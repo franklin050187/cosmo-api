@@ -1,4 +1,4 @@
-from api.shipcomcot import analyze_ship
+from shipcomcot import analyze_ship
 import json
 
 from flask import Flask
@@ -21,3 +21,7 @@ def analyze():
         return json.dumps(data)
     else:
         return analyze_ship(url)
+    
+if __name__ == '__main__':
+    app.run(debug=True)
+    

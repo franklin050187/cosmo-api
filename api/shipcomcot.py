@@ -2,9 +2,9 @@
 
 import cv2
 import numpy as np
-from api.cosmoteer_save_tools import decode_ship_data
+from cosmoteer_save_tools import decode_ship_data
 import json
-from api.png_upload import upload_image_to_imgbb
+from png_upload import upload_image_to_imgbb
 import base64
 
 ## variables ##
