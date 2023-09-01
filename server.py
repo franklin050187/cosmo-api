@@ -1,6 +1,10 @@
 from fastapi import FastAPI, Request
 from shipcomcot import analyze_ship
 import json
+from starlette.middleware.sessions import SessionMiddleware
+import uvicorn
+from fastapi.middleware.gzip import GZipMiddleware
+import os
 
 app = FastAPI()
 
@@ -18,3 +22,11 @@ async def analyze(request: Request):
     else:
         url = query_params['url']
         return analyze_ship(url)
+    
+# session settings
+app.add_middleware(SessionMiddleware, secret_key=os.getenv('secret_session'))
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# start server
+if __name__ == '__main__':
+    uvicorn.run(app)
