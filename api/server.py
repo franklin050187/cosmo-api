@@ -1,27 +1,33 @@
 from shipcomcot import analyze_ship
-import json
+from mangum import Mangum
+from fastapi import FastAPI
+from starlette.middleware.sessions import SessionMiddleware
+from starlette.requests import Request
+from fastapi.middleware.gzip import GZipMiddleware
 
-from flask import Flask
-from flask import request
+app = FastAPI()
 
-app = Flask(__name__)
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
-@app.route('/')
-def home():
-    return 'Hello, World!'
+@app.get('/analyze')
+def analyze(request: Request):
+    query_params = request.query_params
 
-@app.route('/analyze')
-def analyze():
-    url = request.args.get('url')
-    if not url:
+    print("query_param_get = ",query_params)
+    if not query_params['url']:
             # Create a dictionary with your values
         data = {
         "error": "No URL provided",
         }
-        return json.dumps(data)
     else:
+        url = query_params['url']
         return analyze_ship(url)
-    
-if __name__ == '__main__':
-    app.run(debug=True)
+
+app.add_middleware(SessionMiddleware, secret_key="121298102981092")
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+handler = Mangum(app, lifespan="off")
+
     

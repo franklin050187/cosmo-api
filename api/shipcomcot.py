@@ -2,7 +2,6 @@
 
 import cv2
 import numpy as np
-from cosmoteer_save_tools import decode_ship_data
 import json
 from png_upload import upload_image_to_imgbb
 import base64
@@ -105,9 +104,8 @@ yellow_parts = ["cosmoteer.power_storage","cosmoteer.thruster_small","cosmoteer.
 red_parts = ["cosmoteer.laser_blaster_small","cosmoteer.laser_blaster_large","cosmoteer.disruptor","cosmoteer.ion_beam_emitter","cosmoteer.ion_beam_prism","cosmoteer.tractor_beam_emitter","cosmoteer.point_defense","cosmoteer.mining_laser_small","cosmoteer.cannon_med","cosmoteer.cannon_large","cosmoteer.cannon_deck","cosmoteer.explosive_charge","cosmoteer.missile_launcher","cosmoteer.railgun_loader","cosmoteer.railgun_accelerator","cosmoteer.railgun_launcher","cosmoteer.flak_cannon_large"]
 ## end of constants ##
 
-def analyze_ship(ship_url):
-    datajson = decode_ship_data(ship_url)
-    dataclean = json.loads(datajson)
+def analyze_ship(json_data):
+    dataclean = json.loads(json_data)
     parts = dataclean['Parts']
     fdir = dataclean['FlightDirection']
 
