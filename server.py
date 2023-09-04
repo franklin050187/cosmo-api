@@ -1,9 +1,9 @@
 from shipcomcot import analyze_ship
-from mangum import Mangum
 from fastapi import FastAPI
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
 from fastapi.middleware.gzip import GZipMiddleware
+import uvicorn
 
 app = FastAPI()
 
@@ -28,6 +28,7 @@ def analyze(request: Request):
 app.add_middleware(SessionMiddleware, secret_key="121298102981092")
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-handler = Mangum(app, lifespan="off")
+if __name__ == '__main__':
+    uvicorn.run(app)
 
     
