@@ -105,7 +105,8 @@ red_parts = ["cosmoteer.laser_blaster_small","cosmoteer.laser_blaster_large","co
 ## end of constants ##
 
 def analyze_ship(json_data):
-    dataclean = json.loads(json_data)
+    # already in json
+    dataclean = json_data
     parts = dataclean['Parts']
     fdir = dataclean['FlightDirection']
 
