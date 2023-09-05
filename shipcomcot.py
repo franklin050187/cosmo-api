@@ -99,7 +99,7 @@ def calculate_total_thrust(parts):
 
 def calculate_top_speed(mass, thrust):
     speed = 0
-    for _ in range(100):
+    for _ in range(350):
         # Calculate drag based on current speed
         drag = (max(speed / 75, 1) ** 2 * speed * 0.4)
         
