@@ -245,7 +245,7 @@ def center_of_thrust_vector(parts, ship_direction):
     endx = startx + sum_x_thrust / total_thrust * 15
     endy = starty + sum_y_thrust / total_thrust * 15
     
-    return startx, starty, endx, endy, total_thrust_direction / total_thrust
+    return startx, starty, endx, endy, total_thrust_direction / total_thrust, total_thrust_direction
     
 
 
@@ -495,7 +495,8 @@ def com(url):
     # Calculate the center of mass and other data
     center_of_mass_data = center_of_mass(parts)
     center_of_mass_data = list(center_of_mass_data)
-    center_of_mass_data.append(calculate_top_speed(center_of_mass_data[2], calculate_total_thrust(parts)))
+    direction_thrust = center_of_thrust_vector(parts, sorient)
+    center_of_mass_data.append(calculate_top_speed(center_of_mass_data[2], direction_thrust[5]))
 
     # Draw the ship and get the URL of the image
     url_com = draw_ship(parts, center_of_mass_data, sorient)
