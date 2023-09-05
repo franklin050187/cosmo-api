@@ -22,7 +22,7 @@ parts={
         "cosmoteer.cannon_deck":{"mass":27.07, "size":(4,5), "sprite_size":(4,7)},
         "cosmoteer.explosive_charge":{"mass":1, "size":(1,1)},
         "cosmoteer.roof_light":{"mass":1, "size":(1,1)},
-        "cosmoteer.missile_launcher":{"mass":6, "size":(2,3), "sprite_size":(2,4)},
+        "cosmoteer.missile_launcher":{"mass":8, "size":(2,3), "sprite_size":(2,4)},
         "cosmoteer.roof_headlight":{"mass":1, "size":(1,1)},
         "cosmoteer.railgun_loader":{"mass":24, "size":(2,3)},
         "cosmoteer.armor_structure_hybrid_1x1":{"mass":1.5, "size":(1,1)},
