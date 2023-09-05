@@ -109,14 +109,12 @@ def calculate_top_speed(mass, thrust):
     #     # Update speed
     #     speed += acceleration / 30
     speed = 0
-    correction=0.99
-    x=thrust/mass*correction
-    speed=2.5*x
+    correction=0.987
+    x=thrust/mass
+    speed=2.5*x*correction
     if(speed>75):
-        correction=0.98
-        x=thrust/mass*correction
-        speed=2.5*x
-        speed=(14062.5*x)**(1/3)
+        correction=0.982
+        speed=(14062.5*x)**(1/3)*correction
     return speed
 
 
