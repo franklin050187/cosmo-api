@@ -26,6 +26,8 @@ from png_upload import upload_image_to_imgbb
 import base64
 import cv2
 import numpy as np
+from tagextractor import PNGTagExtractor
+from pricegen import calculate_price
 
 GRAPHICS=1 #set to 1 to use opencv to draw ship
 DRAW_ALL_COM=0
@@ -242,10 +244,18 @@ def center_of_thrust_vector(parts, ship_direction):
 
 # Define a function to rotate an image by the specified angle
 def rotate_image(image, angle, flipx):
-    if flipx:
+    if(flipx):
         image = np.fliplr(image)
-    
-    return np.rot90(image, angle % 4)
+    if angle == 0:
+        return image
+    elif angle == 1:
+        return np.rot90(image, 3)
+    elif angle == 2:
+        return np.rot90(image, 2)
+    elif angle == 3:
+        return np.rot90(image, 1)
+    else:
+        return image
 
 # Define a function to insert a sprite onto the background image with a specified size and handle transparency
 def insert_sprite(background, sprite, x, y, rotation, flipx, size):
@@ -462,7 +472,15 @@ def com(url):
     # Decode the ship data from the URL
     json_data = cosmoteer_save_tools.decode_ship_data(url)
     json_data = json.loads(json_data) 
-
+    
+    ## get tags
+    tags, author = PNGTagExtractor().extract_tags(json_data)
+    print(tags)
+    print(author)
+    
+    ## get crew and price
+    price, crew = calculate_price(json_data)
+ 
     # Extract the necessary information from the JSON data
     parts = json_data["Parts"]
     sorient = json_data["FlightDirection"]
@@ -487,7 +505,11 @@ def com(url):
         "center_of_mass_x": center_of_mass_x,
         "center_of_mass_y": center_of_mass_y,
         "total_mass": total_mass,
-        "top_speed": top_speed_x
+        "top_speed": top_speed_x,
+        "crew": crew,
+        "price": price,
+        "tags": tags,
+        "author": author
     }
 
     # Convert the dictionary to a JSON string
