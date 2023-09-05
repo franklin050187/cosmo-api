@@ -113,6 +113,9 @@ def calculate_top_speed(mass, thrust):
     x=thrust/mass*correction
     speed=2.5*x
     if(speed>75):
+        correction=0.98
+        x=thrust/mass*correction
+        speed=2.5*x
         speed=(14062.5*x)**(1/3)
     return speed
 
