@@ -28,6 +28,8 @@ import cv2
 import numpy as np
 from tagextractor import PNGTagExtractor
 from pricegen import calculate_price
+import math
+
 
 GRAPHICS=1 #set to 1 to use opencv to draw ship
 DRAW_ALL_COM=0
@@ -245,6 +247,10 @@ def center_of_thrust_vector(parts, ship_direction):
     endx = startx + sum_x_thrust / total_thrust * 15
     endy = starty + sum_y_thrust / total_thrust * 15
     
+    if ship_direction in [0, 2, 4, 6]: # diagonal ship looses 30% thrust
+        # 1 - sqrt(2) / 2
+        total_thrust_direction = total_thrust_direction /(1+(1-math.sqrt(2)/2))
+        
     return startx, starty, endx, endy, total_thrust_direction / total_thrust, total_thrust_direction
     
 
@@ -482,8 +488,8 @@ def com(url):
     
     ## get tags
     tags, author = PNGTagExtractor().extract_tags(json_data)
-    print(tags)
-    print(author)
+    # print(tags)
+    # print(author)
     
     ## get crew and price
     price, crew = calculate_price(json_data)
@@ -496,6 +502,7 @@ def com(url):
     center_of_mass_data = center_of_mass(parts)
     center_of_mass_data = list(center_of_mass_data)
     direction_thrust = center_of_thrust_vector(parts, sorient)
+    forward_thrust = direction_thrust[5]
     center_of_mass_data.append(calculate_top_speed(center_of_mass_data[2], direction_thrust[5]))
 
     # Draw the ship and get the URL of the image
@@ -517,7 +524,8 @@ def com(url):
         "crew": crew,
         "price": price,
         "tags": tags,
-        "author": author
+        "author": author, 
+        "forward_thrust": forward_thrust
     }
 
     # Convert the dictionary to a JSON string
