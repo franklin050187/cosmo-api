@@ -98,18 +98,24 @@ def calculate_total_thrust(parts):
     return total_thrust
 
 def calculate_top_speed(mass, thrust):
+    # speed = 0
+    # for _ in range(350):
+    #     # Calculate drag based on current speed
+    #     drag = (max(speed / 75, 1) ** 2 * speed * 0.4)
+        
+    #     # Calculate acceleration
+    #     acceleration = thrust / mass - drag
+        
+    #     # Update speed
+    #     speed += acceleration / 30
     speed = 0
-    for _ in range(350):
-        # Calculate drag based on current speed
-        drag = (max(speed / 75, 1) ** 2 * speed * 0.4)
-        
-        # Calculate acceleration
-        acceleration = thrust / mass - drag
-        
-        # Update speed
-        speed += acceleration / 30
-    
+    correction=0.99
+    x=thrust/mass*correction
+    speed=2.5*x
+    if(speed>75):
+        speed=(14062.5*x)**(1/3)
     return speed
+
 
 def part_center_of_mass(part):
     part_size = part_data.parts[part["ID"]]["size"]
