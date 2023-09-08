@@ -12,16 +12,23 @@
 # FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import json
+# modified by LunastroD (I made this a library and removed the dependency on json because I'm reading the data directly)
+SHIP="ships\Sion.ship.png"
+JSON_ON=0
+if(JSON_ON):
+    import json
+
 from PIL import Image
 import numpy as np
-# import pathlib
 import gzip
 import struct
 import enum
 import io
-import requests
 from io import BytesIO
+import base64
+import re
+import requests
+
 
 class OBNodeType(enum.Enum):
     Unset = 0
@@ -33,10 +40,19 @@ class OBNodeType(enum.Enum):
 
 class Ship():
     def __init__(self, image_path) -> None:
-        response = requests.get(image_path)
-        img = Image.open(BytesIO(response.content))
         self.image_path = image_path
-        self.image = img
+        
+        # read image, base64 image or url
+        input_type = check_input_type(image_path)
+        # print(input_type)
+        if input_type == "base64":
+            self.image = Image.open(BytesIO(base64.b64decode(image_path))) # read base64 string
+        elif input_type == "file_path":
+            self.image = Image.open(image_path)
+        elif input_type == "url":
+            response = requests.get(image_path)
+            self.image = Image.open(BytesIO(response.content))
+        
         self.image_data = np.array(self.image.getdata())
 
         self.compressed_image_data = self.read_bytes()
@@ -141,6 +157,9 @@ class Ship():
             length |= (byte & 0x7F) << (i * 7)
             if byte & 0x80 == 0:
                 break
+            if i>2:
+                # print("Warning: string length is too long")
+                break
             i += 1
 
         data = file.read(length)
@@ -215,7 +234,8 @@ class Ship():
                         c4 = value[12:16].hex().upper()
                         value = (c1, c2, c3, c4)
                     else:
-                        print('Unhandled key with binary value:', {key: value})
+                        # print('Unhandled key with binary value:', {key: value})
+                        continue
 
                 d[key] = value
             return d
@@ -287,14 +307,40 @@ class Ship():
         else:
             raise TypeError(f"Unknown datatype: {type(data_node)}")
 
-class JSONEncoderWithBytes(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, bytes):
-            # any bytes that could not be decoded, will be decoded using latin1 and then
-            # wrapped in a special dictionary:
-            return {'__bytes__': obj.decode('latin1')}
-        return json.JSONEncoder.default(self, obj)
+if(JSON_ON):
+    class JSONEncoderWithBytes(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, bytes):
+                # any bytes that could not be decoded, will be decoded using latin1 and then
+                # wrapped in a special dictionary:
+                return {'__bytes__': obj.decode('latin1')}
+            return json.JSONEncoder.default(self, obj)
+def check_input_type(input_value):
+    # Check if it's a valid base64 string
+    try:
+        if base64.b64encode(base64.b64decode(input_value)) == input_value.encode():
+            return "base64"
+    except Exception:
+        pass
 
-def decode_ship_data(shippng):
-    json_data = json.dumps(Ship(shippng).data, cls=JSONEncoderWithBytes)
-    return json_data
+    # Check if it's a valid file path (assuming it's on your server)
+    if re.match(r'^[A-Za-z0-9_./-]*$', input_value):
+        return "file_path"
+
+    # Check if it's a valid URL
+    # print(input_value)
+    url_pattern = re.compile(r'^https?://\S+$')
+    if url_pattern.match(input_value):
+    # url_pattern = re.compile(r'^https?://\S+$')
+    # if url_pattern.match(input_value):
+        return "url"
+
+    # If none of the above, return "unknown"
+    return "unknown"        
+        
+if(__name__ == "__main__"):
+    if(JSON_ON):
+        with open("out.json", "w") as f:
+            json.dump(Ship(SHIP).data, f, cls = JSONEncoderWithBytes)
+    else:
+        print(Ship(SHIP).data)

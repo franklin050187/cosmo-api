@@ -1,7 +1,7 @@
 # tag extractor : takes a base64 png and returns tags as a list
 
-from cosmoteer_save_tools import decode_ship_data
-import json
+# from cosmoteer_save_tools import decode_ship_data
+# import json
 
 class PNGTagExtractor:
     def __init__(self):

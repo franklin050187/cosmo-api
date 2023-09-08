@@ -1,8 +1,8 @@
 # get price for a ship including storage, excluding preload gun 
 # usage : calculate_price(png_url)
 
-from cosmoteer_save_tools import decode_ship_data
-import json
+# from cosmoteer_save_tools import decode_ship_data
+# import json
 
 parts_resources = [
     {"ID": "cosmoteer.airlock", "Resources": [["steel", "8"], ["coil", "4"]]},
