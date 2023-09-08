@@ -963,21 +963,6 @@ def com(input_filename, output_filename, args={}):
 
     ## get crew and price
     price, crew = calculate_price(decoded_data)
-
-    # Calculate speed
-    # speed = top_speed(mass, thrust_direction[ship_orientation])
-
-
-
-    # Print results
-    # print("center of mass: ", data_com)
-    # for i in range(8):
-    #     print("center of thrust in direction", i, ": ", data_cot[0][i])
-    #     print("thrust vector in direction", i, ": ", data_cot[1][i])
-    #     print("thrust in direction", i, ": ", data_cot[2][i])
-    #     print()
-    # print("speed: ", speed)
-    # print(error_message)
     
     # direction mapping
     direction_mapping = {
@@ -990,7 +975,6 @@ def com(input_filename, output_filename, args={}):
         6: "SW",
         7: "W"
     }
-    # print("ship direction: ", direction_mapping[ship_orientation])
     
     # Calculate speed in all directions   
     speeds = {}
@@ -998,9 +982,6 @@ def com(input_filename, output_filename, args={}):
     for ship_orientation, direction_ori in direction_mapping.items():
         speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orientation])
     
-    # for direction_all, speed_dir in speeds.items():
-    #     print(f"speed {direction_all}: ", speed_dir)
-    # to do : push speed directions to discord, need update to bot.py
     if args["draw"]:
         # API override
         output_filename = "" # we dont store file on the server instead we upload it
@@ -1031,7 +1012,7 @@ def com(input_filename, output_filename, args={}):
         # return data_com, data_cot, speeds[direction_mapping[decoded_data["FlightDirection"]]], error_message
         data = {
             # "url_org": url,
-            "url_com": url_com,
+            # "url_com": url_com,
             "center_of_mass_x": comx,
             "center_of_mass_y": comy,
             "total_mass": mass,
