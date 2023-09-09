@@ -944,7 +944,6 @@ def com(input_filename, output_filename, args={}):
     # Read ship data and extract part data
     decoded_data = cosmoteer_save_tools.Ship(input_filename).data
     parts = decoded_data["Parts"]
-    ship_orientation = decoded_data["FlightDirection"]
     
     # Remove weird parts
     parts, error_message = remove_weird_parts(parts)
@@ -986,6 +985,7 @@ def com(input_filename, output_filename, args={}):
         # API override
         output_filename = "" # we dont store file on the server instead we upload it
         # Draw ship and write to output image
+        ship_orientation = decoded_data["FlightDirection"]
         base64_output = draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args)
         url_com = upload_image_to_imgbb(base64_output)
         
