@@ -225,17 +225,18 @@ def top_speed(mass, thrust):
     Returns:
         float: The top speed of the vehicle.
     """
-    # Calculate the correction factor based on the thrust-to-mass ratio
-    correction = 1
-    
-    # Calculate the initial speed based on the thrust-to-mass ratio
+
+    # Calculate speed below 75m/s
     x = thrust / mass
-    speed = 2.5 * x * correction
+    speed = 2.5 * x
     
-    # Apply correction for speeds above 75
+    # Calculate speed above 75m/s
     if speed > 75:
         correction = 1
-        speed = (14062.5 * x) ** (1/3) * correction
+        speed = (14062.5 * x) ** (1/3)
+    
+    # Apply correction
+    speed=1.01518568052653*speed -0.000228187226585198*speed**2
     
     return speed
 
