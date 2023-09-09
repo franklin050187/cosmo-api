@@ -979,8 +979,8 @@ def com(input_filename, output_filename, args={}):
     # Calculate speed in all directions   
     speeds = {}
     
-    for ship_orientation, direction_ori in direction_mapping.items():
-        speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orientation])
+    for ship_orient, direction_ori in direction_mapping.items():
+        speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orient])
     
     if args["draw"]:
         # API override
