@@ -1,5 +1,7 @@
 # API Documentation: Ship Analysis API
 
+## Endpoint https://cosmo-api-six.vercel.app/
+
 ## Introduction
 
 The Ship Analysis API allows you to analyze ships by providing a URL to a PNG image of the ship. It processes the image and returns various ship-related data in JSON format, including information about the ship's characteristics, such as its center of mass, total mass, top speed, crew count, price, tags, author, and speed in different directions.
@@ -32,7 +34,7 @@ The response from the GET request will be a JSON object with the following struc
     "total_mass": float,               // Total mass
     "top_speed": float,                // Top speed in the ship's orientation
     "crew": int,                       // Number of crew
-    "price": float,                    // Price
+    "price": int,                    // Price
     "tags": ["string", ...],           // Tags
     "author": "string",                // Author of the ship
     "all_direction_speeds": {
@@ -154,3 +156,19 @@ Please replace `"https://your-api-url.com"` with the actual URL of the API.
 ## Conclusion
 
 The Ship Analysis API provides a convenient way to extract valuable ship-related information from images and can be used in various applications related to ship analysis and design.
+
+
+## How to deploy on vercel
+Clone this depot
+Create an account on vercel
+Connect to your Git provider
+https://vercel.com/docs/getting-started-with-vercel/import
+Create a new project
+Select the cloned depot
+Fill environment variable (see .env.example)
+Only imagebb_api and secret_session are mandatory
+Click deploy
+Once app is built navigate to it, should display {"Hello":"World"}
+
+Python packages are installed automatically using requirements.txt file.
+Vercel build command are already setup in vercel.json file.
