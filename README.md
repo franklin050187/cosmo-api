@@ -159,16 +159,16 @@ The Ship Analysis API provides a convenient way to extract valuable ship-related
 
 
 ## How to deploy on vercel
-Clone this depot
-Create an account on vercel
-Connect to your Git provider
-https://vercel.com/docs/getting-started-with-vercel/import
-Create a new project
-Select the cloned depot
-Fill environment variable (see .env.example)
-Only imagebb_api and secret_session are mandatory
-Click deploy
-Once app is built navigate to it, should display {"Hello":"World"}
+- Clone this depot
+- Create an account on vercel
+- Connect to your Git provider
+  - https://vercel.com/docs/getting-started-with-vercel/import
+- Create a new project
+- Select the cloned depot
+- Fill environment variable (see .env.example)
+- Only imagebb_api and secret_session are mandatory
+- Click deploy
+  - Once app is built navigate to it, should display {"Hello":"World"}
 
-Python packages are installed automatically using requirements.txt file.
-Vercel build command are already setup in vercel.json file.
+* Python packages are installed automatically using requirements.txt file.
+* Vercel build command are already setup in vercel.json file.
