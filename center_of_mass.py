@@ -697,53 +697,45 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
     Returns:
     - an empty string if the image was successfully saved
     """
-    # Define constants
     sprite_square_size = 64
     size_factor = round(sprite_square_size / 4)
     square_size = round(size_factor)
-    # Create a blank image
     img = np.zeros((120 * size_factor, 120 * size_factor, 3), np.uint8)
-    # Rearrange parts to draw top turrets last
+    sprite_directory = "sprites/"
+    loaded_sprites = {}
     for i in range(len(parts)):
         if parts[i]["ID"] in ["cosmoteer.cannon_deck", "cosmoteer.ion_beam_prism"]:
             parts.append(parts.pop(i))
-    # Draw ship parts
-    for part in parts:
+    for part in parts:  
+        sprite_id = part["ID"].replace("cosmoteer.", "")
+        sprite_path = sprite_directory + sprite_id + ".png"
+        if sprite_path in loaded_sprites:
+            part_image = loaded_sprites[sprite_path]
+        else:
+            part_image = cv2.imread(sprite_path, cv2.IMREAD_UNCHANGED)
+            loaded_sprites[sprite_path] = part_image
         x_coord = part["Location"][0] + 60
         y_coord = part["Location"][1] + 60
-        # Check if part is out of bounds
         if x_coord < 0 or x_coord > 120 or y_coord < 0 or y_coord > 120:
             return "error drawing ship: out of bounds\n"
         size = part_data.parts[part["ID"]]["size"]
         rotation = part["Rotation"]
         flipx = part.get("FlipX", 0)
         x_coord, y_coord = sprite_position(part, [x_coord, y_coord])
-        sprite_directory = "sprites/"
-        sprite_id = part["ID"].replace("cosmoteer.", "")
-        sprite_path = sprite_directory + sprite_id + ".png"
-
-        part_image = cv2.imread(sprite_path, cv2.IMREAD_UNCHANGED)
-
         scaled_x_coord = round(x_coord * size_factor)
         scaled_y_coord = round(y_coord * size_factor)
-
         sprite_dimensions = (round(part_image.shape[1] / 4), round(part_image.shape[0] / 4))
-        # this does the out image
         insert_sprite(img, part_image, scaled_x_coord, scaled_y_coord, rotation, flipx, sprite_dimensions)
-    # Darken the image
     img = img * 0.8
     if args["draw_com"]:
-        # Add center of mass
         cv2.circle(img, (round((data_com[0] + 60) * size_factor), round((data_com[1] + 60) * size_factor)), square_size,
                    [0, 255, 0], -1)
         if args["draw_all_com"]:
-            # Add center of mass of each part
             for part in parts:
                 x_coord, y_coord = part_center_of_mass(part)
                 cv2.circle(img, (round((x_coord + 60) * size_factor), round((y_coord + 60) * size_factor)), 1,
                            [0, 255, 0], -1)
     if args["draw_all_cot"]:
-        # Add center of thrust of each part
         for part in parts:
             cots = part_center_of_thrust(part, args["boost"])
             if cots == 0:
@@ -753,32 +745,26 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
                 vector = cot[0]
                 end_point = (0, 0)
                 size = cot[2] / 2000
-                if part_rotation == 0:
-                    end_point = (vector.x, vector.y - size)
-                elif part_rotation == 1:
-                    end_point = (vector.x + size, vector.y)
-                elif part_rotation == 2:
-                    end_point = (vector.x, vector.y+size)
-                elif part_rotation == 3:
-                    end_point = (vector.x - size, vector.y)
-                #flip the direction of the arrow
+                rotation_mapping = {
+                    0: (vector.x, vector.y - size),
+                    1: (vector.x + size, vector.y),
+                    2: (vector.x, vector.y + size),
+                    3: (vector.x - size, vector.y) 
+                    } 
+                end_point = rotation_mapping[part_rotation]
                 if(args["flip_vectors"]):
                     end_point = (vector.x * 2 - end_point[0], vector.y * 2 - end_point[1])
-                # Draw a line
-                cv2.arrowedLine(img, (round((vector.x+60)*size_factor), round((vector.y+60)*size_factor)), (round((end_point[0]+60)*size_factor), round((end_point[1]+60)*size_factor)), [0,0,255], 2, tipLength=0.3)
-                # Also draw a dot at the start of the arrow
-                cv2.circle(img, (round((vector.x+60)*size_factor), round((vector.y+60)*size_factor)), 3, [0,0,255], -1)
-    
-    # Draw center of thrust of the ship
+                scaled_vector = (round((vector.x + 60) * size_factor), round((vector.y + 60) * size_factor)) ##MOD##
+                scaled_end_point = (round((end_point[0] + 60) * size_factor), round((end_point[1] + 60) * size_factor)) ##MOD##
+                cv2.arrowedLine(img, scaled_vector, scaled_end_point, [0, 0, 255], 2, tipLength=0.3) ##MOD##
+                cv2.circle(img, scaled_vector, 3, [0, 0, 255], -1) ##MOD##
     if args["draw_cot"]:
         origin_thrust, thrust_vector, thrust_direction = data_cot
         total_thrust = sum(thrust_direction)
-
         origin_thrust.append(origin_thrust.pop(ship_orientation))
         thrust_vector.append(thrust_vector.pop(ship_orientation))
         thrust_direction.append(thrust_direction.pop(ship_orientation))
         size_of_arrow = 35
-
         for i in range(8):
             if not args["draw_all_cot"] and i != 7:
                 continue
@@ -787,7 +773,6 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
             if thrust_direction[i] == 0:
                 continue
             thrust = (thrust_vector[i] - origin_thrust[i]) / total_thrust
-            #flip the direction of the arrow
             if(args["flip_vectors"]):
                 thrust = thrust * -1
             end = thrust * size_of_arrow + origin_thrust[i]
@@ -797,26 +782,17 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
                 arrow_color = [0, 200, 0]
             else:
                 arrow_color = [0, 255, 255]
-            # draw a line
             cv2.arrowedLine(img, start, end, arrow_color, 2, tipLength=0.2)
-            # draw a dot
             cv2.circle(img, start, 3, arrow_color, -1)
-
         origin_thrust.insert(ship_orientation, origin_thrust.pop())
         thrust_vector.insert(ship_orientation, thrust_vector.pop())
         thrust_direction.insert(ship_orientation, thrust_direction.pop())
-
-    # Crop the image
     img = crop(img)
-    # Save the image
     if output_filename != "":
         cv2.imwrite(output_filename, img)
         return output_filename
     else:
-        # Convert the OpenCV image to a NumPy array
         img_np = np.asarray(img)
-
-        # Encode the NumPy array as a base64 string
         _, buffer = cv2.imencode('.png', img_np)
         base64_encoded = base64.b64encode(buffer).decode("utf-8")
         return base64_encoded
