@@ -240,4 +240,4 @@ def calculate_price(data_json): ## take json instead of png
 
     total_price += storage_price
 
-    return round_to_k(total_price), crew
+    return total_price, crew
