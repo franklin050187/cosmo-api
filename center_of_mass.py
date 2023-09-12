@@ -920,6 +920,10 @@ def com(input_filename, output_filename, args={}):
     
     # Read ship data and extract part data
     decoded_data = cosmoteer_save_tools.Ship(input_filename).data
+
+    # Convert bytes to base64-encoded strings in the decoded_data dictionary
+    decoded_data = convert_bytes_to_base64(decoded_data)
+    
     parts = decoded_data["Parts"]
     ship_orientation = decoded_data["FlightDirection"]
     
@@ -1005,6 +1009,17 @@ def com(input_filename, output_filename, args={}):
         json_data = json.dumps(data)
         
         return json_data
+
+# Function to recursively convert bytes to base64-encoded strings in the dictionary
+def convert_bytes_to_base64(data):
+    if isinstance(data, bytes):
+        return base64.b64encode(data).decode('utf-8')
+    elif isinstance(data, list):
+        return [convert_bytes_to_base64(item) for item in data]
+    elif isinstance(data, dict):
+        return {key: convert_bytes_to_base64(value) for key, value in data.items()}
+    else:
+        return data
 
 # if(__name__ == "__main__"):
 #     com(SHIP, "out.png", {"boost":BOOST,"draw_all_cot":DRAW_ALL_COT,"draw_all_com":DRAW_ALL_COM,"draw_cot":DRAW_COT,"draw_com":DRAW_COM})

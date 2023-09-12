@@ -60,12 +60,13 @@ class PNGTagExtractor:
         toggle = data["PartUIToggleStates"]
         
         missile_types = []
-        for item in toggle:
-            try:
-                if '__bytes__' in item['Key'][1] and item['Key'][1]['__bytes__'] == '\x0cmissile_type':
-                    missile_types.append(item['Value'])
-            except:
-                continue
+        # for item in toggle:
+        #     try:
+        #         if '__bytes__' in item['Key'][1] and item['Key'][1]['__bytes__'] == '\x0cmissile_type':
+        #             missile_types.append(item['Value'])
+        #     except:
+        #         continue
+        missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
 
         ids = [item['ID'] for item in parts]
         

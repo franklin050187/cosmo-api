@@ -99,7 +99,7 @@ def calculate_price(data_json): ## take json instead of png
     data = data_json
     parts = data["Parts"]
     doors = data["Doors"]
-    toggle = data["PartUIToggleStates"]
+    # toggle = data["PartUIToggleStates"]
     
     # need missile type to calculate cost of the ammo
     missile_mapping = {
@@ -108,14 +108,18 @@ def calculate_price(data_json): ## take json instead of png
             2: 'nukes',
             3: 'mines'
         }
-    # list of missile types
+    # list of missile types "__bytes__": "\fmissile_type"
     missile_types = []
-    for item in toggle:
-        try:
-            if '__bytes__' in item['Key'][1] and item['Key'][1]['__bytes__'] == '\x0cmissile_type':
-                missile_types.append(item['Value'])
-        except:
-            continue
+    # for item in toggle:
+    #     try:
+    #         if '__bytes__' in item['Key'][1] and item['Key'][1]['__bytes__'] == '\x0cmissile_type':
+    #             missile_types.append(item['Value'])
+    #     except:
+    #         continue
+    missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
+    # print(missile_types)
+    # # Print the values
+    # for value in values:
     # init the data
     mapped_output = [] # missile type and number
     for item in missile_types:
@@ -151,9 +155,9 @@ def calculate_price(data_json): ## take json instead of png
                         item_price += resource_price * resource_quantity
                         break
 
-            # print(f"Price for {item_id} at location {location}: {item_price}")
+            # print(f"Price for {item_id}: {item_price}")
             total_price += item_price
-    
+            # print('price parts', item_price)
     # add missile prices
     for item in mapped_output:
         item_id = item
@@ -173,7 +177,7 @@ def calculate_price(data_json): ## take json instead of png
                         item_price += resource_price * resource_quantity
                         break
             total_price += item_price
-            
+            # print('price missiles', item_price)
     # Calculate the price for doors
     door_price = 0
     if doors is not None and isinstance(doors, list):
@@ -218,7 +222,7 @@ def calculate_price(data_json): ## take json instead of png
             crew += 2
         elif item_id == 'cosmoteer.crew_quarters_med':
             crew += 6
-            
+    # print('price crew', crew_quarters_small_price + crew_quarters_med_price)        
     total_price += crew_quarters_small_price + crew_quarters_med_price
 
     # Calculate the price for storage
@@ -232,7 +236,7 @@ def calculate_price(data_json): ## take json instead of png
                         resource_price = cost['BuyPrice']
                         max_stack = cost['MaxStackSize']
                         storage_price += resource_price * max_stack
-
+    # print('price storage', storage_price)
     total_price += storage_price
 
     return total_price, crew
