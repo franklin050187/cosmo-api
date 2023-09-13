@@ -3,6 +3,7 @@ from png_upload import upload_image_to_imgbb
 import json
 from PIL import Image, ImageDraw, ImageFont
 import math
+from io import BytesIO
 
 
 # star chart
@@ -331,7 +332,7 @@ def price_analysis(data_json): ## take json instead of png
         # Add labels
         label_x = center_x + (radius + 20) * math.cos(math.radians(i * angle))
         label_y = center_y + (radius + 20) * math.sin(math.radians(i * angle))
-        label = f"{categories[i]}: {values[i]}"
+        label = f"{categories[i]}: {values[i]} | {round(values[i] / total_price * 100, 2)}%"
         draw.text((label_x, label_y), label, font=font, fill='black')
         
         # Add the coordinates of the data point to the list
@@ -351,17 +352,25 @@ def price_analysis(data_json): ## take json instead of png
 
     
     # Save or display the radar chart
-    image.show()
+    # image.show()
 
+    # Create a BytesIO object to hold the image data
+    image_data = BytesIO()
 
-    
+    # Save the image to the BytesIO object
+    image.save(image_data, format='PNG')
 
-    
+    # Reset the file pointer of the BytesIO object
+    image_data.seek(0)
+
+    # Encode the image data as a base64 string
+    base64_img = base64.b64encode(image_data.getvalue()).decode('utf-8')
+
 
     url_analysis = 'testing'
-    # Convert the image to a base64 string
-    # base64_image = base64.b64encode(img_bytesio.read()).decode('utf-8')
-    # url_analysis = upload_image_to_imgbb(base64_image)
+
+    # print(base64_img)
+    url_analysis = upload_image_to_imgbb(base64_img)
     # print(url_analysis)
     data = {
         "url_analysis": url_analysis,
@@ -380,7 +389,7 @@ def price_analysis(data_json): ## take json instead of png
 
 # for testing
 # import cosmoteer_save_tools
-# # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
+# # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
 # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151507769317404672/input_file.png').data
 
 
