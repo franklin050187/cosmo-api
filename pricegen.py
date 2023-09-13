@@ -116,7 +116,10 @@ def calculate_price(data_json): ## take json instead of png
     #             missile_types.append(item['Value'])
     #     except:
     #         continue
-    missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
+    try :
+        missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
+    except :
+        pass
     # print(missile_types)
     # # Print the values
     # for value in values:

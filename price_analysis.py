@@ -254,7 +254,10 @@ def price_analysis(data_json): ## take json instead of png
             3: 'mines'
         }
     missile_types = []
-    missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
+    try :
+        missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
+    except :
+        pass
     mapped_output = [] # missile type and number
     for item in missile_types:
         if item in missile_mapping:

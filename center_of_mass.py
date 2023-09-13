@@ -30,6 +30,7 @@ from png_upload import upload_image_to_imgbb
 from tagextractor import PNGTagExtractor
 from pricegen import calculate_price
 import json
+from price_analysis import price_analysis
 
 FLIP_VECTORS=False
 BOOST=False
@@ -913,7 +914,8 @@ def com(input_filename, output_filename, args={}):
         "draw_all_cot": True,
         "draw_cot": True,
         "draw_com": True,
-        "boost": True
+        "boost": True,
+        "analyze": False
     }
 
     args = {**defaults, **args}
@@ -963,6 +965,11 @@ def com(input_filename, output_filename, args={}):
     for ship_orient, direction_ori in direction_mapping.items():
         speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orient])
     
+    if args["analyze"]:
+            analysis = json.loads(price_analysis(decoded_data))
+    else :
+        analysis = False  
+    
     if args["draw"]:
         # API override
         output_filename = "" # we dont store file on the server instead we upload it
@@ -982,7 +989,7 @@ def com(input_filename, output_filename, args={}):
             "tags": tags,
             "author": author, 
             "all_direction_speeds": speeds,
-
+            "analysis": analysis
         }
         # Convert the dictionary to a JSON string
         json_data = json.dumps(data)
@@ -993,7 +1000,7 @@ def com(input_filename, output_filename, args={}):
         # return data_com, data_cot, speeds[direction_mapping[decoded_data["FlightDirection"]]], error_message
         data = {
             # "url_org": url,
-            # "url_com": url_com,
+            "url_com": False,
             "center_of_mass_x": comx,
             "center_of_mass_y": comy,
             "total_mass": mass,
@@ -1003,7 +1010,7 @@ def com(input_filename, output_filename, args={}):
             "tags": tags,
             "author": author, 
             "all_direction_speeds": speeds,
-
+            "analysis": analysis
         }
         # Convert the dictionary to a JSON string
         json_data = json.dumps(data)
@@ -1028,6 +1035,6 @@ def convert_bytes_to_base64(data):
 # with open(SHIP, "rb") as img_file:
 # #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
 # ship_data = 'https://media.discordapp.net/attachments/1117705148920234045/1149355944849965106/input_file.png'
-# # ship_data = 'ships/Sion.ship.png'
-# out_data = com(ship_data, "out.png")
+# # # ship_data = 'ships/Sion.ship.png'
+# out_data = com(ship_data, "out.png", {"analyze":False, "draw":False})
 # print(out_data)

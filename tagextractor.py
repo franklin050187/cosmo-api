@@ -66,7 +66,10 @@ class PNGTagExtractor:
         #             missile_types.append(item['Value'])
         #     except:
         #         continue
-        missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
+        try :
+            missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
+        except:
+            pass
 
         ids = [item['ID'] for item in parts]
         
