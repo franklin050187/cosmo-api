@@ -21,7 +21,7 @@ async def analyze(request: Request):
     # get data from url
     url = query["url"]
     args = {}
-    query_keys = ["draw", "flip_vectors", "draw_all_com", "draw_all_cot", "draw_cot", "draw_com", "boost"]
+    query_keys = ["draw", "flip_vectors", "draw_all_com", "draw_all_cot", "draw_cot", "draw_com", "boost", "analyze"]
 
     for key in query_keys:
         if key in query:
@@ -46,7 +46,7 @@ async def analyzepost(request: Request):
     json_image = data_json['image']
     
     args = {}
-    query_keys = ["draw", "flip_vectors", "draw_all_com", "draw_all_cot", "draw_cot", "draw_com", "boost"]
+    query_keys = ["draw", "flip_vectors", "draw_all_com", "draw_all_cot", "draw_cot", "draw_com", "boost", "analyze"]
 
     for key in query_keys:
         if key in json_args:
@@ -60,7 +60,7 @@ async def analyzepost(request: Request):
         placeholder = "placeholder"
         result = com(url, placeholder, args)
         result = json.loads(result)
-        print(result)
+        # print(result)
         return result
     
     
