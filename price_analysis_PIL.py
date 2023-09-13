@@ -4,6 +4,8 @@ import json
 from PIL import Image, ImageDraw, ImageFont
 import math
 from io import BytesIO
+from urllib.request import urlopen
+
 
 
 # star chart
@@ -319,8 +321,9 @@ def price_analysis(data_json): ## take json instead of png
         draw.line([(x1, y1), (x2, y2)], fill='gray')
 
     # Draw the data points on the radar chart and add labels
-    font = ImageFont.load_default()  # You can customize the font as needed
-
+    # font = ImageFont.load_default()  # You can customize the font as needed
+    truetype_url = 'https://github.com/googlefonts/roboto/raw/main/src/hinted/Roboto-Regular.ttf'
+    font = ImageFont.truetype(urlopen(truetype_url), size=12)
     data_points = []
 
     for i in range(num_categories):
@@ -344,7 +347,9 @@ def price_analysis(data_json): ## take json instead of png
 
     # Add label title in the middle top
     title = f"Price Analysis - Total cost : {total_price}"
-    title_font = ImageFont.truetype("arial.ttf", 40)  # You can change the font and size as desired
+    truetype_url = 'https://github.com/googlefonts/roboto/raw/main/src/hinted/Roboto-Regular.ttf'
+    title_font = ImageFont.truetype(urlopen(truetype_url), size=40)
+    # title_font = ImageFont.truetype(font, 40)  # You can change the font and size as desired
     title_width = draw.textlength(title, font=title_font)
     title_x = center_x - title_width / 2
     title_y = 50  # Adjust the y-coordinate as desired
@@ -387,9 +392,9 @@ def price_analysis(data_json): ## take json instead of png
     json_data = json.dumps(data)
     return json_data 
 
-# for testing
+# # for testing
 # import cosmoteer_save_tools
-# # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
+# # # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
 # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151507769317404672/input_file.png').data
 
 
