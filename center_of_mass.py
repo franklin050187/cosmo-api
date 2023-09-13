@@ -30,7 +30,7 @@ from png_upload import upload_image_to_imgbb
 from tagextractor import PNGTagExtractor
 from pricegen import calculate_price
 import json
-from price_analysis_PIL import price_analysis
+from price_analysis_ocv import price_analysis
 
 FLIP_VECTORS=False
 BOOST=False
@@ -1034,7 +1034,7 @@ def convert_bytes_to_base64(data):
 
 # with open(SHIP, "rb") as img_file:
 # #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
-# ship_data = 'https://media.discordapp.net/attachments/1117705148920234045/1149355944849965106/input_file.png'
+# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151517855624474684/input_file.png'
 # # # ship_data = 'ships/Sion.ship.png'
-# out_data = com(ship_data, "out.png", {"analyze":False, "draw":False})
+# out_data = com(ship_data, "out.png", {"analyze":True, "draw":False})
 # print(out_data)
