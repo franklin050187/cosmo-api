@@ -30,7 +30,7 @@ from png_upload import upload_image_to_imgbb
 from tagextractor import PNGTagExtractor
 from pricegen import calculate_price
 import json
-from price_analysis import price_analysis
+from price_analysis_PIL import price_analysis
 
 FLIP_VECTORS=False
 BOOST=False

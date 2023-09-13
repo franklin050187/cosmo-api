@@ -1,18 +1,8 @@
-# import cosmoteer_save_tools
 import base64
-import numpy as np
-import matplotlib.pyplot as plt
-from io import BytesIO
 from png_upload import upload_image_to_imgbb
-import matplotlib.patches as patches
-import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, RegularPolygon
-from matplotlib.path import Path
-from matplotlib.projections.polar import PolarAxes
-from matplotlib.projections import register_projection
-from matplotlib.spines import Spine
-from matplotlib.transforms import Affine2D
 import json
+from PIL import Image, ImageDraw, ImageFont
+import math
 
 
 # star chart
@@ -25,8 +15,7 @@ import json
 # utilities, the rest like doors
 
 
-# for testing
-# data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
+
 
 parts_resources = [
     {"ID": "cosmoteer.airlock", "Resources": [["steel", "8"], ["coil", "4"]]},
@@ -134,105 +123,6 @@ def convert_bytes_to_base64(data):
         return {key: convert_bytes_to_base64(value) for key, value in data.items()}
     else:
         return data
-
-def radar_factory(num_vars, frame='circle'):
-    """Create a radar chart with `num_vars` axes.
-
-    This function creates a RadarAxes projection and registers it.
-
-    Parameters
-    ----------
-    num_vars : int
-        Number of variables for radar chart.
-    frame : {'circle' | 'polygon'}
-        Shape of frame surrounding axes.
-
-    """
-    # calculate evenly-spaced axis angles
-    theta = np.linspace(0, 2*np.pi, num_vars, endpoint=False)
-    
-    class RadarTransform(PolarAxes.PolarTransform):
-        def transform_path_non_affine(self, path):
-            # Paths with non-unit interpolation steps correspond to gridlines,
-            # in which case we force interpolation (to defeat PolarTransform's
-            # autoconversion to circular arcs).
-            if path._interpolation_steps > 1:
-                path = path.interpolated(num_vars)
-            return Path(self.transform(path.vertices), path.codes)
-
-    class RadarAxes(PolarAxes):
-
-        name = 'radar'
-        
-        PolarTransform = RadarTransform
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            # rotate plot such that the first axis is at the top
-            self.set_theta_zero_location('N')
-
-        def fill(self, *args, closed=True, **kwargs):
-            """Override fill so that line is closed by default"""
-            return super().fill(closed=closed, *args, **kwargs)
-
-        def plot(self, *args, **kwargs):
-            """Override plot so that line is closed by default"""
-            lines = super().plot(*args, **kwargs)
-            for line in lines:
-                self._close_line(line)
-
-        def _close_line(self, line):
-            x, y = line.get_data()
-            # FIXME: markers at x[0], y[0] get doubled-up
-            if x[0] != x[-1]:
-                x = np.concatenate((x, [x[0]]))
-                y = np.concatenate((y, [y[0]]))
-                line.set_data(x, y)
-
-        def set_varlabels(self, labels):
-            self.set_thetagrids(np.degrees(theta), labels)
-
-        def _gen_axes_patch(self):
-            # The Axes patch must be centered at (0.5, 0.5) and of radius 0.5
-            # in axes coordinates.
-            if frame == 'circle':
-                return Circle((0.5, 0.5), 0.5)
-            elif frame == 'polygon':
-                return RegularPolygon((0.5, 0.5), num_vars,
-                                      radius=.5, edgecolor="k")
-            else:
-                raise ValueError("unknown value for 'frame': %s" % frame)
-
-        def draw(self, renderer):
-            """ Draw. If frame is polygon, make gridlines polygon-shaped """
-            if frame == 'polygon':
-                gridlines = self.yaxis.get_gridlines()
-                for gl in gridlines:
-                    gl.get_path()._interpolation_steps = num_vars
-            super().draw(renderer)
-
-
-        def _gen_axes_spines(self):
-            if frame == 'circle':
-                return super()._gen_axes_spines()
-            elif frame == 'polygon':
-                # spine_type must be 'left'/'right'/'top'/'bottom'/'circle'.
-                spine = Spine(axes=self,
-                              spine_type='circle',
-                              path=Path.unit_regular_polygon(num_vars))
-                # unit_regular_polygon gives a polygon of radius 1 centered at
-                # (0, 0) but we want a polygon of radius 0.5 centered at (0.5,
-                # 0.5) in axes coordinates.
-                spine.set_transform(Affine2D().scale(.5).translate(.5, .5)
-                                    + self.transAxes)
-
-
-                return {'polar': spine}
-            else:
-                raise ValueError("unknown value for 'frame': %s" % frame)
-
-    register_projection(RadarAxes)
-    return theta
 
 def price_analysis(data_json): ## take json instead of png
     price_weapons = 0
@@ -391,46 +281,87 @@ def price_analysis(data_json): ## take json instead of png
     # print("price_storage: ", price_storage)
     # print("price_utility: ", price_utility)
     
-    # Define the categories
-    # categories = ['Crew', 'Weapons', 'Armor', 'Movement', 'Power', 'Shield', 'Storage', 'Utility']
-    categories = ['Weapons', 'Movement', 'Utility', 'Crew', 'Power', 'Utility', 'Shield', 'Armor']
-    values = [price_weapons, price_mouvement, price_utility, price_crew, price_power, price_utility, price_shield, price_armor]
 
-    # Define the data values
-    # values = [price_crew, price_weapons, price_armor, price_mouvement, price_power, price_shield, price_storage, price_utility]
+    # Define the categories and values
+    categories = ['Shield', 'Weapons', 'Movement', 'Utility', 'Crew', 'Power', 'Armor']
+    values = [price_shield, price_weapons, price_mouvement, price_utility, price_crew, price_power, price_armor]
 
-    data = [categories,
-        (f'Price analysis - total price : {total_price}', [
-            values
-            ])]
+    # Create a blank image
+    width, height = 800, 800
+    image = Image.new('RGB', (width, height), 'white')
+    draw = ImageDraw.Draw(image)
 
-    N = len(data[0])
-    theta = radar_factory(N, frame='polygon')
+    # Center coordinates
+    center_x, center_y = width // 2, height // 2
 
-    spoke_labels = data.pop(0)
-    title, case_data = data[0]
+    # Number of categories
+    num_categories = len(categories)
 
-    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(projection='radar'))
-    fig.subplots_adjust(top=0.85, bottom=0.05)
+    # Calculate the angle between each category
+    angle = 360 / num_categories
 
-    # ax.set_rgrids([price_weapons, price_mouvement, price_utility, price_crew, price_power, price_utility, price_shield, price_armor])
-    ax.set_title(title,  position=(0.5, 1.1), ha='center')
+    # Maximum value for scaling
+    max_value = max(values)
 
-    for d in case_data:
-        line = ax.plot(theta, d)
-        ax.fill(theta, d, alpha=0.25, label='_nolegend_')
-    ax.set_varlabels(spoke_labels)
+    # Radius of the radar chart
+    radius = min(center_x, center_y) - 150
 
-    # plt.show()
+    # Draw the radar chart axes
+    for i in range(num_categories):
+        x1 = center_x + radius * math.cos(math.radians(i * angle))
+        y1 = center_y + radius * math.sin(math.radians(i * angle))
+        draw.line([(center_x, center_y), (x1, y1)], fill='gray')
+        x1 = center_x + radius * math.cos(math.radians(i * angle))
+        y1 = center_y + radius * math.sin(math.radians(i * angle))
+        x2 = center_x + radius * math.cos(math.radians((i+1) * angle))
+        y2 = center_y + radius * math.sin(math.radians((i+1) * angle))
+        draw.line([(x1, y1), (x2, y2)], fill='gray')
+
+    # Draw the data points on the radar chart and add labels
+    font = ImageFont.load_default()  # You can customize the font as needed
+
+    data_points = []
+
+    for i in range(num_categories):
+        normalized_value = values[i] / max_value
+        x = center_x + radius * normalized_value * math.cos(math.radians(i * angle))
+        y = center_y + radius * normalized_value * math.sin(math.radians(i * angle))
+        draw.ellipse([(x - 5, y - 5), (x + 5, y + 5)], fill='blue')
+        
+        # Add labels
+        label_x = center_x + (radius + 20) * math.cos(math.radians(i * angle))
+        label_y = center_y + (radius + 20) * math.sin(math.radians(i * angle))
+        label = f"{categories[i]}: {values[i]}"
+        draw.text((label_x, label_y), label, font=font, fill='black')
+        
+        # Add the coordinates of the data point to the list
+        data_points.append((x, y))
+        
+
+    # Draw lines between data points to create a polygon
+    draw.polygon(data_points, outline='gray', fill='lightblue')
+
+    # Add label title in the middle top
+    title = f"Price Analysis - Total cost : {total_price}"
+    title_font = ImageFont.truetype("arial.ttf", 40)  # You can change the font and size as desired
+    title_width = draw.textlength(title, font=title_font)
+    title_x = center_x - title_width / 2
+    title_y = 50  # Adjust the y-coordinate as desired
+    draw.text((title_x, title_y), title, font=title_font, fill='black')
 
     
-    img_bytesio = BytesIO()
-    plt.savefig(img_bytesio, format='png')
-    img_bytesio.seek(0)
+    # Save or display the radar chart
+    image.show()
 
+
+    
+
+    
+
+    url_analysis = 'testing'
     # Convert the image to a base64 string
-    base64_image = base64.b64encode(img_bytesio.read()).decode('utf-8')
-    url_analysis = upload_image_to_imgbb(base64_image)
+    # base64_image = base64.b64encode(img_bytesio.read()).decode('utf-8')
+    # url_analysis = upload_image_to_imgbb(base64_image)
     # print(url_analysis)
     data = {
         "url_analysis": url_analysis,
@@ -446,6 +377,12 @@ def price_analysis(data_json): ## take json instead of png
     # Convert the dictionary to a JSON string
     json_data = json.dumps(data)
     return json_data 
+
+# for testing
+# import cosmoteer_save_tools
+# # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
+# data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151507769317404672/input_file.png').data
+
 
 # json_data = price_analysis(data)
 # print(json_data)
