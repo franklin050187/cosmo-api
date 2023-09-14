@@ -924,55 +924,65 @@ def com(input_filename, output_filename, args={}):
     try:
         decoded_data = cosmoteer_save_tools.Ship(input_filename).data
     except:
-        return 'Error: Could not read input file'
+        error_text = "Could not read input file (save tool)"
+        return json.dumps({"Error": error_text})
     # Convert bytes to base64-encoded strings in the decoded_data dictionary
     try :
         decoded_data = convert_bytes_to_base64(decoded_data)
     except:
-        return 'Error: Could not convert bytes to base64 (json cleaner)'
+        error_text = "Could not convert_bytes_to_base64 (json cleaner)"
+        return json.dumps({"Error": error_text})
     
     try :
         parts = decoded_data["Parts"]
     except :
-        return 'Error: Could not extract parts'
+        error_text = "Could not read Parts"
+        return json.dumps({"Error": error_text})
     try :
         ship_orientation = decoded_data["FlightDirection"]
     except :
-        return 'Error: Could not extract FlightDirection'
+        error_text = "Could not read FlightDirection"
+        return json.dumps({"Error": error_text})
     
     # Remove weird parts
     try :
         parts, error_message = remove_weird_parts(parts)
     except :
-        return 'Error: cannot remove weird parts'
+        error_text = "Could not remove_weird_parts (classic ships)"
+        return json.dumps({"Error": error_text})
     # Calculate center of mass
     try :
         comx, comy, mass = list(center_of_mass(parts))
     except :
-        return 'Error: could not calculate center of mass'
+        error_text = "Could not execute center_of_mass"
+        return json.dumps({"Error": error_text})
     data_com = [comx, comy, mass]
 
     # Calculate center of thrust
     try :
         origin_thrust, thrust_vector, thrust_direction = center_of_thrust(parts, args)
     except :
-        return 'Error: could not calculate center of thrust'
+        error_text = "Could not execute center_of_thrust"
+        return json.dumps({"Error": error_text})
     try :
         origin_thrust, thrust_vector, thrust_direction = diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction)
     except :
-        return 'Error: could not calculate diagonal center of thrust'
+        error_text = "Could not execute diagonal_center_of_thrust"
+        return json.dumps({"Error": error_text})
     data_cot = [origin_thrust, thrust_vector, thrust_direction]
 
     ## get tags
     try :
         tags, author = PNGTagExtractor().extract_tags(decoded_data)
     except :
-        return 'Error: could not extract tags'
+        error_text = "Could not execute extract_tags (PNGTagExtractor)"
+        return json.dumps({"Error": error_text})
     ## get crew and price
     try : 
         price, crew = calculate_price(decoded_data)
     except :
-        return 'Error: could not calculate price'
+        error_text = "Could not execute calculate_price (pricegen)"
+        return json.dumps({"Error": error_text})
     # direction mapping
     direction_mapping = {
         0: "NW",
@@ -991,13 +1001,15 @@ def com(input_filename, output_filename, args={}):
         for ship_orient, direction_ori in direction_mapping.items():
             speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orient])
     except :
-        return 'Error: could not calculate speed'
+        error_text = "Could not execute top_speed"
+        return json.dumps({"Error": error_text})
      
     if args["analyze"]:
             try :
                 analysis = json.loads(price_analysis(decoded_data))
             except :
-                return 'Error: could not analyze price'
+                error_text = "Could not execute price_analysis (price_analysis_ocv)"
+                return json.dumps({"Error": error_text})
     else :
         analysis = False  
     
@@ -1008,11 +1020,13 @@ def com(input_filename, output_filename, args={}):
         try :
             base64_output = draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args)
         except :
-            return 'Error: could not draw ship'
+            error_text = "Could not execute draw_ship"
+            return json.dumps({"Error": error_text})
         try :
             url_com = upload_image_to_imgbb(base64_output)
         except :
-            return 'Error: could not upload image to imgbb'
+            error_text = "Could not execute upload_image_to_imgbb (png_upload)"
+            return json.dumps({"Error": error_text})
         
         data = {
             # "url_org": url,
@@ -1032,7 +1046,8 @@ def com(input_filename, output_filename, args={}):
         try : 
             json_data = json.dumps(data)
         except :
-            return 'Error: could not convert data to json'
+            error_text = "Could not convert output data to json"
+            return json.dumps({"Error": error_text})
 
         return json_data
         # return data_com, data_cot, speeds[direction_mapping[decoded_data["FlightDirection"]]], error_message, url_com
@@ -1057,7 +1072,8 @@ def com(input_filename, output_filename, args={}):
         try : 
             json_data = json.dumps(data)
         except :
-            return 'Error: could not convert data to json'
+            error_text = "Could not convert output data to json"
+            return json.dumps({"Error": error_text})
         
         return json_data
 
