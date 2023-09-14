@@ -534,7 +534,8 @@ def sprite_position(part, position):
         "cosmoteer.missile_launcher",
         "cosmoteer.railgun_launcher",
         "cosmoteer.flak_cannon_large",
-        "cosmoteer.shield_gen_small"
+        "cosmoteer.shield_gen_small",
+        "cosmoteer.chaingun", # added chaingun
     ]
     
     down_turret_parts = [
@@ -1094,7 +1095,8 @@ def convert_bytes_to_base64(data):
 
 # with open(SHIP, "rb") as img_file:
 # #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
-# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151846744666157127/input_file.png'
+# # ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151846744666157127/input_file.png' # wrong ship file
+# ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1151859638896164914/input_file.png"
 # # # ship_data = 'ships/Sion.ship.png'
-# out_data = com(ship_data, "out.png", {"analyze":True, "draw":False})
+# out_data = com(ship_data, "out.png", {"analyze":False, "draw":True})
 # print(out_data)
