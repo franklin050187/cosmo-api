@@ -371,6 +371,7 @@ def price_analysis(data_json): ## take json instead of png
         "price_power": {"price": price_power, "percent": price_power / total_price},
         "price_shield": {"price": price_shield, "percent": price_shield / total_price},
         "price_storage": {"price": price_storage, "percent": price_storage / total_price},
+        "price_utility": {"price": price_utility, "percent": price_utility / total_price},
     }
     # Convert the dictionary to a JSON string
     json_data = json.dumps(data)
