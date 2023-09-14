@@ -698,10 +698,12 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
     Returns:
     - an empty string if the image was successfully saved
     """
-    sprite_square_size = 64
-    size_factor = round(sprite_square_size / 4)
+    canva_size = 175
+    canva_offset = canva_size // 2
+    sprite_square_size = 128
+    size_factor = round(sprite_square_size / 8)
     square_size = round(size_factor)
-    img = np.zeros((120 * size_factor, 120 * size_factor, 3), np.uint8)
+    img = np.zeros((canva_size * size_factor, canva_size * size_factor, 3), np.uint8)
     sprite_directory = "sprites/"
     loaded_sprites = {}
     for i in range(len(parts)):
@@ -715,9 +717,9 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         else:
             part_image = cv2.imread(sprite_path, cv2.IMREAD_UNCHANGED)
             loaded_sprites[sprite_path] = part_image
-        x_coord = part["Location"][0] + 60
-        y_coord = part["Location"][1] + 60
-        if x_coord < 0 or x_coord > 120 or y_coord < 0 or y_coord > 120:
+        x_coord = part["Location"][0] + canva_offset
+        y_coord = part["Location"][1] + canva_offset
+        if x_coord < 0 or x_coord > canva_size or y_coord < 0 or y_coord > canva_size:
             return "error drawing ship: out of bounds\n"
         size = part_data.parts[part["ID"]]["size"]
         rotation = part["Rotation"]
@@ -729,12 +731,12 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         insert_sprite(img, part_image, scaled_x_coord, scaled_y_coord, rotation, flipx, sprite_dimensions)
     img = img * 0.8
     if args["draw_com"]:
-        cv2.circle(img, (round((data_com[0] + 60) * size_factor), round((data_com[1] + 60) * size_factor)), square_size,
+        cv2.circle(img, (round((data_com[0] + canva_offset) * size_factor), round((data_com[1] + canva_offset) * size_factor)), square_size,
                    [0, 255, 0], -1)
         if args["draw_all_com"]:
             for part in parts:
                 x_coord, y_coord = part_center_of_mass(part)
-                cv2.circle(img, (round((x_coord + 60) * size_factor), round((y_coord + 60) * size_factor)), 1,
+                cv2.circle(img, (round((x_coord + canva_offset) * size_factor), round((y_coord + canva_offset) * size_factor)), 1,
                            [0, 255, 0], -1)
     if args["draw_all_cot"]:
         for part in parts:
@@ -755,8 +757,8 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
                 end_point = rotation_mapping[part_rotation]
                 if(args["flip_vectors"]):
                     end_point = (vector.x * 2 - end_point[0], vector.y * 2 - end_point[1])
-                scaled_vector = (round((vector.x + 60) * size_factor), round((vector.y + 60) * size_factor)) ##MOD##
-                scaled_end_point = (round((end_point[0] + 60) * size_factor), round((end_point[1] + 60) * size_factor)) ##MOD##
+                scaled_vector = (round((vector.x + canva_offset) * size_factor), round((vector.y + canva_offset) * size_factor)) ##MOD##
+                scaled_end_point = (round((end_point[0] + canva_offset) * size_factor), round((end_point[1] + canva_offset) * size_factor)) ##MOD##
                 cv2.arrowedLine(img, scaled_vector, scaled_end_point, [0, 0, 255], 2, tipLength=0.3) ##MOD##
                 cv2.circle(img, scaled_vector, 3, [0, 0, 255], -1) ##MOD##
     if args["draw_cot"]:
@@ -769,7 +771,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         for i in range(8):
             if not args["draw_all_cot"] and i != 7:
                 continue
-            start = (origin_thrust[i] + 60) * size_factor
+            start = (origin_thrust[i] + canva_offset) * size_factor
             start = (round(start.x), round(start.y))
             if thrust_direction[i] == 0:
                 continue
@@ -777,7 +779,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
             if(args["flip_vectors"]):
                 thrust = thrust * -1
             end = thrust * size_of_arrow + origin_thrust[i]
-            end = (end + 60) * size_factor
+            end = (end + canva_offset) * size_factor
             end = (round(end.x), round(end.y))
             if i == 7:
                 arrow_color = [0, 200, 0]
@@ -1034,7 +1036,10 @@ def convert_bytes_to_base64(data):
 
 # with open(SHIP, "rb") as img_file:
 # #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
-# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151701039981006989/input_file.png'
+# # ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151846744666157127/input_file.png' # wrong ship file
+# ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1151881350723420160/input_file.png" # huge ship
+# # ship_data = "https://i.ibb.co/qm85XKd/e421856249d8.png" # normal ship
+
 # # # ship_data = 'ships/Sion.ship.png'
-# out_data = com(ship_data, "out.png", {"analyze":True, "draw":False})
+# out_data = com(ship_data, "out.png", {"analyze":False, "draw":True})
 # print(out_data)
