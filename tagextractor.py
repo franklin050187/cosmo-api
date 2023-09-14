@@ -41,7 +41,8 @@ class PNGTagExtractor:
             'cosmoteer.reactor_small': 'small_reactor',
             'cosmoteer.shield_gen_small': 'small_shield',
             'cosmoteer.tractor_beam_emitter': 'tractor_beams',
-            'cosmoteer.hyperdrive_beacon': 'hyperdrive_relay'
+            'cosmoteer.hyperdrive_beacon': 'hyperdrive_relay',
+            'cosmoteer.chaingun': 'chaingun',
         }
         
         self.missile_mapping = {
@@ -68,8 +69,9 @@ class PNGTagExtractor:
         #         continue
         try :
             missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
-        except :
+        except:
             pass
+
         ids = [item['ID'] for item in parts]
         
         mapped_output = set()
