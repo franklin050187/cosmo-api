@@ -1034,7 +1034,7 @@ def convert_bytes_to_base64(data):
 
 # with open(SHIP, "rb") as img_file:
 # #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
-# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151517855624474684/input_file.png'
+# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151701039981006989/input_file.png'
 # # # ship_data = 'ships/Sion.ship.png'
 # out_data = com(ship_data, "out.png", {"analyze":True, "draw":False})
 # print(out_data)

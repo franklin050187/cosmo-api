@@ -78,6 +78,8 @@ parts={
         "cosmoteer.storage_3x3":{"mass":9, "size":(3,3)},
         "cosmoteer.storage_4x3":{"mass":12, "size":(4,3)},
         "cosmoteer.storage_4x4":{"mass":16, "size":(4,4)},
+        "cosmoteer.chaingun":{"mass":16.82, "size":(3,5)},
+        "cosmoteer.chaingun_magazine":{"mass":2, "size":(1,2)},
 }
 
 thruster_data={

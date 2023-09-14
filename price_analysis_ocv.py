@@ -16,9 +16,6 @@ import numpy as np
 # storage
 # utilities, the rest like doors
 
-
-
-
 parts_resources = [
     {"ID": "cosmoteer.airlock", "Resources": [["steel", "8"], ["coil", "4"]]},
     {"ID": "cosmoteer.armor", "Resources": [["steel", "8"]]},
@@ -102,6 +99,8 @@ parts_resources = [
     {"ID": "nukes","Resources": [["missile_part_nuke", "12"]]},
     {"ID": "mines","Resources": [["mine_part", "24"]]},
     {"ID": "emp_missiles","Resources": [["missile_part_emp", "9"]]},
+    {"ID": "cosmoteer.chaingun","Resources": [["steel", "128"], ["coil2", "38"], ["tristeel", "12"], ["bullet", "10"]]},
+    {"ID": "cosmoteer.chaingun_magazine","Resources": [["steel", "24"], ["coil", "22"], ["tristeel", "1"], ["bullet", "5"]]},
 ]
 
 resource_cost = [{'ID': 'bullet', 'BuyPrice': 4, 'MaxStackSize': 20}, {'ID': 'carbon', 'BuyPrice': 160, 'MaxStackSize': 5}, {'ID': 'coil', 'BuyPrice': 100, 'MaxStackSize': 20}, {'ID': 'coil2', 'BuyPrice': 300, 'MaxStackSize': 20}, {'ID': 'copper', 'BuyPrice': 80, 'MaxStackSize': 5}, {'ID': 'diamond', 'BuyPrice': 4000, 'MaxStackSize': 5}, {'ID': 'enriched_uranium', 'BuyPrice': 2000, 'MaxStackSize': 10}, {'ID': 'gold', 'BuyPrice': 500, 'MaxStackSize': 5}, {'ID': 'hyperium', 'BuyPrice': 50, 'MaxStackSize': 20}, {'ID': 'iron', 'BuyPrice': 20, 'MaxStackSize': 5}, {'ID': 'mine_part', 'BuyPrice': 52, 'MaxStackSize': 8}, {'ID': 'missile_part_emp', 'BuyPrice': 20, 'MaxStackSize': 10}, {'ID': 'missile_part_he', 'BuyPrice': 8, 'MaxStackSize': 10}, {'ID': 'missile_part_nuke', 'BuyPrice': 36, 'MaxStackSize': 10}, {'ID': 'processor', 'BuyPrice': 2500, 'MaxStackSize': 5}, {'ID': 'steel', 'BuyPrice': 25, 'MaxStackSize': 20}, {'ID': 'sulfur', 'BuyPrice': 20, 'MaxStackSize': 5}, {'ID': 'tristeel', 'BuyPrice': 200, 'MaxStackSize': 20}, {'ID': 'tritanium', 'BuyPrice': 160, 'MaxStackSize': 5}, {'ID': 'uranium', 'BuyPrice': 400, 'MaxStackSize': 5}]
@@ -113,7 +112,7 @@ cat_power = ["cosmoteer.power_storage", "cosmoteer.reactor_large", "cosmoteer.re
 cat_shield = ["cosmoteer.shield_gen_large", "cosmoteer.shield_gen_small"]
 cat_storage = ["cosmoteer.storage_2x2", "cosmoteer.storage_3x2", "cosmoteer.storage_3x3", "cosmoteer.storage_4x3", "cosmoteer.storage_4x4"]
 cat_utility = ["cosmoteer.airlock", "cosmoteer.control_room_large", "cosmoteer.control_room_med", "cosmoteer.control_room_small", "cosmoteer.conveyor", "cosmoteer.corridor", "cosmoteer.door", "cosmoteer.explosive_charge", "cosmoteer.factory_ammo", "cosmoteer.factory_coil", "cosmoteer.factory_coil2", "cosmoteer.factory_diamond", "cosmoteer.factory_emp", "cosmoteer.factory_he", "cosmoteer.factory_mine", "cosmoteer.factory_nuke", "cosmoteer.factory_processor", "cosmoteer.factory_steel", "cosmoteer.factory_tristeel", "cosmoteer.factory_uranium", "cosmoteer.fire_extinguisher", "cosmoteer.hyperdrive_beacon", "cosmoteer.hyperdrive_small", "cosmoteer.roof_headlight", "cosmoteer.roof_light", "cosmoteer.sensor_array", "cosmoteer.tractor_beam_emitter"]
-cat_weapons = ["cosmoteer.cannon_deck", "cosmoteer.cannon_large", "cosmoteer.cannon_med", "cosmoteer.disruptor", "cosmoteer.flak_cannon_large", "cosmoteer.ion_beam_emitter", "cosmoteer.ion_beam_prism", "cosmoteer.laser_blaster_large", "cosmoteer.laser_blaster_small", "cosmoteer.mining_laser_small", "cosmoteer.missile_launcher", "cosmoteer.point_defense", "cosmoteer.railgun_accelerator", "cosmoteer.railgun_launcher", "cosmoteer.railgun_loader", "he_missiles", "nukes", "mines", "emp_missiles"]
+cat_weapons = ["cosmoteer.cannon_deck", "cosmoteer.cannon_large", "cosmoteer.cannon_med", "cosmoteer.disruptor", "cosmoteer.flak_cannon_large", "cosmoteer.ion_beam_emitter", "cosmoteer.ion_beam_prism", "cosmoteer.laser_blaster_large", "cosmoteer.laser_blaster_small", "cosmoteer.mining_laser_small", "cosmoteer.missile_launcher", "cosmoteer.point_defense", "cosmoteer.railgun_accelerator", "cosmoteer.railgun_launcher", "cosmoteer.railgun_loader", "he_missiles", "nukes", "mines", "emp_missiles", "cosmoteer.chaingun", "cosmoteer.chaingun_magazine"]
 
 
 def convert_bytes_to_base64(data):
@@ -272,7 +271,7 @@ def price_analysis(data_json): ## take json instead of png
     # add price to storage
     price_storage += storage_price
     total_price += storage_price
-
+    
     # Define the categories and values
     categories = ['Shield', 'Weapons', 'Movement', 'Utility', 'Crew', 'Power', 'Armor']
     values = [price_shield, price_weapons, price_mouvement, price_utility, price_crew, price_power, price_armor]
@@ -299,11 +298,11 @@ def price_analysis(data_json): ## take json instead of png
     data_points = []
 
     for i in range(num_categories):
-        normalized_value = values[i] / max_value
+        normalized_value = values[i] / max_value + 0.05
         x = int(center_x + radius * normalized_value * math.cos(math.radians(i * angle)))
         y = int(center_y + radius * normalized_value * math.sin(math.radians(i * angle)))
 
-        # Add the coordinates of the data point to the list
+        # print(x, y)
         data_points.append((x, y))
 
     # Convert the image to BGR format (OpenCV uses BGR by default)

@@ -41,7 +41,8 @@ class PNGTagExtractor:
             'cosmoteer.reactor_small': 'small_reactor',
             'cosmoteer.shield_gen_small': 'small_shield',
             'cosmoteer.tractor_beam_emitter': 'tractor_beams',
-            'cosmoteer.hyperdrive_beacon': 'hyperdrive_relay'
+            'cosmoteer.hyperdrive_beacon': 'hyperdrive_relay',
+            'cosmoteer.chaingun': 'chaingun',
         }
         
         self.missile_mapping = {
