@@ -921,32 +921,58 @@ def com(input_filename, output_filename, args={}):
     args = {**defaults, **args}
     
     # Read ship data and extract part data
-    decoded_data = cosmoteer_save_tools.Ship(input_filename).data
-
+    try:
+        decoded_data = cosmoteer_save_tools.Ship(input_filename).data
+    except:
+        return 'Error: Could not read input file'
     # Convert bytes to base64-encoded strings in the decoded_data dictionary
-    decoded_data = convert_bytes_to_base64(decoded_data)
+    try :
+        decoded_data = convert_bytes_to_base64(decoded_data)
+    except:
+        return 'Error: Could not convert bytes to base64 (json cleaner)'
     
-    parts = decoded_data["Parts"]
-    ship_orientation = decoded_data["FlightDirection"]
+    try :
+        parts = decoded_data["Parts"]
+    except :
+        return 'Error: Could not extract parts'
+    try :
+        ship_orientation = decoded_data["FlightDirection"]
+    except :
+        return 'Error: Could not extract FlightDirection'
     
     # Remove weird parts
-    parts, error_message = remove_weird_parts(parts)
-
+    try :
+        parts, error_message = remove_weird_parts(parts)
+    except :
+        return 'Error: cannot remove weird parts'
     # Calculate center of mass
-    comx, comy, mass = list(center_of_mass(parts))
+    try :
+        comx, comy, mass = list(center_of_mass(parts))
+    except :
+        return 'Error: could not calculate center of mass'
     data_com = [comx, comy, mass]
 
     # Calculate center of thrust
-    origin_thrust, thrust_vector, thrust_direction = center_of_thrust(parts, args)
-    origin_thrust, thrust_vector, thrust_direction = diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction)
+    try :
+        origin_thrust, thrust_vector, thrust_direction = center_of_thrust(parts, args)
+    except :
+        return 'Error: could not calculate center of thrust'
+    try :
+        origin_thrust, thrust_vector, thrust_direction = diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction)
+    except :
+        return 'Error: could not calculate diagonal center of thrust'
     data_cot = [origin_thrust, thrust_vector, thrust_direction]
 
     ## get tags
-    tags, author = PNGTagExtractor().extract_tags(decoded_data)
-
+    try :
+        tags, author = PNGTagExtractor().extract_tags(decoded_data)
+    except :
+        return 'Error: could not extract tags'
     ## get crew and price
-    price, crew = calculate_price(decoded_data)
-    
+    try : 
+        price, crew = calculate_price(decoded_data)
+    except :
+        return 'Error: could not calculate price'
     # direction mapping
     direction_mapping = {
         0: "NW",
@@ -961,12 +987,17 @@ def com(input_filename, output_filename, args={}):
     
     # Calculate speed in all directions   
     speeds = {}
-    
-    for ship_orient, direction_ori in direction_mapping.items():
-        speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orient])
-    
+    try : 
+        for ship_orient, direction_ori in direction_mapping.items():
+            speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orient])
+    except :
+        return 'Error: could not calculate speed'
+     
     if args["analyze"]:
-            analysis = json.loads(price_analysis(decoded_data))
+            try :
+                analysis = json.loads(price_analysis(decoded_data))
+            except :
+                return 'Error: could not analyze price'
     else :
         analysis = False  
     
@@ -974,8 +1005,14 @@ def com(input_filename, output_filename, args={}):
         # API override
         output_filename = "" # we dont store file on the server instead we upload it
         # Draw ship and write to output image
-        base64_output = draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args)
-        url_com = upload_image_to_imgbb(base64_output)
+        try :
+            base64_output = draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args)
+        except :
+            return 'Error: could not draw ship'
+        try :
+            url_com = upload_image_to_imgbb(base64_output)
+        except :
+            return 'Error: could not upload image to imgbb'
         
         data = {
             # "url_org": url,
@@ -992,8 +1029,11 @@ def com(input_filename, output_filename, args={}):
             "analysis": analysis
         }
         # Convert the dictionary to a JSON string
-        json_data = json.dumps(data)
-        
+        try : 
+            json_data = json.dumps(data)
+        except :
+            return 'Error: could not convert data to json'
+
         return json_data
         # return data_com, data_cot, speeds[direction_mapping[decoded_data["FlightDirection"]]], error_message, url_com
     else:
@@ -1014,7 +1054,10 @@ def com(input_filename, output_filename, args={}):
             "analysis": analysis
         }
         # Convert the dictionary to a JSON string
-        json_data = json.dumps(data)
+        try : 
+            json_data = json.dumps(data)
+        except :
+            return 'Error: could not convert data to json'
         
         return json_data
 
@@ -1035,7 +1078,7 @@ def convert_bytes_to_base64(data):
 
 # with open(SHIP, "rb") as img_file:
 # #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
-# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151701039981006989/input_file.png'
+# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151846744666157127/input_file.png'
 # # # ship_data = 'ships/Sion.ship.png'
 # out_data = com(ship_data, "out.png", {"analyze":True, "draw":False})
 # print(out_data)
