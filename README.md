@@ -47,6 +47,18 @@ The response from the GET request will be a JSON object with the following struc
         "SW": float,
         "W": float
     }                                  // JSON with a list of speeds in all directions
+    "analysis": {
+        "url_analysis": "string",
+        "total_price": {"price": float, "percent": float},
+        "price_crew": {"price": float, "percent": float},
+        "price_weapons": {"price": float, "percent": float},
+        "price_armor": {"price": float, "percent": float},
+        "price_mouvement": {"price": float, "percent": float},
+        "price_power": {"price": float, "percent": float},
+        "price_shield": {"price": float, "percent": float},
+        "price_storage": {"price": float, "percent": float},
+        "price_utility": {"price": float, "percent": float},
+    }
 }
 ```
 
@@ -63,7 +75,8 @@ The response from the GET request will be a JSON object with the following struc
     - `draw_all_cot` (boolean, optional): Draw all center of thrust.
     - `draw_cot` (boolean, optional): Draw center of thrust.
     - `draw_com` (boolean, optional): Draw center of mass.
-    - `boost` (boolean, optional): Boost analysis.
+    - `boost` (boolean, optional): Boost buff.
+    - `analyze` (boolean, optional): Cost analysis.
 
 Example JSON request payload:
 
@@ -78,6 +91,7 @@ Example JSON request payload:
         "draw_cot": false,
         "draw_com": true,
         "boost": true
+        "analyze": true
     }
 }
 ```
