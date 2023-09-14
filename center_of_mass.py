@@ -998,9 +998,10 @@ def com(input_filename, output_filename, args={}):
         # return data_com, data_cot, speeds[direction_mapping[decoded_data["FlightDirection"]]], error_message, url_com
     else:
         # return data_com, data_cot, speeds[direction_mapping[decoded_data["FlightDirection"]]], error_message
+        url_com = "draw is false"
         data = {
             # "url_org": url,
-            "url_com": False,
+            "url_com": url_com,
             "center_of_mass_x": comx,
             "center_of_mass_y": comy,
             "total_mass": mass,
