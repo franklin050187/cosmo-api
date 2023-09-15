@@ -1040,12 +1040,13 @@ def com(input_filename, output_filename, args={}):
         except :
             error_text = "Could not execute draw_ship"
             return json.dumps({"Error": error_text})
+        url_com = "error url upload_image"
         try :
             url_com = upload_image_to_imgbb(base64_output)
         except :
             error_text = "Could not execute upload_image_to_imgbb (png_upload)"
             return json.dumps({"Error": error_text})
-        
+        print(url_com)
         data = {
             # "url_org": url,
             "url_com": url_com,
@@ -1113,7 +1114,7 @@ def convert_bytes_to_base64(data):
 # with open(SHIP, "rb") as img_file:
 # #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
 # # ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151846744666157127/input_file.png' # wrong ship file
-# ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1151859638896164914/input_file.png"
-# ship_data = 'bromo.png'
-# out_data = com(ship_data, "out.png", {"analyze":False, "draw":True})
+# ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1152226828329689159/input_file.png"
+# # ship_data = 'bromo.png'
+# out_data = com(ship_data, "out.png", {"analyze":True, "draw":True})
 # print(out_data)
