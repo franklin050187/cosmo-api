@@ -273,7 +273,7 @@ def price_analysis(data_json): ## take json instead of png
     total_price += storage_price
     
     # Define the categories and values
-    categories = ['Shield', 'Weapons', 'Movement', 'Utility', 'Crew', 'Power', 'Armor']
+    categories = ['Shield', 'Weapon', 'Thrust', 'Misc', 'Crew', 'Power', 'Armor']
     values = [price_shield, price_weapons, price_mouvement, price_utility, price_crew, price_power, price_armor]
 
     # Create a blank image
