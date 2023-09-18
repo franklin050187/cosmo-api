@@ -749,6 +749,16 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
     if args["draw_com"]:
         cv2.circle(img, (round((data_com[0] + canva_offset) * size_factor), round((data_com[1] + canva_offset) * size_factor)), square_size,
                    [0, 255, 0], -1)
+        partsTB = []
+        for part in parts:
+            if part["ID"] == "cosmoteer.tractor_beam_emitter":
+                partsTB.append(part)
+        if partsTB is not None:        
+            comxtb, comytb, masstb = list(center_of_mass(partsTB))
+            data_comtb = [comxtb, comytb, masstb]
+            square_size_mod = 12
+            cv2.circle(img, (round((data_comtb[0] + canva_offset) * size_factor), round((data_comtb[1] + canva_offset) * size_factor)), square_size_mod,
+                    [0, 0, 255], -1)
         if args["draw_all_com"]:
             for part in parts:
                 x_coord, y_coord = part_center_of_mass(part)
@@ -1115,6 +1125,9 @@ def convert_bytes_to_base64(data):
 # #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
 # # ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151846744666157127/input_file.png' # wrong ship file
 # ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1152226828329689159/input_file.png"
-# # ship_data = 'bromo.png'
+# ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1153009131884650596/input_file.png" # TB
+
+# # # ship_data = 'bromo.png'
 # out_data = com(ship_data, "out.png", {"analyze":True, "draw":True})
 # print(out_data)
+ 
