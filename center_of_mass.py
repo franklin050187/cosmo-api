@@ -753,7 +753,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         for part in parts:
             if part["ID"] == "cosmoteer.tractor_beam_emitter":
                 partsTB.append(part)
-        if partsTB is not None:        
+        if partsTB :        
             comxtb, comytb, masstb = list(center_of_mass(partsTB))
             data_comtb = [comxtb, comytb, masstb]
             square_size_mod = 12
