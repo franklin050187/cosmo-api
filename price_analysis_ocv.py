@@ -129,7 +129,7 @@ def price_analysis(data_json): ## take json instead of png
     price_weapons = 0
     price_armor = 0
     price_crew = 0
-    price_mouvement = 0
+    price_movement = 0
     price_power = 0
     price_shield = 0
     price_storage = 0
@@ -185,7 +185,7 @@ def price_analysis(data_json): ## take json instead of png
             elif item_id in cat_crew:
                 price_crew += item_price
             elif item_id in cat_mouvement:
-                price_mouvement += item_price
+                price_movement += item_price
             elif item_id in cat_power:
                 price_power += item_price
             elif item_id in cat_shield:
@@ -273,8 +273,8 @@ def price_analysis(data_json): ## take json instead of png
     total_price += storage_price
     
     # Define the categories and values
-    categories = ['Shield', 'Weapon', 'Thrust', 'Misc', 'Crew', 'Power', 'Armor']
-    values = [price_shield, price_weapons, price_mouvement, price_utility, price_crew, price_power, price_armor]
+    categories = ['Shield', 'Weapon', 'Thrust', 'Misc', 'Crew', 'Power', 'Armor', 'Storage']
+    values = [price_shield, price_weapons, price_movement, price_utility, price_crew, price_power, price_armor, price_storage]
 
     # Create a blank image
     width, height = 800, 800
@@ -358,7 +358,7 @@ def price_analysis(data_json): ## take json instead of png
 
     url_analysis = 'testing/error'
 
-    # print(base64_img)
+    # print(base64_encoded)
     url_analysis = upload_image_to_imgbb(base64_encoded)
     # print(url_analysis)
     data = {
@@ -367,7 +367,7 @@ def price_analysis(data_json): ## take json instead of png
         "price_crew": {"price": price_crew, "percent": price_crew / total_price},
         "price_weapons": {"price": price_weapons, "percent": price_weapons / total_price},
         "price_armor": {"price": price_armor, "percent": price_armor / total_price},
-        "price_mouvement": {"price": price_mouvement, "percent": price_mouvement / total_price},
+        "price_mouvement": {"price": price_movement, "percent": price_movement / total_price},
         "price_power": {"price": price_power, "percent": price_power / total_price},
         "price_shield": {"price": price_shield, "percent": price_shield / total_price},
         "price_storage": {"price": price_storage, "percent": price_storage / total_price},
