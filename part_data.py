@@ -78,7 +78,7 @@ parts={
         "cosmoteer.storage_3x3":{"mass":9, "size":(3,3)},
         "cosmoteer.storage_4x3":{"mass":12, "size":(4,3)},
         "cosmoteer.storage_4x4":{"mass":16, "size":(4,4)},
-        "cosmoteer.chaingun":{"mass":16.82, "size":(3,5), "sprite_size":(3,7)},
+        "cosmoteer.chaingun":{"mass":17.77, "size":(3,5), "sprite_size":(3,7)},
         "cosmoteer.chaingun_magazine":{"mass":2, "size":(1,2)},
 }
 
@@ -86,7 +86,7 @@ thruster_data={
         "cosmoteer.thruster_small":{"cot":((0.5,1.5,0),),"thrust":400},
         "cosmoteer.thruster_med":{"cot":((0.5,2.5,0),),"thrust":1200},
         "cosmoteer.thruster_large":{"cot":((1,2.5,0),),"thrust":3200},
-        "cosmoteer.thruster_boost":{"cot":((1,4.5,0),),"thrust":3200},
+        "cosmoteer.thruster_boost":{"cot":((1,4.5,0),),"thrust":9600},
         "cosmoteer.thruster_huge":{"cot":((1.5,3.5,0),),"thrust":8000},
         "cosmoteer.thruster_small_2way":{"cot":((0.5,1.5,0),(1.5,0.5,3)),"thrust":400},
         "cosmoteer.thruster_small_3way":{"cot":((0.5,1.5,0),(1.5,0.5,3),(-0.5,0.5,1)),"thrust":400},
