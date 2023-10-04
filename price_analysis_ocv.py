@@ -290,7 +290,7 @@ def price_analysis(data_json): ## take json instead of png
     angle = 360 / num_categories
 
     # Maximum value for scaling
-    max_value = max(values)
+    max_value = sum(values)
 
     # Radius of the radar chart
     radius = min(center_x, center_y) - 150
@@ -298,7 +298,7 @@ def price_analysis(data_json): ## take json instead of png
     data_points = []
 
     for i in range(num_categories):
-        normalized_value = values[i] / max_value + 0.05
+        normalized_value = max(values[i] / max_value, 0.05)
         x = int(center_x + radius * normalized_value * math.cos(math.radians(i * angle)))
         y = int(center_y + radius * normalized_value * math.sin(math.radians(i * angle)))
 
