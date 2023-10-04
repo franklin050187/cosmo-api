@@ -291,6 +291,7 @@ def price_analysis(data_json): ## take json instead of png
 
     # Maximum value for scaling
     max_value = max(values)
+    # max_value = sum(values)
 
     # Radius of the radar chart
     radius = min(center_x, center_y) - 150
@@ -298,7 +299,8 @@ def price_analysis(data_json): ## take json instead of png
     data_points = []
 
     for i in range(num_categories):
-        normalized_value = values[i] / max_value + 0.05
+        # normalized_value = values[i] / max_value + 0.05
+        normalized_value = max(values[i] / max_value, 0.05)
         x = int(center_x + radius * normalized_value * math.cos(math.radians(i * angle)))
         y = int(center_y + radius * normalized_value * math.sin(math.radians(i * angle)))
 
@@ -379,8 +381,8 @@ def price_analysis(data_json): ## take json instead of png
 
 # # # for testing
 # import cosmoteer_save_tools
-# # # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
-# # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151507769317404672/input_file.png').data
+# # # # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
+# # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151507769317404672/input_file.png').data
 # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151517855624474684/input_file.png').data
 
 
