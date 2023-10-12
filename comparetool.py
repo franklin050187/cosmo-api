@@ -278,7 +278,7 @@ def price_analysis(data_json): ## take json instead of png
     return values
 ### up is data, down is image gen
 
-def create_chart(values1, values2, shipname1, shipname2):
+def create_chart(values1, values2, shipname1, shipname2, id1, id2):
     categories = ['Shield', 'Weapon', 'Thrust', 'Misc', 'Crew', 'Power', 'Armor', 'Storage']
     # sum up values for each values to create total price
     # print(values1)
@@ -431,6 +431,8 @@ def create_chart(values1, values2, shipname1, shipname2):
     price_shield2 = values2[0]
     price_storage2 = values2[7]
     price_utility2 = values2[3]
+    urlship1 = get_shippng(id1)
+    urlship2 = get_shippng(id2)
     data = {
         "url_analysis": url_analysis,
         "total_price1": {"price": total_price, "percent": 1},
@@ -451,6 +453,10 @@ def create_chart(values1, values2, shipname1, shipname2):
         "price_shield2": {"price": price_shield2, "percent": price_shield2 / total_price2},
         "price_storage2": {"price": price_storage2, "percent": price_storage2 / total_price2},
         "price_utility2": {"price": price_utility2, "percent": price_utility2 / total_price2},
+        "urlship1": urlship1[0],
+        "urlship2": urlship2[0],
+        "shipname1": shipname1,
+        "shipname2": shipname2
     }
     # Convert the dictionary to a JSON string
     json_data = json.dumps(data)
@@ -471,6 +477,21 @@ def get_json(id):
     # print(data)
     return data
 
+def get_shippng(id):
+    conn = psycopg2.connect(database=os.getenv('POSTGRES_DATABASE'),
+                        host=os.getenv('POSTGRES_HOST'),
+                        user=os.getenv('POSTGRES_USER'),
+                        password=os.getenv('POSTGRES_PASSWORD'),
+                        port=5432)
+    query = "SELECT data FROM shipdb WHERE id = %s"
+    cursor = conn.cursor()
+    cursor.execute(query, (id,))
+    data = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    # print(data)
+    return data
+
 def compare_ships(id1, id2):
     data1 = get_json(id1)
     data2 = get_json(id2)
@@ -478,13 +499,14 @@ def compare_ships(id1, id2):
     price2 = price_analysis(data2[1])
     shipname1 = f'{data1[3]} (id={data1[2]})'
     shipname2 = f'{data2[3]} (id={data2[2]})'
-    
-    # print(price1)
-    # print(price2)
-    json_data = create_chart(price1, price2, shipname1, shipname2)
+    # data1[0] is the id
+    # data1[1] is the json
+    # data1[2] is the shipid
+    # data1[3] is the shipname
+    json_data = create_chart(price1, price2, shipname1, shipname2, id1, id2)
     return json_data
 
-# test = compare(761, 752)
+# test = compare_ships(761, 752)
 # print(test)
 
 # # # for testing
