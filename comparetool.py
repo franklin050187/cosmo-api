@@ -278,10 +278,10 @@ def price_analysis(data_json): ## take json instead of png
     return values
 ### up is data, down is image gen
 
-def create_chart(values1, values2, shipname1, shipname2, id1, id2):
+def create_chart(values1, values2, shipname1, shipname2, id1, id2, scale=False):
+    print("scale value", scale)
     categories = ['Shield', 'Weapon', 'Thrust', 'Misc', 'Crew', 'Power', 'Armor', 'Storage']
     # sum up values for each values to create total price
-    # print(values1)
     total_price = 0
     for value in values1 :
         total_price += int(value)
@@ -306,55 +306,50 @@ def create_chart(values1, values2, shipname1, shipname2, id1, id2):
     max_value1 = max(values1)
     max_value2 = max(values2)
     max_value = max(max_value1, max_value2)
-    
-    # max_value = sum(values)
 
     # Radius of the radar chart
     radius = min(center_x, center_y) - 150
     
-    data_points = []
-
+    data_points = [] # ship1
     for i in range(num_categories):
-        # normalized_value = values[i] / max_value + 0.05
-        normalized_value = max(values1[i] / max_value, 0.05)
+        if scale == False:
+            print("scale is False")
+            normalized_value = max(values1[i] / max_value, 0.05)
+        else:
+            print("scale is True")
+            # normalized_value = values1[i] / total_price
+            normalized_value = values1[i] / max_value1
+            
         x = int(center_x + radius * normalized_value * math.cos(math.radians(i * angle)))
         y = int(center_y + radius * normalized_value * math.sin(math.radians(i * angle)))
-
-        # print(x, y)
         data_points.append((x, y))
-
     # Convert the image to BGR format (OpenCV uses BGR by default)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
-    # # Draw lines between data points to create a polygon
+    # Draw lines between data points to create a polygon
     data_points = np.array(data_points, np.int32)
     data_points = data_points.reshape((-1, 1, 2))
-    # cv2.fillPoly(image, [data_points], (76, 76, 255))  # Light blue color (R, G, B)
-
-    # Draw the polygon outline (if needed)
+    # Draw the polygon outline
     cv2.polylines(image, [data_points], isClosed=True, color=(255, 76, 76), thickness=3)
 
-    data_points = []
-
+    data_points = [] # ship2
     for i in range(num_categories):
-        # normalized_value = values[i] / max_value + 0.05
-        normalized_value = max(values2[i] / max_value, 0.05)
+        if scale == False:
+            normalized_value = max(values2[i] / max_value, 0.05)
+        else:
+            # normalized_value = values2[i] / total_price2
+            normalized_value = values2[i] / max_value2
+            
         x = int(center_x + radius * normalized_value * math.cos(math.radians(i * angle)))
         y = int(center_y + radius * normalized_value * math.sin(math.radians(i * angle)))
-
-        # print(x, y)
         data_points.append((x, y))
-
     # Convert the image to BGR format (OpenCV uses BGR by default)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
     # # Draw lines between data points to create a polygon
     data_points = np.array(data_points, np.int32)
     data_points = data_points.reshape((-1, 1, 2))
-    # cv2.fillPoly(image, [data_points], (76, 255, 76))  # Light blue color (R, G, B)
-
     # Draw the polygon outline (if needed)
     cv2.polylines(image, [data_points], isClosed=True, color=(76, 255, 76), thickness=3)
+
 
     # Draw the radar chart axes
     for i in range(num_categories):
@@ -370,14 +365,26 @@ def create_chart(values1, values2, shipname1, shipname2, id1, id2):
     # Draw the data points on the radar chart and add labels
     font = cv2.FONT_HERSHEY_SIMPLEX
 
-# this draw dot
+    # this draw dot and text
     for i in range(num_categories):
-        normalized_value = values1[i] / max_value
+        # ship 1
+        if scale == False:
+            normalized_value = values1[i] / max_value
+        else:
+            # normalized_value = values1[i] / total_price
+            normalized_value = values1[i] / max_value1
+            
         x = int(center_x + radius * normalized_value * math.cos(math.radians(i * angle)))
         y = int(center_y + radius * normalized_value * math.sin(math.radians(i * angle)))
         cv2.circle(image, (x, y), 5, (0, 0, 255), -1)  # Red circles for data points
         
-        normalized_value = values2[i] / max_value
+        # ship 2 
+        if scale == False:
+            normalized_value = values2[i] / max_value
+        else:
+            # normalized_value = values2[i] / total_price2
+            normalized_value = values2[i] / max_value2
+            
         x = int(center_x + radius * normalized_value * math.cos(math.radians(i * angle)))
         y = int(center_y + radius * normalized_value * math.sin(math.radians(i * angle)))
         cv2.circle(image, (x, y), 5, (0, 255, 0), -1)  # Green circles for data points
@@ -492,21 +499,21 @@ def get_shippng(id):
     # print(data)
     return data
 
-def compare_ships(id1, id2):
+def compare_ships(id1, id2, scale=False):
+    # data1[0] is the id
+    # data1[1] is the json
+    # data1[2] is the shipid
+    # data1[3] is the shipname
     data1 = get_json(id1)
     data2 = get_json(id2)
     price1 = price_analysis(data1[1])
     price2 = price_analysis(data2[1])
     shipname1 = f'{data1[3]} (id={data1[2]})'
     shipname2 = f'{data2[3]} (id={data2[2]})'
-    # data1[0] is the id
-    # data1[1] is the json
-    # data1[2] is the shipid
-    # data1[3] is the shipname
-    json_data = create_chart(price1, price2, shipname1, shipname2, id1, id2)
+    json_data = create_chart(price1, price2, shipname1, shipname2, id1, id2, scale)
     return json_data
 
-# test = compare_ships(761, 752)
+# test = compare_ships(776, 777, scale=True)
 # print(test)
 
 # # # for testing

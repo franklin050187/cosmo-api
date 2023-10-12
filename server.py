@@ -38,20 +38,28 @@ async def analyze(request: Request):
         result = json.loads(result)
         return result
 
-@app.get('/compare') # usage : http://127.0.0.1:8001/compare?ship1=761&ship2=752
+@app.get('/compare') # usage : http://127.0.0.1:8001/compare?ship1=776&ship2=777
 async def compare(request: Request):
     query = request.query_params
     # get data from url
     ship1 = query["ship1"]
     ship2 = query["ship2"]
 
-    placeholder = "placeholder" # we do not output a file here
-    # data = unquote_plus(data)
-    # print(data)
     if not ship1 or not ship2:
         return "Missing ship id"
     else:
-        result = compare_ships(ship1, ship2)
+            # if key scale in query then return its value
+        if "scale" in query:
+            # print("scale")
+            scale = query["scale"]
+            # print(scale)
+            if scale == "True" : 
+                # print("scale True")
+                result = compare_ships(ship1, ship2, scale)
+            else:
+                result = compare_ships(ship1, ship2)
+        else:
+            result = compare_ships(ship1, ship2)
         result = json.loads(result)
         return result
 
