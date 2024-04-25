@@ -712,7 +712,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         min_y = min(min_y, y)
         max_y = max(max_y, y)
     # now the canvas must be at least min x to max x and min y to max y
-    canva_size = max((abs(max_x) + abs(min_x)) , (abs(max_y) + abs(min_y))) + 50 # add 50 margin
+    canva_size = max((abs(max_x) + abs(min_x)) , (abs(max_y) + abs(min_y))) + 250 # add 50 margin
     canva_offset = canva_size // 2
     sprite_square_size = 64
     size_factor = round(sprite_square_size / 4)
