@@ -87,12 +87,13 @@ parts_resources = [
     {"ID": "nukes","Resources": [["missile_part_nuke", "12"]]},
     {"ID": "mines","Resources": [["mine_part", "24"]]},
     {"ID": "emp_missiles","Resources": [["missile_part_emp", "9"]]},
-    {"ID": "cosmoteer.chaingun","Resources": [["steel", "128"], ["coil2", "38"], ["tristeel", "12"], ["bullet", "10"]]},
-    {"ID": "cosmoteer.chaingun_magazine","Resources": [["steel", "24"], ["coil", "22"], ["tristeel", "1"], ["bullet", "5"]]},
+    {"ID": "cosmoteer.chaingun","Resources": [["steel", "144"], ["coil2", "38"], ["tristeel", "45"], ["bullet", "10"]]},
+    {"ID": "cosmoteer.chaingun_magazine","Resources": [["steel", "20"], ["coil", "5"], ["bullet", "4"]]},
     {"ID": "cosmoteer.hyperdrive_large","Resources": [["steel", "156"], ["coil2", "67"], ["processor", "4"]]},
     {"ID": "cosmoteer.thruster_rocket_battery","Resources": [["steel", "20"], ["coil", "10"]]},
     {"ID": "cosmoteer.thruster_rocket_extender","Resources": [["steel", "60"], ["coil2", "20"]]},
     {"ID": "cosmoteer.thruster_rocket_nozzle","Resources": [["steel", "120"], ["coil2", "30"], ["tristeel", "15"], ["bullet", "5"]]},
+    {"ID": "cosmoteer.hyperdrive_med","Resources": [["steel", "76"], ["coil2", "52"], ["processor", "1"]]},
 ]
 
 resource_cost = [{'ID': 'bullet', 'BuyPrice': 4, 'MaxStackSize': 20}, {'ID': 'carbon', 'BuyPrice': 160, 'MaxStackSize': 5}, {'ID': 'coil', 'BuyPrice': 100, 'MaxStackSize': 20}, {'ID': 'coil2', 'BuyPrice': 300, 'MaxStackSize': 20}, {'ID': 'copper', 'BuyPrice': 80, 'MaxStackSize': 5}, {'ID': 'diamond', 'BuyPrice': 4000, 'MaxStackSize': 5}, {'ID': 'enriched_uranium', 'BuyPrice': 2000, 'MaxStackSize': 10}, {'ID': 'gold', 'BuyPrice': 500, 'MaxStackSize': 5}, {'ID': 'hyperium', 'BuyPrice': 50, 'MaxStackSize': 20}, {'ID': 'iron', 'BuyPrice': 20, 'MaxStackSize': 5}, {'ID': 'mine_part', 'BuyPrice': 52, 'MaxStackSize': 8}, {'ID': 'missile_part_emp', 'BuyPrice': 20, 'MaxStackSize': 10}, {'ID': 'missile_part_he', 'BuyPrice': 8, 'MaxStackSize': 10}, {'ID': 'missile_part_nuke', 'BuyPrice': 36, 'MaxStackSize': 10}, {'ID': 'processor', 'BuyPrice': 2500, 'MaxStackSize': 5}, {'ID': 'steel', 'BuyPrice': 25, 'MaxStackSize': 20}, {'ID': 'sulfur', 'BuyPrice': 20, 'MaxStackSize': 5}, {'ID': 'tristeel', 'BuyPrice': 200, 'MaxStackSize': 20}, {'ID': 'tritanium', 'BuyPrice': 160, 'MaxStackSize': 5}, {'ID': 'uranium', 'BuyPrice': 400, 'MaxStackSize': 5}]

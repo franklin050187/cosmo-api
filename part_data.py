@@ -80,10 +80,11 @@ parts={
         "cosmoteer.storage_4x4":{"mass":16, "size":(4,4)},
         "cosmoteer.chaingun":{"mass":17.77, "size":(3,5), "sprite_size":(3,7)},
         "cosmoteer.chaingun_magazine":{"mass":2, "size":(1,2)},
-        "cosmoteer.hyperdriver_large":{"mass":16, "size":(4,4)},
+        "cosmoteer.hyperdrive_large":{"mass":16, "size":(4,4)},
         'cosmoteer.thruster_rocket_battery':{'mass':2, 'size':(1,2)},
         'cosmoteer.thruster_rocket_extender':{'mass':6, 'size':(3,2)},
         'cosmoteer.thruster_rocket_nozzle':{'mass':14.4, 'size':(3,4), 'sprite_size':(3,5)},
+        'cosmoteer.hyperdrive_med':{"mass":9, "size":(3,3)},
 }
 
 thruster_data={
