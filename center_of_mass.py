@@ -595,36 +595,34 @@ def crop(image, margin=10):
     Returns:
         numpy.ndarray: The cropped image.
     """
-    # Get the non-zero pixel indices
-    y_nonzero, x_nonzero, _ = np.nonzero(image)
+    # Find the non-zero pixels and get their indices
+    coords = np.transpose(np.nonzero(image))
 
     # Calculate the min/max values for x and y
-    xmin = np.min(x_nonzero) - margin
-    xmax = np.max(x_nonzero) + margin
-    ymin = np.min(y_nonzero) - margin
-    ymax = np.max(y_nonzero) + margin
+    xmin = np.min(coords[:, 1]) - margin
+    xmax = np.max(coords[:, 1]) + margin
+    ymin = np.min(coords[:, 0]) - margin
+    ymax = np.max(coords[:, 0]) + margin
 
-    # Make sure the image is a square
-    if xmax - xmin > ymax - ymin:
-        margin=round((xmax-xmin)/2)-round((ymax-ymin)/2)
+    # Ensure the image is a square
+    dx = xmax - xmin
+    dy = ymax - ymin
+    if dx > dy:
+        margin = (dx - dy) // 2
         ymax += margin
         ymin -= margin
-    elif ymax - ymin > xmax - xmin:
-        margin=round((ymax-ymin)/2)-round((xmax-xmin)/2)
+    elif dy > dx:
+        margin = (dy - dx) // 2
         xmax += margin
         xmin -= margin
 
-    # Adjust the min/max values if they exceed the image boundaries
-    if xmin < 0:
-        xmin = 0
-    if xmax > image.shape[1]:
-        xmax = image.shape[1]
-    if ymin < 0:
-        ymin = 0
-    if ymax > image.shape[0]:
-        ymax = image.shape[0]
+    # Clamp the min/max values to fit within image boundaries
+    xmin = max(0, xmin)
+    xmax = min(image.shape[1], xmax)
+    ymin = max(0, ymin)
+    ymax = min(image.shape[0], ymax)
 
-    # Crop the image based on the calculated min/max values
+    # Crop the image
     return image[ymin:ymax, xmin:xmax]
 
 def draw_legend(output_filename):
