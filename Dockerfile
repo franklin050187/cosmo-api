@@ -17,7 +17,7 @@ WORKDIR /app/cosmo-api
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the .env file to the working directory
-COPY .env .
+# load them in the container
 
 # Expose port 8001
 EXPOSE 8001
