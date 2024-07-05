@@ -23,15 +23,16 @@ parts_resources = [
     {"ID": "cosmoteer.chaingun_magazine","Resources": [["steel", "20"], ["coil", "5"], ["bullet", "4"]]},
     {"ID": "cosmoteer.control_room_large","Resources": [["steel", "160"], ["coil2", "70"], ["processor", "10"]]},
     {"ID": "cosmoteer.control_room_med","Resources": [["steel", "80"], ["coil2", "35"], ["processor", "5"]]},
-    {"ID": "cosmoteer.control_room_small","Resources": [["steel", "32"], ["coil2", "14"], ["processor", "2"]]},
+    {"ID": "cosmoteer.control_room_small","Resources": [["steel", "32"], ["coil", "42"], ["processor", "2"]]},
     {"ID": "cosmoteer.conveyor", "Resources": [["steel", "4"], ["coil", "1"]]},
     {"ID": "cosmoteer.corridor", "Resources": [["steel", "4"]]},
+    {"ID": "cosmoteer.crew_quarters_large", "Resources": [["steel", "144"]]},
     {"ID": "cosmoteer.crew_quarters_med", "Resources": [["steel", "48"]]},
     {"ID": "cosmoteer.crew_quarters_small", "Resources": [["steel", "24"]]},
     {"ID": "cosmoteer.disruptor", "Resources": [["steel", "40"], ["coil", "20"]]},
     {"ID": "cosmoteer.door", "Resources": [["coil", "1"]]},
     {"ID": "cosmoteer.engine_room","Resources": [["steel", "72"], ["coil2", "28"], ["tristeel", "9"]]},
-    {"ID": "cosmoteer.explosive_charge","Resources": [["steel", "16"], ["coil", "4"]]},
+    {"ID": "cosmoteer.explosive_charge","Resources": [["steel", "12"], ["coil", "3"]]},
     {"ID": "cosmoteer.factory_ammo","Resources": [["steel", "32"], ["coil", "24"], ["tristeel", "4"], ["sulfur", "5"]]},
     {"ID": "cosmoteer.factory_coil","Resources": [["steel", "80"], ["coil", "80"], ["processor", "8"], ["copper", "10"]]},
     {"ID": "cosmoteer.factory_coil2","Resources": [["steel", "104"], ["coil2", "58"], ["processor", "12"], ["copper", "10"], ["coil", "40"] ]},
@@ -39,7 +40,7 @@ parts_resources = [
     {"ID": "cosmoteer.factory_emp","Resources": [["steel", "96"], ["coil2", "32"], ["diamond", "2"], ["iron", "5"], ["copper", "5"]]},
     {"ID": "cosmoteer.factory_he","Resources": [["steel", "76"], ["coil2", "27"], ["processor", "2"], ["iron", "5"], ["sulfur", "5"]]},
     {"ID": "cosmoteer.factory_mine","Resources": [["steel", "96"], ["coil2", "50"], ["tristeel", "13"], ["iron", "5"], ["bullet", "20"]]},
-    {"ID": "cosmoteer.factory_nuke","Resources": [["steel", "136"], ["coil2", "62"], ["enriched_uranium", "4"], ["iron", "5"], ["uranium", "5"]]},
+    {"ID": "cosmoteer.factory_nuke","Resources": [["steel", "120"], ["coil2", "60"], ["enriched_uranium", "2"], ["iron", "5"], ["uranium", "5"]]},
     {"ID": "cosmoteer.factory_processor","Resources": [["steel", "80"], ["coil2", "100"], ["diamond", "12"], ["coil", "40"], ["gold", "10"]]},
     {"ID": "cosmoteer.factory_steel","Resources": [["steel", "120"], ["coil", "90"], ["coil2", "60"], ["iron", "20"]]},
     {"ID": "cosmoteer.factory_tristeel","Resources": [["steel", "120"], ["coil2", "100"], ["diamond", "8"], ["tritanium", "20"]]},
@@ -49,11 +50,12 @@ parts_resources = [
     {"ID": "cosmoteer.hyperdrive_beacon","Resources": [["steel", "160"], ["coil2", "40"], ["diamond", "6"]]},
     {"ID": "cosmoteer.hyperdrive_large","Resources": [["steel", "156"], ["coil2", "67"], ["processor", "4"]]},
     {"ID": "cosmoteer.hyperdrive_med","Resources": [["steel", "76"], ["coil2", "52"], ["processor", "1"]]},
-    {"ID": "cosmoteer.hyperdrive_small","Resources": [["steel", "40"], ["coil2", "30"]]},
+    {"ID": "cosmoteer.hyperdrive_small","Resources": [["steel", "40"], ["coil", "90"]]},
     {"ID": "cosmoteer.ion_beam_emitter","Resources": [["steel", "60"], ["coil2", "15"], ["diamond", "1"]]},
     {"ID": "cosmoteer.ion_beam_prism","Resources": [["steel", "16"], ["coil2", "2"], ["diamond", "1"]]},
     {"ID": "cosmoteer.laser_blaster_large","Resources": [["steel", "96"], ["coil", "36"]]},
     {"ID": "cosmoteer.laser_blaster_small","Resources": [["steel", "32"], ["coil", "12"]]},
+    {"ID": "cosmoteer.manipulator_beam_emitter","Resources": [["steel", "36"], ["coil2", "7"]]},
     {"ID": "cosmoteer.mining_laser_small","Resources": [["steel", "96"], ["coil", "36"]]},
     {"ID": "cosmoteer.missile_launcher","Resources": [["steel", "60"], ["coil2", "20"], ["processor", "1"]]},
     {"ID": "cosmoteer.point_defense", "Resources": [["steel", "8"], ["coil", "8"]]},
@@ -82,10 +84,10 @@ parts_resources = [
     {"ID": "cosmoteer.structure_wedge", "Resources": [["steel", "1"]]},
     {"ID": "cosmoteer.thruster_boost","Resources": [["steel", "56"], ["coil2", "10"], ["tristeel", "8"]]},
     {"ID": "cosmoteer.thruster_huge","Resources": [["steel", "80"], ["coil2", "20"], ["tristeel", "10"]]},
-    {"ID": "cosmoteer.thruster_large", "Resources": [["steel", "40"], ["coil2", "10"]]},
+    {"ID": "cosmoteer.thruster_large", "Resources": [["steel", "40"], ["coil", "30"]]},
     {"ID": "cosmoteer.thruster_med", "Resources": [["steel", "24"], ["coil", "9"]]},
     {"ID": "cosmoteer.thruster_rocket_battery","Resources": [["steel", "20"], ["coil", "10"]]},
-    {"ID": "cosmoteer.thruster_rocket_extender","Resources": [["steel", "60"], ["coil2", "20"]]},
+    {"ID": "cosmoteer.thruster_rocket_extender","Resources": [["steel", "60"], ["coil2", "15"]]},
     {"ID": "cosmoteer.thruster_rocket_nozzle","Resources": [["steel", "120"], ["coil2", "30"], ["tristeel", "15"]]},
     {"ID": "cosmoteer.thruster_small", "Resources": [["steel", "8"], ["coil", "3"]]},
     {"ID": "cosmoteer.thruster_small_2way","Resources": [["steel", "12"], ["coil", "7"]]},
@@ -213,6 +215,7 @@ def calculate_price(data_json): ## take json instead of png
         # Calculate the price for crew quarters
     crew_quarters_small_price = 0
     crew_quarters_med_price = 0
+    crew_quarters_large_price = 0
 
     for item in parts:
         item_id = item['ID']
@@ -220,6 +223,8 @@ def calculate_price(data_json): ## take json instead of png
             crew_quarters_small_price += 1000
         elif item_id == 'cosmoteer.crew_quarters_med':
             crew_quarters_med_price += 3000
+        elif item_id == 'cosmoteer.crew_quarters_large':
+            crew_quarters_large_price += 6000
 
 # calculate crew number
     crew = 0
@@ -230,8 +235,10 @@ def calculate_price(data_json): ## take json instead of png
             crew += 2
         elif item_id == 'cosmoteer.crew_quarters_med':
             crew += 6
+        elif item_id == 'cosmoteer.crew_quarters_large':
+            crew += 24
     # print('price crew', crew_quarters_small_price + crew_quarters_med_price)        
-    total_price += crew_quarters_small_price + crew_quarters_med_price
+    total_price += crew_quarters_small_price + crew_quarters_med_price + crew_quarters_large_price
 
     # Calculate the price for storage
     storage_price = 0

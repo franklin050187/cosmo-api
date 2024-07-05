@@ -85,6 +85,7 @@ parts={
         'cosmoteer.thruster_rocket_extender':{'mass':6, 'size':(3,2)},
         'cosmoteer.thruster_rocket_nozzle':{'mass':14.4, 'size':(3,4), 'sprite_size':(3,5)},
         'cosmoteer.hyperdrive_med':{"mass":9, "size":(3,3)},
+        'cosmoteer.manipulator_beam_emitter':{"mass":4, "size":(2,2)},
 }
 
 thruster_data={
