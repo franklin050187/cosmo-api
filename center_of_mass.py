@@ -317,10 +317,10 @@ def part_center_of_thrust(part, boost):
         
         absolute_cots.append((Vector2D(center_of_thrust_x, center_of_thrust_y), orientation, thrust))
     
-    # Add additional cot tuples with reduced thrust
-    for i in range(len(absolute_cots)):
-        absolute_cots.append((absolute_cots[i][0], (absolute_cots[i][1] + 1) % 4, absolute_cots[i][2] * 0.05))
-        absolute_cots.append((absolute_cots[i][0], (absolute_cots[i][1] + 3) % 4, absolute_cots[i][2] * 0.05))
+    # Add additional cot tuples with reduced thrust removed in last update end of may 24
+    # for i in range(len(absolute_cots)):
+    #     absolute_cots.append((absolute_cots[i][0], (absolute_cots[i][1] + 1) % 4, absolute_cots[i][2] * 0.05))
+    #     absolute_cots.append((absolute_cots[i][0], (absolute_cots[i][1] + 3) % 4, absolute_cots[i][2] * 0.05))
     
     return absolute_cots
 
