@@ -481,7 +481,10 @@ def insert_sprite(background, sprite, x, y, rotation, flipx, size):
         sprite_rgb = sprite[:, :, :3]
 
         # Extract the alpha channel from the sprite (opacity)
-        alpha_channel = sprite[:, :, 3] / 255.0  # Normalize to range [0, 1]
+        try : # fix min sprite without alpha
+            alpha_channel = sprite[:, :, 3] / 255.0  # Normalize to range [0, 1]
+        except :
+            alpha_channel = 1
 
         # Extract the corresponding region from the background
         background_region = background[y:y+y_end, x:x+x_end]
