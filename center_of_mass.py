@@ -472,16 +472,24 @@ def insert_sprite(background, sprite, x, y, rotation, flipx, size):
     sprite = cv2.resize(sprite, size)  # Resize the sprite
 
     sprite = rotate_image(sprite, rotation, flipx)  # Rotate the sprite
+    try : 
+        y_end, x_end, _ = sprite.shape  # Get the dimensions of the sprite
+    except :
+        y_end, x_end = sprite.shape  # Get the dimensions of the sprite
 
-    y_end, x_end, _ = sprite.shape  # Get the dimensions of the sprite
-
-    # Ensure that the sprite fits within the specified region
     if y + y_end <= background.shape[0] and x + x_end <= background.shape[1]:
-        # Extract the RGB channels from the sprite
-        sprite_rgb = sprite[:, :, :3]
-
-        # Extract the alpha channel from the sprite (opacity)
-        alpha_channel = sprite[:, :, 3] / 255.0  # Normalize to range [0, 1]
+        # Check if sprite is 3D (height, width, channels) or 2D (height, width)
+        if len(sprite.shape) == 3:  # Sprite has color channels
+            sprite_rgb = sprite[:, :, :3]  # Extract RGB channels
+            if sprite.shape[2] == 4:  # Check if the sprite has an alpha channel
+                alpha_channel = sprite[:, :, 3] / 255.0  # Normalize to range [0, 1]
+            else:
+                alpha_channel = np.ones((sprite.shape[0], sprite.shape[1]))  # Create full opacity alpha channel
+        elif len(sprite.shape) == 2:  # Sprite is 2D (grayscale)
+            sprite_rgb = np.stack((sprite,) * 3, axis=-1)  # Convert grayscale to RGB by duplicating the channel
+            alpha_channel = np.ones((sprite.shape[0], sprite.shape[1]))  # Create full opacity alpha channel
+        else:
+            raise ValueError("Unexpected sprite shape")
 
         # Extract the corresponding region from the background
         background_region = background[y:y+y_end, x:x+x_end]
@@ -1125,7 +1133,8 @@ def convert_bytes_to_base64(data):
 # ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1152226828329689159/input_file.png"
 # ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1153009131884650596/input_file.png" # TB
 
-# # # ship_data = 'bromo.png'
+# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1259151756194218014/input_file.png?ex=668aa3f4&is=66895274&hm=49414f8119fcc2d1a85301b3fc032141b2587de4f862eccc34ceb21812c44e9c&'
+# # ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1259166875703836682/input_file.png?ex=668ab209&is=66896089&hm=d1fa82618201100dbb08e0c5e5c9a97b3e695d174e6f01f42659dd11b9bf7dc7&"
 # out_data = com(ship_data, "out.png", {"analyze":True, "draw":True})
 # print(out_data)
  

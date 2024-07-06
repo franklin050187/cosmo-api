@@ -14,7 +14,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Cosmoteer version": "0.26.2"}
 
 @app.get('/analyze') # get a url
 async def analyze(request: Request):
