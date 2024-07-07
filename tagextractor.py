@@ -60,9 +60,9 @@ class PNGTagExtractor:
         # json_data = decode_ship_data(png_file)
         # data = json.loads(json_data)
         data = data_json
-        author = data["Author"]
+        author = data.get("Author", "unknown")
         parts = data["Parts"]
-        toggle = data["PartUIToggleStates"]
+        # toggle = data["PartUIToggleStates"]
         
         missile_types = []
         # for item in toggle:
