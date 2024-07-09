@@ -19,18 +19,20 @@
 #   the center of thrust will be drawn as a green arrow and yellow arrows for each direction
 #   if you can't see the window, the image will be saved as out.png
 
-import part_data
-import cosmoteer_save_tools
-# from pathlib import Path
-from vector2d import Vector2D
 import base64
+import json
+
 import cv2
 import numpy as np
+# from pathlib import Path
+from vector2d import Vector2D
+
+import cosmoteer_save_tools
+import part_data
 from png_upload import upload_image_to_imgbb
-from tagextractor import PNGTagExtractor
-from pricegen import calculate_price
-import json
 from price_analysis_ocv import price_analysis
+from pricegen import calculate_price
+from tagextractor import PNGTagExtractor
 
 FLIP_VECTORS=False
 BOOST=False
@@ -392,7 +394,7 @@ def center_of_thrust_vector(parts, ship_direction):
     sum_y_thrust = 0
 
     for part in parts:
-        cots = part_center_of_thrust(part)
+        cots = part_center_of_thrust(part, False)
         if cots == 0:
             continue
         for cot in cots:
@@ -1012,7 +1014,7 @@ def com(input_filename, output_filename, args={}):
         error_text = "Could not execute extract_tags (PNGTagExtractor)"
         return json.dumps({"Error": error_text})
     ## get crew and price
-    try : 
+    try :
         price, crew = calculate_price(decoded_data)
     except :
         error_text = "Could not execute calculate_price (pricegen)"
@@ -1028,8 +1030,8 @@ def com(input_filename, output_filename, args={}):
         6: "SW",
         7: "W"
     }
-    
-    # Calculate speed in all directions   
+
+    # Calculate speed in all directions
     speeds = {}
     try : 
         for ship_orient, direction_ori in direction_mapping.items():
@@ -1114,27 +1116,19 @@ def com(input_filename, output_filename, args={}):
 
 # Function to recursively convert bytes to base64-encoded strings in the dictionary
 def convert_bytes_to_base64(data):
+    """
+    A function that recursively converts bytes to base64-encoded strings in the dictionary.
+
+    Parameters:
+    - data: The input data that can be bytes, a list, a dictionary, or any other type.
+
+    Returns:
+    - The converted data with bytes converted to base64-encoded strings.
+    """
     if isinstance(data, bytes):
         return base64.b64encode(data).decode('utf-8')
-    elif isinstance(data, list):
+    if isinstance(data, list):
         return [convert_bytes_to_base64(item) for item in data]
-    elif isinstance(data, dict):
+    if isinstance(data, dict):
         return {key: convert_bytes_to_base64(value) for key, value in data.items()}
-    else:
-        return data
-
-# if(__name__ == "__main__"):
-#     com(SHIP, "out.png", {"boost":BOOST,"draw_all_cot":DRAW_ALL_COT,"draw_all_com":DRAW_ALL_COM,"draw_cot":DRAW_COT,"draw_com":DRAW_COM})
-
-
-# with open(SHIP, "rb") as img_file:
-# #         ship_data = base64.b64encode(img_file.read()).decode('utf-8')
-# # ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1151846744666157127/input_file.png' # wrong ship file
-# ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1152226828329689159/input_file.png"
-# ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1153009131884650596/input_file.png" # TB
-
-# ship_data = 'https://cdn.discordapp.com/attachments/546321242471530506/1259151756194218014/input_file.png?ex=668aa3f4&is=66895274&hm=49414f8119fcc2d1a85301b3fc032141b2587de4f862eccc34ceb21812c44e9c&'
-# # ship_data = "https://cdn.discordapp.com/attachments/546321242471530506/1259166875703836682/input_file.png?ex=668ab209&is=66896089&hm=d1fa82618201100dbb08e0c5e5c9a97b3e695d174e6f01f42659dd11b9bf7dc7&"
-# out_data = com(ship_data, "out.png", {"analyze":True, "draw":True})
-# print(out_data)
- 
+    return data

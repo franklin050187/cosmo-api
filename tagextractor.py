@@ -1,9 +1,16 @@
+"""
+extract tags from base64 png
+"""
+
 # tag extractor : takes a base64 png and returns tags as a list
 
 # from cosmoteer_save_tools import decode_ship_data
 # import json
 
 class PNGTagExtractor:
+    """
+    takes a base64 png and returns tags as a list
+    """
     def __init__(self):
         self.mapping = {
             'cosmoteer.cannon_med': 'cannon',

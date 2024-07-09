@@ -1,11 +1,15 @@
+"""
+price analysis
+"""
+
 import base64
-from png_upload import upload_image_to_imgbb
 import json
 import math
+
 import cv2
 import numpy as np
 
-
+from png_upload import upload_image_to_imgbb
 
 # star chart
 # armor, struct, corridor
@@ -390,14 +394,4 @@ def price_analysis(data_json): ## take json instead of png
     }
     # Convert the dictionary to a JSON string
     json_data = json.dumps(data)
-    return json_data 
-
-# # # for testing
-# import cosmoteer_save_tools
-# # # # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
-# # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151507769317404672/input_file.png').data
-# data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151517855624474684/input_file.png').data
-
-
-# json_data = price_analysis(data)
-# print(json_data)
+    return json_data
