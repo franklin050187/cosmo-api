@@ -955,41 +955,41 @@ def com(input_filename, output_filename, args={}):
     }
 
     args = {**defaults, **args}
-    
+
     # Read ship data and extract part data
     try:
         decoded_data = cosmoteer_save_tools.Ship(input_filename).data
-    except:
-        error_text = "Could not read input file (save tool)"
+    except Exception as e:
+        error_text = f"Could not read input file (save tool) {e}"
         return json.dumps({"Error": error_text})
     # Convert bytes to base64-encoded strings in the decoded_data dictionary
     try :
         decoded_data = convert_bytes_to_base64(decoded_data)
-    except:
+    except Exception as e:
         error_text = "Could not convert_bytes_to_base64 (json cleaner)"
         return json.dumps({"Error": error_text})
     
     try :
         parts = decoded_data["Parts"]
-    except :
+    except Exception as e:
         error_text = "Could not read Parts"
         return json.dumps({"Error": error_text})
     try :
         ship_orientation = decoded_data["FlightDirection"]
-    except :
+    except Exception as e:
         error_text = "Could not read FlightDirection"
         return json.dumps({"Error": error_text})
     
     # Remove weird parts
     try :
         parts, error_message = remove_weird_parts(parts)
-    except :
+    except Exception as e:
         error_text = "Could not remove_weird_parts (classic ships)"
         return json.dumps({"Error": error_text})
     # Calculate center of mass
     try :
         comx, comy, mass = list(center_of_mass(parts))
-    except :
+    except Exception as e:
         error_text = "Could not execute center_of_mass"
         return json.dumps({"Error": error_text})
     data_com = [comx, comy, mass]
@@ -997,12 +997,12 @@ def com(input_filename, output_filename, args={}):
     # Calculate center of thrust
     try :
         origin_thrust, thrust_vector, thrust_direction = center_of_thrust(parts, args)
-    except :
+    except Exception as e:
         error_text = "Could not execute center_of_thrust"
         return json.dumps({"Error": error_text})
     try :
         origin_thrust, thrust_vector, thrust_direction = diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction)
-    except :
+    except Exception as e:
         error_text = "Could not execute diagonal_center_of_thrust"
         return json.dumps({"Error": error_text})
     data_cot = [origin_thrust, thrust_vector, thrust_direction]
@@ -1010,13 +1010,13 @@ def com(input_filename, output_filename, args={}):
     ## get tags
     try :
         tags, author = PNGTagExtractor().extract_tags(decoded_data)
-    except :
+    except Exception as e:
         error_text = "Could not execute extract_tags (PNGTagExtractor)"
         return json.dumps({"Error": error_text})
     ## get crew and price
     try :
         price, crew = calculate_price(decoded_data)
-    except :
+    except Exception as e:
         error_text = "Could not execute calculate_price (pricegen)"
         return json.dumps({"Error": error_text})
     # direction mapping
@@ -1033,35 +1033,36 @@ def com(input_filename, output_filename, args={}):
 
     # Calculate speed in all directions
     speeds = {}
-    try : 
+    try :
         for ship_orient, direction_ori in direction_mapping.items():
             speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orient])
-    except :
+    except Exception as e:
         error_text = "Could not execute top_speed"
         return json.dumps({"Error": error_text})
-     
+
     if args["analyze"]:
-            try :
-                analysis = json.loads(price_analysis(decoded_data))
-            except :
-                error_text = "Could not execute price_analysis (price_analysis_ocv)"
-                return json.dumps({"Error": error_text})
+        try :
+            analysis = json.loads(price_analysis(decoded_data))
+        except Exception as e:
+            error_text = f"Could not execute price_analysis (price_analysis_ocv) {e}"
+            return json.dumps({"Error": error_text})
     else :
-        analysis = False  
-    
+        analysis = False
+
     if args["draw"]:
         # API override
         output_filename = "" # we dont store file on the server instead we upload it
         # Draw ship and write to output image
         try :
             base64_output = draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args)
-        except :
+        except Exception as e:
             error_text = "Could not execute draw_ship"
             return json.dumps({"Error": error_text})
         url_com = "error url upload_image"
         try :
             url_com = upload_image_to_imgbb(base64_output)
-        except :
+        except Exception as e:
+
             error_text = "Could not execute upload_image_to_imgbb (png_upload)"
             return json.dumps({"Error": error_text})
         print(url_com)
@@ -1080,39 +1081,37 @@ def com(input_filename, output_filename, args={}):
             "analysis": analysis
         }
         # Convert the dictionary to a JSON string
-        try : 
+        try :
             json_data = json.dumps(data)
-        except :
+        except Exception as e:
             error_text = "Could not convert output data to json"
             return json.dumps({"Error": error_text})
 
         return json_data
-        # return data_com, data_cot, speeds[direction_mapping[decoded_data["FlightDirection"]]], error_message, url_com
-    else:
-        # return data_com, data_cot, speeds[direction_mapping[decoded_data["FlightDirection"]]], error_message
-        url_com = "draw is false"
-        data = {
-            # "url_org": url,
-            "url_com": url_com,
-            "center_of_mass_x": comx,
-            "center_of_mass_y": comy,
-            "total_mass": mass,
-            "top_speed": speeds[direction_mapping[decoded_data["FlightDirection"]]],
-            "crew": crew,
-            "price": price,
-            "tags": tags,
-            "author": author, 
-            "all_direction_speeds": speeds,
-            "analysis": analysis
-        }
-        # Convert the dictionary to a JSON string
-        try : 
-            json_data = json.dumps(data)
-        except :
-            error_text = "Could not convert output data to json"
-            return json.dumps({"Error": error_text})
-        
-        return json_data
+
+    url_com = "draw is false"
+    data = {
+        # "url_org": url,
+        "url_com": url_com,
+        "center_of_mass_x": comx,
+        "center_of_mass_y": comy,
+        "total_mass": mass,
+        "top_speed": speeds[direction_mapping[decoded_data["FlightDirection"]]],
+        "crew": crew,
+        "price": price,
+        "tags": tags,
+        "author": author, 
+        "all_direction_speeds": speeds,
+        "analysis": analysis
+    }
+    # Convert the dictionary to a JSON string
+    try :
+        json_data = json.dumps(data)
+    except Exception as e:
+        error_text = "Could not convert output data to json"
+        return json.dumps({"Error": error_text})
+
+    return json_data
 
 # Function to recursively convert bytes to base64-encoded strings in the dictionary
 def convert_bytes_to_base64(data):
