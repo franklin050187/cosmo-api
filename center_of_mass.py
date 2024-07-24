@@ -1,30 +1,32 @@
-# Copyright 2023 LunastroD
+"""
+Copyright 2023 LunastroD
 
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-# documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use,  
-# copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
-# is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following conditions:
 
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-# FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# INSTRUCTIONS:
-# move your ship.png to the ships folder
-# change the SHIP variable to the name of your ship.png
-#   the center of mass of your ship will be drawn as a green circle
-#   the center of thrust will be drawn as a green arrow and yellow arrows for each direction
-#   if you can't see the window, the image will be saved as out.png
+INSTRUCTIONS:
+move your ship.png to the ships folder
+change the SHIP variable to the name of your ship.png
+  the center of mass of your ship will be drawn as a green circle
+  the center of thrust will be drawn as a green arrow and yellow arrows for each direction
+  if you can't see the window, the image will be saved as out.png
+"""
 
 import base64
 import json
 
 import cv2
 import numpy as np
-# from pathlib import Path
+
 from vector2d import Vector2D
 
 import cosmoteer_save_tools
@@ -34,24 +36,24 @@ from price_analysis_ocv import price_analysis
 from pricegen import calculate_price
 from tagextractor import PNGTagExtractor
 
-FLIP_VECTORS=False
-BOOST=False
-DRAW_ALL_COM=False
-DRAW_COM=True
-DRAW_COT=True
-DRAW_ALL_COT=True
-DRAW=True
-SHIP="ships\\nw.png" #set to the name of your ship.png
+FLIP_VECTORS = False
+BOOST = False
+DRAW_ALL_COM = False
+DRAW_COM = True
+DRAW_COT = True
+DRAW_ALL_COT = True
+DRAW = True
+SHIP = "ships\\nw.png"  # set to the name of your ship.png
 
 
 def parts_touching(part1, part2):
     """
     Check if two parts are touching each other.
-    
+
     Args:
         part1 (dict): Dictionary containing information about part 1.
         part2 (dict): Dictionary containing information about part 2.
-        
+
     Returns:
         bool: True if part1 and part2 are touching, False otherwise.
     """
@@ -84,21 +86,22 @@ def parts_touching(part1, part2):
             part1_tiles.append((part1_location[0] + i - 1, part1_location[1] + j))
             part1_tiles.append((part1_location[0] + i, part1_location[1] + j + 1))
             part1_tiles.append((part1_location[0] + i, part1_location[1] + j - 1))
-    
+
     # check if any of the tiles of part 1 are touching part 2
     for tile in part1_tiles:
         if tile in part2_tiles:
             return True
     return False
-    
+
+
 def thruster_touching_engine_room(parts, thruster):
     """
     Checks if the given thruster is touching the engine room part.
-    
+
     Args:
         parts (list): List of parts to check.
         thruster (dict): The thruster part to check.
-        
+
     Returns:
         bool: True if the thruster is touching the engine room, False otherwise.
     """
@@ -106,6 +109,7 @@ def thruster_touching_engine_room(parts, thruster):
         if part["ID"] == "cosmoteer.engine_room" and parts_touching(thruster, part):
             return True
     return False
+
 
 def center_of_thrust(parts, args):
     """
@@ -120,12 +124,7 @@ def center_of_thrust(parts, args):
     """
 
     # Initialize origin thrust for each direction
-    origin_thrust = [
-        Vector2D(0, 0),
-        Vector2D(0, 0),
-        Vector2D(0, 0),
-        Vector2D(0, 0)
-    ]
+    origin_thrust = [Vector2D(0, 0), Vector2D(0, 0), Vector2D(0, 0), Vector2D(0, 0)]
 
     # Initialize thrust direction for each direction
     thrust_direction = [0, 0, 0, 0]
@@ -154,17 +153,17 @@ def center_of_thrust(parts, args):
             origin_thrust[orientation] += origin * thrust
 
     # Calculate the average origin thrust for each direction
-    for i in range(len(thrust_direction)):
-        if thrust_direction[i] == 0:
+    for i, direction in enumerate(thrust_direction):
+        if direction == 0:
             continue
-        origin_thrust[i] = origin_thrust[i] / thrust_direction[i]
+        origin_thrust[i] = origin_thrust[i] / direction
 
     # Calculate the end of the thrust vector
     thrust_vector = [
         origin_thrust[0] + Vector2D(0, -thrust_direction[0]),
         origin_thrust[1] + Vector2D(thrust_direction[1], 0),
         origin_thrust[2] + Vector2D(0, thrust_direction[2]),
-        origin_thrust[3] + Vector2D(-thrust_direction[3], 0)
+        origin_thrust[3] + Vector2D(-thrust_direction[3], 0),
     ]
 
     return origin_thrust, thrust_vector, thrust_direction
@@ -173,17 +172,18 @@ def center_of_thrust(parts, args):
 def diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction):
     """
     Calculates the center of thrust vectors for the diagonal directions.
-    
+
     Args:
-        origin_thrust (list[Vector2D]): List of origin thrust vectors for each direction (0, 1, 2, 3).
-        thrust_vector (list[Vector2D]): List of thrust vectors for each direction (0, 1, 2, 3).
-        thrust_direction (list[int]): List of thrust directions for each direction (0, 1, 2, 3).
-    
+        origin_thrust (list[Vector2D]): List of origin thrust vectors for each direction (0,1,2,3).
+        thrust_vector (list[Vector2D]): List of thrust vectors for each direction (0,1,2,3).
+        thrust_direction (list[int]): List of thrust directions for each direction (0,1,2,3).
+
     Returns:
-        tuple[list[Vector2D], list[Vector2D], list[int]]: A tuple containing the origin thrust vectors, 
-            thrust vectors, and thrust directions for all diagonal and non-diagonal directions.
+        tuple[list[Vector2D], list[Vector2D], list[int]]: A tuple containing 
+        the origin thrust vectors, thrust vectors, and thrust directions for all diagonal 
+        and non-diagonal directions.
     """
-    
+
     # 0 is up_left, 1 is up_right, 2 is down_right, 3 is down_left
     diagonal_thrust_vector = [Vector2D(0, 0), Vector2D(0, 0), Vector2D(0, 0), Vector2D(0, 0)]
     diagonal_thrust_direction = [0, 0, 0, 0]
@@ -191,22 +191,33 @@ def diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction):
 
     for i in range(4):
         if thrust_direction[i] != 0 and thrust_direction[(i + 3) % 4] != 0:
-            diagonal_thrust_direction[i] = (thrust_direction[i] ** 2 + thrust_direction[(i + 3) % 4] ** 2) ** 0.5
+            diagonal_thrust_direction[i] = (
+                thrust_direction[i] ** 2 + thrust_direction[(i + 3) % 4] ** 2
+            ) ** 0.5
             diagonal_origin_thrust[i] = Vector2D.Lerp(
                 origin_thrust[i],
                 origin_thrust[(i + 3) % 4],
-                thrust_direction[(i + 3) % 4] / (thrust_direction[(i + 3) % 4] + thrust_direction[i])
+                thrust_direction[(i + 3) % 4]
+                / (thrust_direction[(i + 3) % 4] + thrust_direction[i]),
             )
 
-    diagonal_thrust_vector[0] = diagonal_origin_thrust[0] + Vector2D(-thrust_direction[3], -thrust_direction[0])
-    diagonal_thrust_vector[1] = diagonal_origin_thrust[1] + Vector2D(thrust_direction[1], -thrust_direction[0])
-    diagonal_thrust_vector[2] = diagonal_origin_thrust[2] + Vector2D(thrust_direction[1], thrust_direction[2])
-    diagonal_thrust_vector[3] = diagonal_origin_thrust[3] + Vector2D(-thrust_direction[3], thrust_direction[2])
+    diagonal_thrust_vector[0] = diagonal_origin_thrust[0] + Vector2D(
+        -thrust_direction[3], -thrust_direction[0]
+    )
+    diagonal_thrust_vector[1] = diagonal_origin_thrust[1] + Vector2D(
+        thrust_direction[1], -thrust_direction[0]
+    )
+    diagonal_thrust_vector[2] = diagonal_origin_thrust[2] + Vector2D(
+        thrust_direction[1], thrust_direction[2]
+    )
+    diagonal_thrust_vector[3] = diagonal_origin_thrust[3] + Vector2D(
+        -thrust_direction[3], thrust_direction[2]
+    )
 
     all_thrust_vector = []
     all_thrust_direction = []
     all_origin_thrust = []
-    
+
     for i in range(4):
         all_thrust_vector.append(diagonal_thrust_vector[i])
         all_thrust_vector.append(thrust_vector[i])
@@ -214,17 +225,18 @@ def diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction):
         all_thrust_direction.append(thrust_direction[i])
         all_origin_thrust.append(diagonal_origin_thrust[i])
         all_origin_thrust.append(origin_thrust[i])
-    
+
     return all_origin_thrust, all_thrust_vector, all_thrust_direction
+
 
 def top_speed(mass, thrust):
     """
     Calculate the top speed of a vehicle given its mass and thrust.
-    
+
     Args:
         mass (float): The mass of the vehicle.
         thrust (float): The thrust of the vehicle.
-        
+
     Returns:
         float: The top speed of the vehicle.
     """
@@ -232,16 +244,17 @@ def top_speed(mass, thrust):
     # Calculate speed below 75m/s
     x = thrust / mass
     speed = 2.5 * x
-    
+
     # Calculate speed above 75m/s
     if speed > 75:
-        correction = 1
-        speed = (14062.5 * x) ** (1/3)
-    
+        # correction = 1
+        speed = (14062.5 * x) ** (1 / 3)
+
     # Apply correction
-    speed=1.01518568052653*speed -0.000228187226585198*speed**2
-    
+    speed = 1.01518568052653 * speed - 0.000228187226585198 * speed**2
+
     return speed
+
 
 def part_center_of_mass(part):
     """
@@ -255,7 +268,7 @@ def part_center_of_mass(part):
     """
     # Get part size
     part_size = part_data.parts[part["ID"]]["size"]
-    part_rotation = part["Rotation"] # 0, 1, 2, 3
+    part_rotation = part["Rotation"]  # 0, 1, 2, 3
 
     # Calculate center of mass
     if part_rotation == 0 or part_rotation == 2:
@@ -268,6 +281,7 @@ def part_center_of_mass(part):
         print("ERROR: part_rotation not 0, 1, 2, 3")
 
     return center_of_mass_x, center_of_mass_y
+
 
 def part_center_of_thrust(part, boost):
     """
@@ -283,24 +297,24 @@ def part_center_of_thrust(part, boost):
     # Get part center of thrust (cot) and thrust values
     part_cots = part_data.thruster_data.get(part["ID"], {"cot": 0})["cot"]
     thrust = part_data.thruster_data.get(part["ID"], {"thrust": 0})["thrust"]
-    
+
     # Adjust thrust if part is not boosted and is a specific type
     if not boost and part["ID"] == "cosmoteer.thruster_boost":
         thrust = thrust / 3
-    
+
     # Return 0 if part does not have a center of thrust
     if part_cots == 0:
         return 0
-    
+
     # Calculate the absolute centers of thrust for the part
     part_rotation = part["Rotation"]
     part_size = part_data.parts[part["ID"]]["size"]
     absolute_cots = []
-    
+
     for part_cot in part_cots:
         # Calculate orientation
         orientation = (part_rotation + part_cot[2]) % 4
-        
+
         # Calculate center of thrust based on part rotation
         if part_rotation == 0:
             center_of_thrust_x = part["Location"][0] + part_cot[0]
@@ -316,15 +330,13 @@ def part_center_of_thrust(part, boost):
             center_of_thrust_y = part["Location"][1] - part_cot[0] + part_size[0]
         else:
             print("ERROR: part_rotation not 0, 1, 2, 3")
-        
-        absolute_cots.append((Vector2D(center_of_thrust_x, center_of_thrust_y), orientation, thrust))
-    
-    # Add additional cot tuples with reduced thrust removed in last update end of may 24
-    # for i in range(len(absolute_cots)):
-    #     absolute_cots.append((absolute_cots[i][0], (absolute_cots[i][1] + 1) % 4, absolute_cots[i][2] * 0.05))
-    #     absolute_cots.append((absolute_cots[i][0], (absolute_cots[i][1] + 3) % 4, absolute_cots[i][2] * 0.05))
-    
+
+        absolute_cots.append(
+            (Vector2D(center_of_thrust_x, center_of_thrust_y), orientation, thrust)
+        )
+
     return absolute_cots
+
 
 def center_of_mass(parts):
     """
@@ -359,6 +371,7 @@ def center_of_mass(parts):
 
     return center_of_mass_x, center_of_mass_y, total_mass
 
+
 def center_of_thrust_vector(parts, ship_direction):
     """
     Calculate the center of thrust vector of the ship in a given direction.
@@ -373,23 +386,14 @@ def center_of_thrust_vector(parts, ship_direction):
     """
 
     # Define the thrust vectors for each ship direction
-    thrust_vectors = {
-        0: [0, 3],
-        1: [0],
-        2: [0, 1],
-        3: [1],
-        4: [1, 2],
-        5: [2],
-        6: [2, 3],
-        7: [3]
-    }
-    
+    thrust_vectors = {0: [0, 3], 1: [0], 2: [0, 1], 3: [1], 4: [1, 2], 5: [2], 6: [2, 3], 7: [3]}
+
     total_thrust = 0
     total_thrust_direction = 0
 
     sum_x_cot = 0
     sum_y_cot = 0
-    
+
     sum_x_thrust = 0
     sum_y_thrust = 0
 
@@ -426,9 +430,10 @@ def center_of_thrust_vector(parts, ship_direction):
     starty = sum_y_cot / total_thrust_direction
     endx = startx + sum_x_thrust / total_thrust * 15
     endy = starty + sum_y_thrust / total_thrust * 15
-    
+
     return startx, starty, endx, endy, total_thrust_direction / total_thrust
-    
+
+
 def rotate_image(image, angle, flipx):
     """
     Rotate the given image by the specified angle and flip it horizontally if needed.
@@ -455,6 +460,7 @@ def rotate_image(image, angle, flipx):
     else:
         return image
 
+
 def insert_sprite(background, sprite, x, y, rotation, flipx, size):
     """
     Inserts a sprite onto a background image at the specified position.
@@ -469,14 +475,15 @@ def insert_sprite(background, sprite, x, y, rotation, flipx, size):
         size (tuple): The desired size of the sprite after resizing.
 
     Returns:
-        numpy.ndarray: The background image with the sprite inserted, or the original background image if the sprite doesn't fit.
+        numpy.ndarray: The background image with the sprite inserted, or the original 
+        background image if the sprite doesn't fit.
     """
     sprite = cv2.resize(sprite, size)  # Resize the sprite
 
     sprite = rotate_image(sprite, rotation, flipx)  # Rotate the sprite
-    try : 
+    try:
         y_end, x_end, _ = sprite.shape  # Get the dimensions of the sprite
-    except :
+    except:
         y_end, x_end = sprite.shape  # Get the dimensions of the sprite
 
     if y + y_end <= background.shape[0] and x + x_end <= background.shape[1]:
@@ -486,50 +493,56 @@ def insert_sprite(background, sprite, x, y, rotation, flipx, size):
             if sprite.shape[2] == 4:  # Check if the sprite has an alpha channel
                 alpha_channel = sprite[:, :, 3] / 255.0  # Normalize to range [0, 1]
             else:
-                alpha_channel = np.ones((sprite.shape[0], sprite.shape[1]))  # Create full opacity alpha channel
+                alpha_channel = np.ones(
+                    (sprite.shape[0], sprite.shape[1])
+                )  # Create full opacity alpha channel
         elif len(sprite.shape) == 2:  # Sprite is 2D (grayscale)
-            sprite_rgb = np.stack((sprite,) * 3, axis=-1)  # Convert grayscale to RGB by duplicating the channel
-            alpha_channel = np.ones((sprite.shape[0], sprite.shape[1]))  # Create full opacity alpha channel
+            sprite_rgb = np.stack(
+                (sprite,) * 3, axis=-1
+            )  # Convert grayscale to RGB by duplicating the channel
+            alpha_channel = np.ones(
+                (sprite.shape[0], sprite.shape[1])
+            )  # Create full opacity alpha channel
         else:
             raise ValueError("Unexpected sprite shape")
 
         # Extract the corresponding region from the background
-        background_region = background[y:y+y_end, x:x+x_end]
+        background_region = background[y : y + y_end, x : x + x_end]
 
         # Blend the sprite with the background using alpha compositing
         for c in range(3):  # Iterate over RGB channels
-            background_region[:, :, c] = (
-                (1.0 - alpha_channel) * background_region[:, :, c]
-                + alpha_channel * sprite_rgb[:, :, c]
-            )
+            background_region[:, :, c] = (1.0 - alpha_channel) * background_region[
+                :, :, c
+            ] + alpha_channel * sprite_rgb[:, :, c]
 
     else:
         # Handle cases where the sprite doesn't fit within the region
         print(f"Warning: Sprite at ({x}, {y}) exceeds the background dimensions.")
-    
+
     return background
+
 
 def sprite_position(part, position):
     """
     Calculate the offset needed to draw a sprite at a given position.
-    
+
     Args:
         part (dict): The part object containing information about the sprite.
         position (list): The current position of the sprite.
-        
+
     Returns:
         list: The updated position of the sprite.
     """
     # Get the sprite size from the part data
     sprite_size = part_data.parts[part["ID"]].get("sprite_size")
-    
+
     if sprite_size is None:
         return position
-    
+
     # Get the part size and rotation
     part_size = part_data.parts[part["ID"]]["size"]
     part_rotation = part["Rotation"]
-    
+
     # Define problematic parts for each rotation
     up_turret_parts = [
         "cosmoteer.laser_blaster_small",
@@ -545,22 +558,19 @@ def sprite_position(part, position):
         "cosmoteer.railgun_launcher",
         "cosmoteer.flak_cannon_large",
         "cosmoteer.shield_gen_small",
-        "cosmoteer.chaingun", # added chaingun
+        "cosmoteer.chaingun",  # added chaingun
     ]
-    
+
     down_turret_parts = [
         "cosmoteer.thruster_small",
         "cosmoteer.thruster_med",
         "cosmoteer.thruster_large",
         "cosmoteer.thruster_huge",
-        "cosmoteer.thruster_boost"
+        "cosmoteer.thruster_boost",
     ]
-    
-    multiple_turrets = [
-        "cosmoteer.thruster_small_2way",
-        "cosmoteer.thruster_small_3way"
-    ]
-    
+
+    multiple_turrets = ["cosmoteer.thruster_small_2way", "cosmoteer.thruster_small_3way"]
+
     # Update position based on part rotation and type
     if part_rotation == 0 and part["ID"] in up_turret_parts:
         position[1] -= sprite_size[1] - part_size[1]
@@ -590,8 +600,9 @@ def sprite_position(part, position):
                 position[1] -= 1
             if part_rotation == 3:
                 position[1] -= 1
-    
+
     return position
+
 
 def crop(image, margin=10):
     """
@@ -635,10 +646,11 @@ def crop(image, margin=10):
     # Crop the image
     return image[ymin:ymax, xmin:xmax]
 
+
 def draw_legend(output_filename):
     """
     Draw a legend image with arrows, circles, and text.
-    
+
     Args:
         output_filename (str): The filename to save the legend image.
     """
@@ -651,9 +663,30 @@ def draw_legend(output_filename):
     img = np.zeros((line_sep * 5, 600, 3), np.uint8)
 
     # Draw arrows and circles
-    cv2.arrowedLine(img, (left_margin, line_sep * 1), (left_margin + 100, line_sep * 1), [0, 255, 0], 3, tipLength=0.3)
-    cv2.arrowedLine(img, (left_margin, line_sep * 2), (left_margin + 100, line_sep * 2), [0, 255, 255], 3, tipLength=0.3)
-    cv2.arrowedLine(img, (left_margin, line_sep * 3), (left_margin + 100, line_sep * 3), [0, 0, 255], 3, tipLength=0.3)
+    cv2.arrowedLine(
+        img,
+        (left_margin, line_sep * 1),
+        (left_margin + 100, line_sep * 1),
+        [0, 255, 0],
+        3,
+        tipLength=0.3,
+    )
+    cv2.arrowedLine(
+        img,
+        (left_margin, line_sep * 2),
+        (left_margin + 100, line_sep * 2),
+        [0, 255, 255],
+        3,
+        tipLength=0.3,
+    )
+    cv2.arrowedLine(
+        img,
+        (left_margin, line_sep * 3),
+        (left_margin + 100, line_sep * 3),
+        [0, 0, 255],
+        3,
+        tipLength=0.3,
+    )
     cv2.circle(img, (left_margin, line_sep * 4), 10, [0, 255, 0], -1)
 
     # Draw dots at the start of the arrows
@@ -665,31 +698,122 @@ def draw_legend(output_filename):
     font = cv2.FONT_HERSHEY_SIMPLEX
 
     # Center of mass next to green circle
-    cv2.putText(img, 'Center of Mass', (left_margin + 20, line_sep * 4 + 5), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+    cv2.putText(
+        img,
+        "Center of Mass",
+        (left_margin + 20, line_sep * 4 + 5),
+        font,
+        0.5,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
 
     # Add white thin arrow from text to circle
-    cv2.arrowedLine(img, (left_margin + 20, line_sep * 4), (left_margin, line_sep * 4), [255, 255, 255], 2, tipLength=0.2)
+    cv2.arrowedLine(
+        img,
+        (left_margin + 20, line_sep * 4),
+        (left_margin, line_sep * 4),
+        [255, 255, 255],
+        2,
+        tipLength=0.2,
+    )
 
     # Center of thrust to the left of green arrow
-    cv2.putText(img, 'Center of Thrust', (left_margin - 200, line_sep * 1 + 5), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+    cv2.putText(
+        img,
+        "Center of Thrust",
+        (left_margin - 200, line_sep * 1 + 5),
+        font,
+        0.5,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
 
     # Add white thin arrow from text to start of green arrow
-    cv2.arrowedLine(img, (left_margin - 50, line_sep * 1), (left_margin, line_sep * 1), [255, 255, 255], 2, tipLength=0.2)
+    cv2.arrowedLine(
+        img,
+        (left_margin - 50, line_sep * 1),
+        (left_margin, line_sep * 1),
+        [255, 255, 255],
+        2,
+        tipLength=0.2,
+    )
 
     # Strafe center of thrust to the left of yellow arrow
-    cv2.putText(img, 'Strafe Center of Thrust', (left_margin - 250, line_sep * 2 + 5), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+    cv2.putText(
+        img,
+        "Strafe Center of Thrust",
+        (left_margin - 250, line_sep * 2 + 5),
+        font,
+        0.5,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
 
     # Add white thin arrow from text to start of yellow arrow
-    cv2.arrowedLine(img, (left_margin - 50, line_sep * 2), (left_margin, line_sep * 2), [255, 255, 255], 2, tipLength=0.2)
+    cv2.arrowedLine(
+        img,
+        (left_margin - 50, line_sep * 2),
+        (left_margin, line_sep * 2),
+        [255, 255, 255],
+        2,
+        tipLength=0.2,
+    )
 
     # Draw the text for the engine center of thrust to the left of the red arrow
-    cv2.putText(img,'Engine Center of Thrust',(left_margin-250,line_sep*3+5), font, 0.5,(255,255,255),1,cv2.LINE_AA)
-    # Add a white thin arrow from the text to the start of the red arrow    
-    cv2.arrowedLine(img, (left_margin-50, line_sep*3), (left_margin, line_sep*3), [255,255,255], 2, tipLength=0.2)
+    cv2.putText(
+        img,
+        "Engine Center of Thrust",
+        (left_margin - 250, line_sep * 3 + 5),
+        font,
+        0.5,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
+    # Add a white thin arrow from the text to the start of the red arrow
+    cv2.arrowedLine(
+        img,
+        (left_margin - 50, line_sep * 3),
+        (left_margin, line_sep * 3),
+        [255, 255, 255],
+        2,
+        tipLength=0.2,
+    )
     # Add the text "length of vector" on three lines to the right of the arrows
-    cv2.putText(img,'length of vector',(left_margin+120,line_sep*1+5), font, 0.5,(255,255,255),1,cv2.LINE_AA)
-    cv2.putText(img,'depends on thrust',(left_margin+120,line_sep*2+5), font, 0.5,(255,255,255),1,cv2.LINE_AA)
-    cv2.putText(img,'on that direction',(left_margin+120,line_sep*3+5), font, 0.5,(255,255,255),1,cv2.LINE_AA)
+    cv2.putText(
+        img,
+        "length of vector",
+        (left_margin + 120, line_sep * 1 + 5),
+        font,
+        0.5,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
+    cv2.putText(
+        img,
+        "depends on thrust",
+        (left_margin + 120, line_sep * 2 + 5),
+        font,
+        0.5,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
+    cv2.putText(
+        img,
+        "on that direction",
+        (left_margin + 120, line_sep * 3 + 5),
+        font,
+        0.5,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
     # Save the image
     cv2.imwrite(output_filename, img)
 
@@ -722,7 +846,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         min_y = min(min_y, y)
         max_y = max(max_y, y)
     # now the canvas must be at least min x to max x and min y to max y
-    canva_size = max((abs(max_x) + abs(min_x)) , (abs(max_y) + abs(min_y))) + 250 # add 50 margin
+    canva_size = max((abs(max_x) + abs(min_x)), (abs(max_y) + abs(min_y))) + 250  # add 50 margin
     canva_offset = canva_size // 2
     sprite_square_size = 64
     size_factor = round(sprite_square_size / 4)
@@ -730,10 +854,10 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
     img = np.zeros((canva_size * size_factor, canva_size * size_factor, 3), np.uint8)
     sprite_directory = "sprites/"
     loaded_sprites = {}
-    for i in range(len(parts)):
-        if parts[i]["ID"] in ["cosmoteer.cannon_deck", "cosmoteer.ion_beam_prism"]:
+    for i, part in enumerate(parts):
+        if part["ID"] in ["cosmoteer.cannon_deck", "cosmoteer.ion_beam_prism"]:
             parts.append(parts.pop(i))
-    for part in parts:  
+    for part in parts:
         sprite_id = part["ID"].replace("cosmoteer.", "")
         sprite_path = sprite_directory + sprite_id + ".png"
         if sprite_path in loaded_sprites:
@@ -752,26 +876,52 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         scaled_x_coord = round(x_coord * size_factor)
         scaled_y_coord = round(y_coord * size_factor)
         sprite_dimensions = (round(part_image.shape[1] / 4), round(part_image.shape[0] / 4))
-        insert_sprite(img, part_image, scaled_x_coord, scaled_y_coord, rotation, flipx, sprite_dimensions)
+        insert_sprite(
+            img, part_image, scaled_x_coord, scaled_y_coord, rotation, flipx, sprite_dimensions
+        )
     img = img * 0.8
     if args["draw_com"]:
-        cv2.circle(img, (round((data_com[0] + canva_offset) * size_factor), round((data_com[1] + canva_offset) * size_factor)), square_size,
-                   [0, 255, 0], -1)
-        partsTB = []
+        cv2.circle(
+            img,
+            (
+                round((data_com[0] + canva_offset) * size_factor),
+                round((data_com[1] + canva_offset) * size_factor),
+            ),
+            square_size,
+            [0, 255, 0],
+            -1,
+        )
+        parts_tb = []
         for part in parts:
             if part["ID"] == "cosmoteer.tractor_beam_emitter":
-                partsTB.append(part)
-        if partsTB :        
-            comxtb, comytb, masstb = list(center_of_mass(partsTB))
+                parts_tb.append(part)
+        if parts_tb:
+            comxtb, comytb, masstb = list(center_of_mass(parts_tb)) or [0, 0, 0]
             data_comtb = [comxtb, comytb, masstb]
             square_size_mod = 12
-            cv2.circle(img, (round((data_comtb[0] + canva_offset) * size_factor), round((data_comtb[1] + canva_offset) * size_factor)), square_size_mod,
-                    [0, 0, 255], -1)
+            cv2.circle(
+                img,
+                (
+                    round((data_comtb[0] + canva_offset) * size_factor),
+                    round((data_comtb[1] + canva_offset) * size_factor),
+                ),
+                square_size_mod,
+                [0, 0, 255],
+                -1,
+            )
         if args["draw_all_com"]:
             for part in parts:
                 x_coord, y_coord = part_center_of_mass(part)
-                cv2.circle(img, (round((x_coord + canva_offset) * size_factor), round((y_coord + canva_offset) * size_factor)), 1,
-                           [0, 255, 0], -1)
+                cv2.circle(
+                    img,
+                    (
+                        round((x_coord + canva_offset) * size_factor),
+                        round((y_coord + canva_offset) * size_factor),
+                    ),
+                    1,
+                    [0, 255, 0],
+                    -1,
+                )
     if args["draw_all_cot"]:
         for part in parts:
             cots = part_center_of_thrust(part, args["boost"])
@@ -786,15 +936,23 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
                     0: (vector.x, vector.y - size),
                     1: (vector.x + size, vector.y),
                     2: (vector.x, vector.y + size),
-                    3: (vector.x - size, vector.y) 
-                    } 
+                    3: (vector.x - size, vector.y),
+                }
                 end_point = rotation_mapping[part_rotation]
-                if(args["flip_vectors"]):
+                if args["flip_vectors"]:
                     end_point = (vector.x * 2 - end_point[0], vector.y * 2 - end_point[1])
-                scaled_vector = (round((vector.x + canva_offset) * size_factor), round((vector.y + canva_offset) * size_factor)) ##MOD##
-                scaled_end_point = (round((end_point[0] + canva_offset) * size_factor), round((end_point[1] + canva_offset) * size_factor)) ##MOD##
-                cv2.arrowedLine(img, scaled_vector, scaled_end_point, [0, 0, 255], 2, tipLength=0.3) ##MOD##
-                cv2.circle(img, scaled_vector, 3, [0, 0, 255], -1) ##MOD##
+                scaled_vector = (
+                    round((vector.x + canva_offset) * size_factor),
+                    round((vector.y + canva_offset) * size_factor),
+                )  ##MOD##
+                scaled_end_point = (
+                    round((end_point[0] + canva_offset) * size_factor),
+                    round((end_point[1] + canva_offset) * size_factor),
+                )  ##MOD##
+                cv2.arrowedLine(
+                    img, scaled_vector, scaled_end_point, [0, 0, 255], 2, tipLength=0.3
+                )  ##MOD##
+                cv2.circle(img, scaled_vector, 3, [0, 0, 255], -1)  ##MOD##
     if args["draw_cot"]:
         origin_thrust, thrust_vector, thrust_direction = data_cot
         total_thrust = sum(thrust_direction)
@@ -810,7 +968,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
             if thrust_direction[i] == 0:
                 continue
             thrust = (thrust_vector[i] - origin_thrust[i]) / total_thrust
-            if(args["flip_vectors"]):
+            if args["flip_vectors"]:
                 thrust = thrust * -1
             end = thrust * size_of_arrow + origin_thrust[i]
             end = (end + canva_offset) * size_factor
@@ -830,9 +988,10 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         return output_filename
     else:
         img_np = np.asarray(img)
-        _, buffer = cv2.imencode('.png', img_np)
+        _, buffer = cv2.imencode(".png", img_np)
         base64_encoded = base64.b64encode(buffer).decode("utf-8")
         return base64_encoded
+
 
 def remove_weird_parts(parts):
     """
@@ -860,13 +1019,13 @@ def remove_weird_parts(parts):
                 "cosmoteer.ammo_factory",
                 "cosmoteer.missile_factory_nuke",
                 "cosmoteer.missile_factory_he",
-                "cosmoteer.electro_bolter"
+                "cosmoteer.electro_bolter",
             ]
             new_part_ids = [
                 "cosmoteer.factory_ammo",
                 "cosmoteer.factory_nuke",
                 "cosmoteer.factory_he",
-                "cosmoteer.disruptor"
+                "cosmoteer.disruptor",
             ]
 
             if part["ID"] in old_part_ids:
@@ -878,23 +1037,23 @@ def remove_weird_parts(parts):
                 continue
 
             # List of old mirror L IDs and their corresponding updated IDs
-            old_mirror_L = [
+            old_mirror_left = [
                 "cosmoteer.structure_1x2_wedge_L",
                 "cosmoteer.structure_1x3_wedge_L",
                 "cosmoteer.armor_1x2_wedge_L",
-                "cosmoteer.armor_1x3_wedge_L"
+                "cosmoteer.armor_1x3_wedge_L",
             ]
 
             # List of old mirror R IDs and their corresponding updated IDs
-            old_mirror_R = [
+            old_mirror_right = [
                 "cosmoteer.structure_1x2_wedge_R",
                 "cosmoteer.structure_1x3_wedge_R",
                 "cosmoteer.armor_1x2_wedge_R",
-                "cosmoteer.armor_1x3_wedge_R"
+                "cosmoteer.armor_1x3_wedge_R",
             ]
 
             # Check if the part ID is in the old_mirror_L list
-            if part["ID"] in old_mirror_L:
+            if part["ID"] in old_mirror_left:
                 # Update the part ID and FlipX value
                 part["ID"] = part["ID"][:-2]
                 part["FlipX"] = 0
@@ -903,7 +1062,7 @@ def remove_weird_parts(parts):
                 continue
 
             # Check if the part ID is in the old_mirror_R list
-            if part["ID"] in old_mirror_R:
+            if part["ID"] in old_mirror_right:
                 # Update the part ID and FlipX value
                 part["ID"] = part["ID"][:-2]
                 part["FlipX"] = 1
@@ -951,11 +1110,12 @@ def com(input_filename, output_filename, args={}):
         "draw_cot": True,
         "draw_com": True,
         "boost": True,
-        "analyze": False
+        "analyze": False,
     }
 
     args = {**defaults, **args}
 
+# preprocessing
     # Read ship data and extract part data
     try:
         decoded_data = cosmoteer_save_tools.Ship(input_filename).data
@@ -963,31 +1123,43 @@ def com(input_filename, output_filename, args={}):
         error_text = f"Could not read input file (save tool) {e}"
         return json.dumps({"Error": error_text})
     # Convert bytes to base64-encoded strings in the decoded_data dictionary
-    try :
+    try:
         decoded_data = convert_bytes_to_base64(decoded_data)
     except Exception as e:
         error_text = "Could not convert_bytes_to_base64 (json cleaner)"
         return json.dumps({"Error": error_text})
-    
-    try :
+# decoded data processing
+    try:
         parts = decoded_data["Parts"]
     except Exception as e:
         error_text = "Could not read Parts"
         return json.dumps({"Error": error_text})
-    try :
+    try:
         ship_orientation = decoded_data["FlightDirection"]
     except Exception as e:
         error_text = "Could not read FlightDirection"
         return json.dumps({"Error": error_text})
-    
+    ## get tags
+    try:
+        tags, author = PNGTagExtractor().extract_tags(decoded_data)
+    except Exception as e:
+        error_text = "Could not execute extract_tags (PNGTagExtractor)"
+        return json.dumps({"Error": error_text})
+    ## get crew and price
+    try:
+        price, crew = calculate_price(decoded_data)
+    except Exception as e:
+        error_text = "Could not execute calculate_price (pricegen)"
+        return json.dumps({"Error": error_text})
+# parts processing
     # Remove weird parts
-    try :
+    try:
         parts, error_message = remove_weird_parts(parts)
     except Exception as e:
         error_text = "Could not remove_weird_parts (classic ships)"
         return json.dumps({"Error": error_text})
     # Calculate center of mass
-    try :
+    try:
         comx, comy, mass = list(center_of_mass(parts))
     except Exception as e:
         error_text = "Could not execute center_of_mass"
@@ -995,74 +1167,58 @@ def com(input_filename, output_filename, args={}):
     data_com = [comx, comy, mass]
 
     # Calculate center of thrust
-    try :
+    try:
         origin_thrust, thrust_vector, thrust_direction = center_of_thrust(parts, args)
     except Exception as e:
         error_text = "Could not execute center_of_thrust"
         return json.dumps({"Error": error_text})
-    try :
-        origin_thrust, thrust_vector, thrust_direction = diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction)
+    try:
+        origin_thrust, thrust_vector, thrust_direction = diagonal_center_of_thrust(
+            origin_thrust, thrust_vector, thrust_direction
+        )
     except Exception as e:
         error_text = "Could not execute diagonal_center_of_thrust"
         return json.dumps({"Error": error_text})
     data_cot = [origin_thrust, thrust_vector, thrust_direction]
 
-    ## get tags
-    try :
-        tags, author = PNGTagExtractor().extract_tags(decoded_data)
-    except Exception as e:
-        error_text = "Could not execute extract_tags (PNGTagExtractor)"
-        return json.dumps({"Error": error_text})
-    ## get crew and price
-    try :
-        price, crew = calculate_price(decoded_data)
-    except Exception as e:
-        error_text = "Could not execute calculate_price (pricegen)"
-        return json.dumps({"Error": error_text})
+
     # direction mapping
-    direction_mapping = {
-        0: "NW",
-        1: "N",
-        2: "NE",
-        3: "E",
-        4: "SE",
-        5: "S",
-        6: "SW",
-        7: "W"
-    }
+    direction_mapping = {0: "NW", 1: "N", 2: "NE", 3: "E", 4: "SE", 5: "S", 6: "SW", 7: "W"}
 
     # Calculate speed in all directions
     speeds = {}
-    try :
+    try:
         for ship_orient, direction_ori in direction_mapping.items():
             speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orient])
     except Exception as e:
         error_text = "Could not execute top_speed"
         return json.dumps({"Error": error_text})
-
+    
+# actual return function
     if args["analyze"]:
-        try :
+        try:
             analysis = json.loads(price_analysis(decoded_data))
         except Exception as e:
             error_text = f"Could not execute price_analysis (price_analysis_ocv) {e}"
             return json.dumps({"Error": error_text})
-    else :
+    else:
         analysis = False
 
     if args["draw"]:
         # API override
-        output_filename = "" # we dont store file on the server instead we upload it
+        output_filename = ""  # we dont store file on the server instead we upload it
         # Draw ship and write to output image
-        try :
-            base64_output = draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args)
+        try:
+            base64_output = draw_ship(
+                parts, data_com, data_cot, ship_orientation, output_filename, args
+            )
         except Exception as e:
             error_text = "Could not execute draw_ship"
             return json.dumps({"Error": error_text})
         url_com = "error url upload_image"
-        try :
+        try:
             url_com = upload_image_to_imgbb(base64_output)
         except Exception as e:
-
             error_text = "Could not execute upload_image_to_imgbb (png_upload)"
             return json.dumps({"Error": error_text})
         print(url_com)
@@ -1076,12 +1232,12 @@ def com(input_filename, output_filename, args={}):
             "crew": crew,
             "price": price,
             "tags": tags,
-            "author": author, 
+            "author": author,
             "all_direction_speeds": speeds,
-            "analysis": analysis
+            "analysis": analysis,
         }
         # Convert the dictionary to a JSON string
-        try :
+        try:
             json_data = json.dumps(data)
         except Exception as e:
             error_text = "Could not convert output data to json"
@@ -1100,18 +1256,19 @@ def com(input_filename, output_filename, args={}):
         "crew": crew,
         "price": price,
         "tags": tags,
-        "author": author, 
+        "author": author,
         "all_direction_speeds": speeds,
-        "analysis": analysis
+        "analysis": analysis,
     }
     # Convert the dictionary to a JSON string
-    try :
+    try:
         json_data = json.dumps(data)
     except Exception as e:
         error_text = "Could not convert output data to json"
         return json.dumps({"Error": error_text})
 
     return json_data
+
 
 # Function to recursively convert bytes to base64-encoded strings in the dictionary
 def convert_bytes_to_base64(data):
@@ -1125,7 +1282,7 @@ def convert_bytes_to_base64(data):
     - The converted data with bytes converted to base64-encoded strings.
     """
     if isinstance(data, bytes):
-        return base64.b64encode(data).decode('utf-8')
+        return base64.b64encode(data).decode("utf-8")
     if isinstance(data, list):
         return [convert_bytes_to_base64(item) for item in data]
     if isinstance(data, dict):
