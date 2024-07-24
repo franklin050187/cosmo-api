@@ -36,15 +36,6 @@ from price_analysis_ocv import price_analysis
 from pricegen import calculate_price
 from tagextractor import PNGTagExtractor
 
-FLIP_VECTORS = False
-BOOST = False
-DRAW_ALL_COM = False
-DRAW_COM = True
-DRAW_COT = True
-DRAW_ALL_COT = True
-DRAW = True
-SHIP = "ships\\nw.png"  # set to the name of your ship.png
-
 
 def parts_touching(part1, part2):
     """
@@ -148,6 +139,30 @@ def center_of_thrust(parts, args):
             if thruster_touching_engine_room(parts, part):
                 thrust = thrust * 1.5
 
+            # if part is thruster_rocket_extender then find thruster_rocket_nozzle in the same orientation and x or y and set origin to the origin of nozzle
+            if part["ID"] == "cosmoteer.thruster_rocket_extender":
+                for part2 in parts:
+                    if part2["ID"] == "cosmoteer.thruster_rocket_nozzle":
+                        if part2["Rotation"] == part["Rotation"]:
+                            if part["Rotation"] == 0 or part["Rotation"] == 2:
+                                if part2["Location"][0] == part["Location"][0]:
+                                    cots2 = part_center_of_thrust(part2, args["boost"])
+                                    for cot2 in cots2:
+                                        origin = cot2[0]
+
+                            if part["Rotation"] == 1 or part["Rotation"] == 3:
+                                if part2["Location"][1] == part["Location"][1]:
+                                    cots2 = part_center_of_thrust(part2, args["boost"])
+                                    for cot2 in cots2:
+                                        origin = cot2[0]
+                            # if (
+                            #     part2["Location"][0] == part["Location"][0]
+                            #     or part2["Location"][1] == part["Location"]
+                            # ):
+                            #     cots2 = part_center_of_thrust(part2, args["boost"])
+                            #     for cot2 in cots2:
+                            #         origin = cot2[0]
+
             # Update thrust direction and origin thrust for the given orientation
             thrust_direction[orientation] += thrust
             origin_thrust[orientation] += origin * thrust
@@ -179,8 +194,8 @@ def diagonal_center_of_thrust(origin_thrust, thrust_vector, thrust_direction):
         thrust_direction (list[int]): List of thrust directions for each direction (0,1,2,3).
 
     Returns:
-        tuple[list[Vector2D], list[Vector2D], list[int]]: A tuple containing 
-        the origin thrust vectors, thrust vectors, and thrust directions for all diagonal 
+        tuple[list[Vector2D], list[Vector2D], list[int]]: A tuple containing
+        the origin thrust vectors, thrust vectors, and thrust directions for all diagonal
         and non-diagonal directions.
     """
 
@@ -372,66 +387,66 @@ def center_of_mass(parts):
     return center_of_mass_x, center_of_mass_y, total_mass
 
 
-def center_of_thrust_vector(parts, ship_direction):
-    """
-    Calculate the center of thrust vector of the ship in a given direction.
+# def center_of_thrust_vector(parts, ship_direction):
+#     """
+#     Calculate the center of thrust vector of the ship in a given direction.
 
-    Args:
-        parts (list): List of ship parts.
-        ship_direction (int): Direction of the ship.
+#     Args:
+#         parts (list): List of ship parts.
+#         ship_direction (int): Direction of the ship.
 
-    Returns:
-        tuple: A tuple containing the start and end coordinates of the center of thrust vector,
-               along with the total thrust direction.
-    """
+#     Returns:
+#         tuple: A tuple containing the start and end coordinates of the center of thrust vector,
+#                along with the total thrust direction.
+#     """
 
-    # Define the thrust vectors for each ship direction
-    thrust_vectors = {0: [0, 3], 1: [0], 2: [0, 1], 3: [1], 4: [1, 2], 5: [2], 6: [2, 3], 7: [3]}
+#     # Define the thrust vectors for each ship direction
+#     thrust_vectors = {0: [0, 3], 1: [0], 2: [0, 1], 3: [1], 4: [1, 2], 5: [2], 6: [2, 3], 7: [3]}
 
-    total_thrust = 0
-    total_thrust_direction = 0
+#     total_thrust = 0
+#     total_thrust_direction = 0
 
-    sum_x_cot = 0
-    sum_y_cot = 0
+#     sum_x_cot = 0
+#     sum_y_cot = 0
 
-    sum_x_thrust = 0
-    sum_y_thrust = 0
+#     sum_x_thrust = 0
+#     sum_y_thrust = 0
 
-    for part in parts:
-        cots = part_center_of_thrust(part, False)
-        if cots == 0:
-            continue
-        for cot in cots:
-            thrust = part_data.thruster_data[part["ID"]]["thrust"]
-            if thruster_touching_engine_room(parts, part):
-                thrust *= 1.5
-            x_coord = cot[0]
-            y_coord = cot[1]
+#     for part in parts:
+#         cots = part_center_of_thrust(part, False)
+#         if cots == 0:
+#             continue
+#         for cot in cots:
+#             thrust = part_data.thruster_data[part["ID"]]["thrust"]
+#             if thruster_touching_engine_room(parts, part):
+#                 thrust *= 1.5
+#             x_coord = cot[0]
+#             y_coord = cot[1]
 
-            total_thrust += thrust
-            if cot[2] in thrust_vectors[ship_direction]:
-                total_thrust_direction += thrust
+#             total_thrust += thrust
+#             if cot[2] in thrust_vectors[ship_direction]:
+#                 total_thrust_direction += thrust
 
-                sum_x_cot += thrust * x_coord
-                sum_y_cot += thrust * y_coord
-                if cot[2] == 0:
-                    sum_y_thrust -= thrust
-                if cot[2] == 1:
-                    sum_x_thrust += thrust
-                if cot[2] == 2:
-                    sum_y_thrust += thrust
-                if cot[2] == 3:
-                    sum_x_thrust -= thrust
+#                 sum_x_cot += thrust * x_coord
+#                 sum_y_cot += thrust * y_coord
+#                 if cot[2] == 0:
+#                     sum_y_thrust -= thrust
+#                 if cot[2] == 1:
+#                     sum_x_thrust += thrust
+#                 if cot[2] == 2:
+#                     sum_y_thrust += thrust
+#                 if cot[2] == 3:
+#                     sum_x_thrust -= thrust
 
-    if total_thrust_direction == 0:
-        return 0
+#     if total_thrust_direction == 0:
+#         return 0
 
-    startx = sum_x_cot / total_thrust_direction
-    starty = sum_y_cot / total_thrust_direction
-    endx = startx + sum_x_thrust / total_thrust * 15
-    endy = starty + sum_y_thrust / total_thrust * 15
+#     startx = sum_x_cot / total_thrust_direction
+#     starty = sum_y_cot / total_thrust_direction
+#     endx = startx + sum_x_thrust / total_thrust * 15
+#     endy = starty + sum_y_thrust / total_thrust * 15
 
-    return startx, starty, endx, endy, total_thrust_direction / total_thrust
+#     return startx, starty, endx, endy, total_thrust_direction / total_thrust
 
 
 def rotate_image(image, angle, flipx):
@@ -475,7 +490,7 @@ def insert_sprite(background, sprite, x, y, rotation, flipx, size):
         size (tuple): The desired size of the sprite after resizing.
 
     Returns:
-        numpy.ndarray: The background image with the sprite inserted, or the original 
+        numpy.ndarray: The background image with the sprite inserted, or the original
         background image if the sprite doesn't fit.
     """
     sprite = cv2.resize(sprite, size)  # Resize the sprite
@@ -855,7 +870,10 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
     sprite_directory = "sprites/"
     loaded_sprites = {}
     for i, part in enumerate(parts):
-        if part["ID"] in ["cosmoteer.cannon_deck", "cosmoteer.ion_beam_prism"]:
+        if part["ID"] in [
+            "cosmoteer.cannon_deck",
+            "cosmoteer.ion_beam_prism",
+        ]:
             parts.append(parts.pop(i))
     for part in parts:
         sprite_id = part["ID"].replace("cosmoteer.", "")
@@ -923,6 +941,23 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
                     -1,
                 )
     if args["draw_all_cot"]:
+        # prepare storing vector of thruster_rocket_extender for each thruster_rocket_nozzle
+        # create a variable for each thruster_rocket_nozzle found
+        nozzle_vectors = {}
+        # List to temporarily hold the parts to be moved to the end
+        thruster_nozzles = []
+
+        for part in parts:
+            if part["ID"] == "cosmoteer.thruster_rocket_nozzle":
+                location = str(part["Location"])
+                nozzle_vectors[location] = 0
+                thruster_nozzles.append(part)
+        # Remove the parts to be moved from the original list
+        parts = [part for part in parts if part["ID"] != "cosmoteer.thruster_rocket_nozzle"]
+
+        # Append the thruster nozzles to the end of the list
+        parts.extend(thruster_nozzles)
+
         for part in parts:
             cots = part_center_of_thrust(part, args["boost"])
             if cots == 0:
@@ -932,6 +967,35 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
                 vector = cot[0]
                 end_point = (0, 0)
                 size = cot[2] / 2000
+                # if part is extender check the nozzle on the same x or y axis
+                if part["ID"] == "cosmoteer.thruster_rocket_extender":
+                    for part2 in parts:
+                        if part2["ID"] == "cosmoteer.thruster_rocket_nozzle":
+                            # same rotation and same x or y
+                            if part2["Rotation"] == part["Rotation"]:
+                                # check for rotation the correct axis
+                                if part["Rotation"] == 0 or part["Rotation"] == 2:
+                                    if part2["Location"][0] == part["Location"][0]:
+                                        location = str(part2["Location"]) # location of the nozzle
+                                        # add size of thruster_rocket_extender to thruster_rocket_nozzle
+                                        nozzle_vectors[location] += size
+                                        # then set size to 0
+                                        size = 0
+                                if part["Rotation"] == 1 or part["Rotation"] == 3:
+                                    if part2["Location"][1] == part["Location"][1]:
+                                        location = str(part2["Location"]) # location of the nozzle
+                                        # add size of thruster_rocket_extender to thruster_rocket_nozzle
+                                        nozzle_vectors[location] += size
+                                        # then set size to 0
+                                        size = 0
+                # then dont draw the extender
+                if part["ID"] == "cosmoteer.thruster_rocket_extender":
+                    continue
+                if part["ID"] == "cosmoteer.thruster_rocket_nozzle":
+                    location = str(part["Location"])
+                    # find the location matching and get size value
+                    size = nozzle_vectors[location]
+                    size = size / 2
                 rotation_mapping = {
                     0: (vector.x, vector.y - size),
                     1: (vector.x + size, vector.y),
@@ -1115,7 +1179,7 @@ def com(input_filename, output_filename, args={}):
 
     args = {**defaults, **args}
 
-# preprocessing
+    # preprocessing
     # Read ship data and extract part data
     try:
         decoded_data = cosmoteer_save_tools.Ship(input_filename).data
@@ -1128,7 +1192,7 @@ def com(input_filename, output_filename, args={}):
     except Exception as e:
         error_text = "Could not convert_bytes_to_base64 (json cleaner)"
         return json.dumps({"Error": error_text})
-# decoded data processing
+    # decoded data processing
     try:
         parts = decoded_data["Parts"]
     except Exception as e:
@@ -1151,7 +1215,7 @@ def com(input_filename, output_filename, args={}):
     except Exception as e:
         error_text = "Could not execute calculate_price (pricegen)"
         return json.dumps({"Error": error_text})
-# parts processing
+    # parts processing
     # Remove weird parts
     try:
         parts, error_message = remove_weird_parts(parts)
@@ -1181,7 +1245,6 @@ def com(input_filename, output_filename, args={}):
         return json.dumps({"Error": error_text})
     data_cot = [origin_thrust, thrust_vector, thrust_direction]
 
-
     # direction mapping
     direction_mapping = {0: "NW", 1: "N", 2: "NE", 3: "E", 4: "SE", 5: "S", 6: "SW", 7: "W"}
 
@@ -1193,8 +1256,8 @@ def com(input_filename, output_filename, args={}):
     except Exception as e:
         error_text = "Could not execute top_speed"
         return json.dumps({"Error": error_text})
-    
-# actual return function
+
+    # actual return function
     if args["analyze"]:
         try:
             analysis = json.loads(price_analysis(decoded_data))
@@ -1221,7 +1284,7 @@ def com(input_filename, output_filename, args={}):
         except Exception as e:
             error_text = "Could not execute upload_image_to_imgbb (png_upload)"
             return json.dumps({"Error": error_text})
-        print(url_com)
+        # print(url_com)
         data = {
             # "url_org": url,
             "url_com": url_com,
