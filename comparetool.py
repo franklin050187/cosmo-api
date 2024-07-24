@@ -1,11 +1,17 @@
+"""
+compare two ship files
+"""
+
 import base64
-from png_upload import upload_image_to_imgbb
 import json
 import math
+import os
+
 import cv2
 import numpy as np
 import psycopg2
-import os
+
+from png_upload import upload_image_to_imgbb
 
 # star chart
 # armor, struct, corridor
@@ -473,30 +479,30 @@ def create_chart(values1, values2, shipname1, shipname2, id1, id2, scale=False):
     json_data = json.dumps(data)
     return json_data 
 
-def get_json(id):
+def get_json(ship_id):
     conn = psycopg2.connect(database=os.getenv('POSTGRES_DATABASE'),
                         host=os.getenv('POSTGRES_HOST'),
                         user=os.getenv('POSTGRES_USER'),
                         password=os.getenv('POSTGRES_PASSWORD'),
-                        port=5432)
+                        port=6543)
     query = "SELECT * FROM jsondb WHERE shipid = %s"
     cursor = conn.cursor()
-    cursor.execute(query, (id,))
+    cursor.execute(query, (ship_id,))
     data = cursor.fetchone()
     cursor.close()
     conn.close()
     # print(data)
     return data
 
-def get_shippng(id):
+def get_shippng(ship_id):
     conn = psycopg2.connect(database=os.getenv('POSTGRES_DATABASE'),
                         host=os.getenv('POSTGRES_HOST'),
                         user=os.getenv('POSTGRES_USER'),
                         password=os.getenv('POSTGRES_PASSWORD'),
-                        port=5432)
+                        port=6543)
     query = "SELECT data FROM shipdb WHERE id = %s"
     cursor = conn.cursor()
-    cursor.execute(query, (id,))
+    cursor.execute(query, (ship_id,))
     data = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -516,17 +522,3 @@ def compare_ships(id1, id2, scale=False):
     shipname2 = f'{data2[3]} (id={data2[2]})'
     json_data = create_chart(price1, price2, shipname1, shipname2, id1, id2, scale)
     return json_data
-
-# test = compare_ships(776, 777, scale=True)
-# print(test)
-
-# # # for testing
-# import cosmoteer_save_tools
-# # # # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151249538108096652/input_file.png').data
-# # # data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151507769317404672/input_file.png').data
-# data = cosmoteer_save_tools.Ship('https://cdn.discordapp.com/attachments/546321242471530506/1151517855624474684/input_file.png').data
-
-
-
-# json_data = price_analysis(data)
-# print(json_data)

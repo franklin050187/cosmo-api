@@ -1,4 +1,7 @@
-# The size parameter is the size of the tiles, it doesn't care about turrets or engines
+"""
+The size parameter is the size of the tiles, it doesn't care about turrets or engines
+"""
+
 parts={
         "cosmoteer.corridor":{"mass":1, "size":(1,1)},
         "cosmoteer.structure":{"mass":1/3, "size":(1,1)},

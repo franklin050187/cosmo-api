@@ -13,22 +13,24 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # modified by LunastroD (I made this a library and removed the dependency on json because I'm reading the data directly)
+
+
+import base64
+import enum
+import gzip
+import io
+import re
+import struct
+from io import BytesIO
+
+import numpy as np
+import requests
+from PIL import Image
+
 SHIP="ships\Sion.ship.png"
 JSON_ON=0
 if(JSON_ON):
     import json
-
-from PIL import Image
-import numpy as np
-import gzip
-import struct
-import enum
-import io
-from io import BytesIO
-import base64
-import re
-import requests
-
 
 class OBNodeType(enum.Enum):
     Unset = 0
@@ -336,11 +338,4 @@ def check_input_type(input_value):
         return "url"
 
     # If none of the above, return "unknown"
-    return "unknown"        
-        
-if(__name__ == "__main__"):
-    if(JSON_ON):
-        with open("out.json", "w") as f:
-            json.dump(Ship(SHIP).data, f, cls = JSONEncoderWithBytes)
-    else:
-        print(Ship(SHIP).data)
+    return "unknown"
