@@ -210,6 +210,7 @@ class Ship:
         raise TypeError(f"Unexpected type {_type}")
 
 def get_ship_data(url):
+    """pass an url, gets a json data"""
     ship_data = Ship(url).data
     return ship_data
 
@@ -224,7 +225,3 @@ def check_input_type(input_value):
     if url_pattern.match(input_value):
         return "url"
     return "unknown"
-
-# test_data = get_ship_data("https://i.ibb.co/vcttfZT/f9cfc51fd56f.png")
-# print(test_data)
-# print(type(test_data))

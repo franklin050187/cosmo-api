@@ -976,14 +976,14 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
                                 # check for rotation the correct axis
                                 if part["Rotation"] == 0 or part["Rotation"] == 2:
                                     if part2["Location"][0] == part["Location"][0]:
-                                        location = str(part2["Location"]) # location of the nozzle
+                                        location = str(part2["Location"])  # location of the nozzle
                                         # add size of thruster_rocket_extender to thruster_rocket_nozzle
                                         nozzle_vectors[location] += size
                                         # then set size to 0
                                         size = 0
                                 if part["Rotation"] == 1 or part["Rotation"] == 3:
                                     if part2["Location"][1] == part["Location"][1]:
-                                        location = str(part2["Location"]) # location of the nozzle
+                                        location = str(part2["Location"])  # location of the nozzle
                                         # add size of thruster_rocket_extender to thruster_rocket_nozzle
                                         nozzle_vectors[location] += size
                                         # then set size to 0
@@ -1055,6 +1055,89 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         _, buffer = cv2.imencode(".png", img_np)
         base64_encoded = base64.b64encode(buffer).decode("utf-8")
         return base64_encoded
+
+
+def draw_ship_only(parts):
+    """
+    Draw a ship using OpenCV.
+    Args:
+    - parts: a list of ship parts
+    Returns:
+    - an empty string if the image was successfully saved
+    """
+    min_x = parts[0]["Location"][0]
+    max_x = parts[0]["Location"][0]
+    min_y = parts[0]["Location"][1]
+    max_y = parts[0]["Location"][1]
+    for part in parts:
+        x = part["Location"][0]
+        y = part["Location"][1]
+        min_x = min(min_x, x)
+        max_x = max(max_x, x)
+        min_y = min(min_y, y)
+        max_y = max(max_y, y)
+    canva_size = max((abs(max_x) + abs(min_x)), (abs(max_y) + abs(min_y))) + 250  # add 50 margin
+    canva_offset = canva_size // 2
+    sprite_square_size = 64
+    size_factor = round(sprite_square_size / 4)
+    img = np.zeros((canva_size * size_factor, canva_size * size_factor, 3), np.uint8)
+    sprite_directory = "sprites/"
+    loaded_sprites = {}
+    for i, part in enumerate(parts):
+        if part["ID"] in [
+            "cosmoteer.cannon_deck",
+            "cosmoteer.ion_beam_prism",
+        ]:
+            parts.append(parts.pop(i))
+    for part in parts:
+        sprite_id = part["ID"].replace("cosmoteer.", "")
+        sprite_path = sprite_directory + sprite_id + ".png"
+        if sprite_path in loaded_sprites:
+            part_image = loaded_sprites[sprite_path]
+        else:
+            part_image = cv2.imread(sprite_path, cv2.IMREAD_UNCHANGED)
+            loaded_sprites[sprite_path] = part_image
+        x_coord = part["Location"][0] + canva_offset
+        y_coord = part["Location"][1] + canva_offset
+        if x_coord < 0 or x_coord > canva_size or y_coord < 0 or y_coord > canva_size:
+            return "error drawing ship: out of bounds\n"
+        # size = part_data.parts[part["ID"]]["size"]
+        rotation = part["Rotation"]
+        flipx = part.get("FlipX", 0)
+        x_coord, y_coord = sprite_position(part, [x_coord, y_coord])
+        scaled_x_coord = round(x_coord * size_factor)
+        scaled_y_coord = round(y_coord * size_factor)
+        sprite_dimensions = (round(part_image.shape[1] / 4), round(part_image.shape[0] / 4))
+        insert_sprite(
+            img, part_image, scaled_x_coord, scaled_y_coord, rotation, flipx, sprite_dimensions
+        )
+
+    img = img * 0.8
+    img = crop(img)
+    # put text on the image
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    line_sep = 40
+    left_margin = 0
+    # Center of mass next to green circle
+    cv2.putText(
+        img,
+        "Made with CosmoShipBuilder",
+        (left_margin + 20, line_sep * 4 + 5),
+        font,
+        0.5,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
+    # Resize the image to 512x512
+    img = cv2.resize(img, (512, 512), interpolation=cv2.INTER_AREA)
+    # # Ensure the image has 4 channels (RGBA)
+    # if img.shape[2] == 3:
+    #     img = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
+    img_np = np.asarray(img)
+    _, buffer = cv2.imencode(".png", img_np)
+    base64_encoded = base64.b64encode(buffer).decode("utf-8")
+    return base64_encoded
 
 
 def remove_weird_parts(parts):
@@ -1151,6 +1234,7 @@ def remove_weird_parts(parts):
         error_msg += "classic ships are not supported, com and cot may be wrong\n"
 
     return new_parts, error_msg
+
 
 def com(input_filename, output_filename, args={}):
     """

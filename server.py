@@ -14,6 +14,7 @@ from starlette.requests import Request
 from center_of_mass import com
 from comparetool import compare_ships
 from read_ship import get_ship_data
+from write_ship_from_json import write_ship_png
 
 app = FastAPI()
 
@@ -49,7 +50,11 @@ async def add_cors_headers(request, call_next):
     response = await call_next(request)
     if request.url.path == "/edit" and request.method == "GET":
         response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
-        response.headers["Access-Control-Allow-Methods"] = "POST, GET"
+        response.headers["Access-Control-Allow-Methods"] = "GET"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    if request.url.path == "/generate" and request.method == "POST":
+        response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
+        response.headers["Access-Control-Allow-Methods"] = "POST"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response
 
@@ -79,8 +84,14 @@ async def get_ship_data_from_url(request: Request):
         return {"error": str(e)}
     return ship_data
 
+@app.post("/generate")  # endpoint for CosmoShipBuilder, in = json, out = png
+async def generate_png(request: Request):
+    request_json = await request.json()
+    data_json = request_json
+    data_url = write_ship_png(data_json)
+    return {"url": data_url}
 
-# @app.post("/edit")  # endpoint for CosmoShipBuilder, in = json, out = png
+
 @app.get("/analyze")  # get a url
 async def analyze(request: Request):
     """
