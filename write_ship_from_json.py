@@ -32,13 +32,13 @@ class Ship:
 
     def write(self, new_image: Image.Image = None) -> Image.Image:
         self.in_image = self.image_data.copy() # we will generate a new image
+        # Handle possible absence of alpha channel
+        # if self.in_image.shape[1] == 3:
+        #     alpha_channel = np.full((self.in_image.shape[0], 1), 0)  # Create an alpha channel
+        #     self.in_image = np.hstack((self.in_image, alpha_channel))  # Add the alpha channel
         data = self.encode(self.data)
         compressed = gzip.compress(data, 6)
         self.write_bytes(compressed)
-        # Handle possible absence of alpha channel
-        if self.in_image.shape[1] == 3:
-            alpha_channel = np.full((self.in_image.shape[0], 1), 255)  # Create an alpha channel
-            self.in_image = np.hstack((self.in_image, alpha_channel))  # Add the alpha channel
         return Image.fromarray(self.in_image.reshape((*self.image.size, 4)).astype(np.uint8))
 
     def write_bytes(self, in_bytes) -> None:

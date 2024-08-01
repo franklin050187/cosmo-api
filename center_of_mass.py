@@ -1101,7 +1101,6 @@ def draw_ship_only(parts):
         y_coord = part["Location"][1] + canva_offset
         if x_coord < 0 or x_coord > canva_size or y_coord < 0 or y_coord > canva_size:
             return "error drawing ship: out of bounds\n"
-        # size = part_data.parts[part["ID"]]["size"]
         rotation = part["Rotation"]
         flipx = part.get("FlipX", 0)
         x_coord, y_coord = sprite_position(part, [x_coord, y_coord])
@@ -1129,12 +1128,14 @@ def draw_ship_only(parts):
         1,
         cv2.LINE_AA,
     )
-    # Resize the image to 512x512
     img = cv2.resize(img, (512, 512), interpolation=cv2.INTER_AREA)
-    # # Ensure the image has 4 channels (RGBA)
-    # if img.shape[2] == 3:
-    #     img = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
-    img_np = np.asarray(img)
+    # read the image and add alpha bit plane to it
+    b_channel, g_channel, r_channel = cv2.split(img)
+    alpha_channel = np.ones(b_channel.shape, dtype=b_channel.dtype) * 200 #creating a dummy alpha channel image.
+    img_BGRA = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
+    img_np = np.asarray(img_BGRA)
+    
+    # img_np = np.asarray(img)
     _, buffer = cv2.imencode(".png", img_np)
     base64_encoded = base64.b64encode(buffer).decode("utf-8")
     return base64_encoded
