@@ -62,7 +62,8 @@ class Ship():
         if self.compressed_image_data[:9] == b'COSMOSHIP':
             self.compressed_image_data = self.compressed_image_data[9:]
             self.version = 2
-
+            
+        self.raw_data=gzip.decompress(self.compressed_image_data)
         self.buffer = io.BytesIO(gzip.decompress(self.compressed_image_data))
         self.data = self.decode()
 
@@ -339,3 +340,36 @@ def check_input_type(input_value):
 
     # If none of the above, return "unknown"
     return "unknown"
+
+
+def test_ship(url1, url2):
+    """ compare ship from url1 with ship from url2, print out the differences """
+    # input_filename = "https://i.ibb.co/fMmCwKs/1b39bdff0418.png" # mod
+    input_filename = url2
+    test_data2 = Ship(input_filename)
+    # input_filename2 = "https://i.ibb.co/vcttfZT/f9cfc51fd56f.png" # org
+    input_filename2 = url1
+    test_data = Ship(input_filename2)
+
+    print(test_data.raw_data==test_data2.raw_data)
+    #print the data around the first difference in hex
+    for i in range(len(test_data.raw_data)):
+        if test_data.raw_data[i]!=test_data2.raw_data[i]:
+            #print(my_ship1.raw_data[i-100:i+100])
+            #print the bytes separated by spaces but if the byte is a character, print the character
+            print(" ".join([chr(x) if x>=32 and x<=126 else hex(x) for x in test_data.raw_data[i-100:i+50]]))
+            #print(" ".join([hex(x) for x in my_ship1.raw_data[i-100:i+50]]))
+            print("===================================")
+            print(" ".join([chr(x) if x>=32 and x<=126 else hex(x) for x in test_data2.raw_data[i-100:i+50]]))
+            #print(" ".join([hex(x) for x in my_ship2.raw_data[i-10:i+50]]))
+            break
+
+    print(test_data.data==test_data2.data)
+    #print all of the differences
+    for key in test_data.data.keys():
+        if test_data.data[key]!=test_data2.data[key]:
+            print(key)
+            print(test_data.data[key])
+            print("===================================")
+            print(test_data2.data[key])
+            print()

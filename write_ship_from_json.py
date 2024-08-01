@@ -32,10 +32,6 @@ class Ship:
 
     def write(self, new_image: Image.Image = None) -> Image.Image:
         self.in_image = self.image_data.copy() # we will generate a new image
-        # Handle possible absence of alpha channel
-        # if self.in_image.shape[1] == 3:
-        #     alpha_channel = np.full((self.in_image.shape[0], 1), 0)  # Create an alpha channel
-        #     self.in_image = np.hstack((self.in_image, alpha_channel))  # Add the alpha channel
         data = self.encode(self.data)
         compressed = gzip.compress(data, 6)
         self.write_bytes(compressed)
@@ -169,6 +165,23 @@ def write_ship_png(ship_data):
     """
     ship_parts = ship_data['Parts']
     base64_image = draw_ship_only(ship_parts)
+    
+    tuple_data = ["RoofBaseColor", "RoofDecalColor1", "RoofDecalColor2", "RoofDecalColor3"]
+    for key, value in ship_data.items():
+        if key in tuple_data:
+            if isinstance(value, list):
+                ship_data[key] = tuple(value)
+    if "Roles" in ship_data:
+        for role in ship_data["Roles"]:
+            if "Color" in role and isinstance(role["Color"], list):
+                role["Color"] = tuple(role["Color"])
+    if "WeaponShipRelativeTargets" in ship_data:
+        for WeaponShipRelativeTargets in ship_data["WeaponShipRelativeTargets"]:
+            if "Value" in WeaponShipRelativeTargets and isinstance(
+                WeaponShipRelativeTargets["Value"], list
+            ):
+                WeaponShipRelativeTargets["Value"] = tuple(WeaponShipRelativeTargets["Value"])
+    
     new_image = Ship(base64_image, ship_data).write()
     buffered = BytesIO()
     new_image.save(buffered, format="PNG")
