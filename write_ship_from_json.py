@@ -34,6 +34,9 @@ class Ship:
         self.in_image = self.image_data.copy() # we will generate a new image
         data = self.encode(self.data)
         compressed = gzip.compress(data, 6)
+        b_compressed = bytearray(b'COSMOSHIP')
+        b_compressed.extend(compressed)
+        compressed = bytes(b_compressed)
         self.write_bytes(compressed)
         return Image.fromarray(self.in_image.reshape((*self.image.size, 4)).astype(np.uint8))
 
@@ -165,7 +168,15 @@ def write_ship_png(ship_data):
     """
     ship_parts = ship_data['Parts']
     base64_image = draw_ship_only(ship_parts)
+    # ship_version = 2
+    # # add shipversion to ship data
+    # ship_data['version'] = ship_version
     
+    # add cosmoteer to compress data
+    # if self.compressed_image_data[:9] == b'COSMOSHIP':
+    #     self.compressed_image_data = self.compressed_image_data[9:]
+    #     self.version = 2
+
     tuple_data = ["RoofBaseColor", "RoofDecalColor1", "RoofDecalColor2", "RoofDecalColor3"]
     for key, value in ship_data.items():
         if key in tuple_data:
@@ -181,7 +192,7 @@ def write_ship_png(ship_data):
                 WeaponShipRelativeTargets["Value"], list
             ):
                 WeaponShipRelativeTargets["Value"] = tuple(WeaponShipRelativeTargets["Value"])
-    
+
     new_image = Ship(base64_image, ship_data).write()
     buffered = BytesIO()
     new_image.save(buffered, format="PNG")
