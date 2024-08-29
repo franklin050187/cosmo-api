@@ -9,7 +9,7 @@ import math
 import cv2
 import numpy as np
 
-from png_upload import upload_image_to_imgbb
+from png_upload import upload_image_to_imgbb, upload_image_to_cloudinary
 
 # star chart
 # armor, struct, corridor
@@ -378,7 +378,9 @@ def price_analysis(data_json): ## take json instead of png
     url_analysis = 'testing/error'
 
     # print(base64_encoded)
-    url_analysis = upload_image_to_imgbb(base64_encoded)
+    # url_analysis = upload_image_to_imgbb(base64_encoded)
+    url_analysis = upload_image_to_cloudinary(base64_encoded)
+    
     # print(url_analysis)
     data = {
         "url_analysis": url_analysis,
