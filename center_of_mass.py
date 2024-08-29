@@ -31,7 +31,7 @@ from vector2d import Vector2D
 
 import cosmoteer_save_tools
 import part_data
-from png_upload import upload_image_to_imgbb
+from png_upload import upload_image_to_imgbb, upload_image_to_cloudinary
 from price_analysis_ocv import price_analysis
 from pricegen import calculate_price
 from tagextractor import PNGTagExtractor
@@ -976,14 +976,14 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
                                 # check for rotation the correct axis
                                 if part["Rotation"] == 0 or part["Rotation"] == 2:
                                     if part2["Location"][0] == part["Location"][0]:
-                                        location = str(part2["Location"]) # location of the nozzle
+                                        location = str(part2["Location"])  # location of the nozzle
                                         # add size of thruster_rocket_extender to thruster_rocket_nozzle
                                         nozzle_vectors[location] += size
                                         # then set size to 0
                                         size = 0
                                 if part["Rotation"] == 1 or part["Rotation"] == 3:
                                     if part2["Location"][1] == part["Location"][1]:
-                                        location = str(part2["Location"]) # location of the nozzle
+                                        location = str(part2["Location"])  # location of the nozzle
                                         # add size of thruster_rocket_extender to thruster_rocket_nozzle
                                         nozzle_vectors[location] += size
                                         # then set size to 0
@@ -1152,6 +1152,7 @@ def remove_weird_parts(parts):
 
     return new_parts, error_msg
 
+
 def com(input_filename, output_filename, args={}):
     """
     Calculate the center of mass, center of thrust, and speed of a ship.
@@ -1280,7 +1281,8 @@ def com(input_filename, output_filename, args={}):
             return json.dumps({"Error": error_text})
         url_com = "error url upload_image"
         try:
-            url_com = upload_image_to_imgbb(base64_output)
+            url_com = upload_image_to_cloudinary(base64_output)
+            # url_com = upload_image_to_imgbb(base64_output)
         except Exception as e:
             error_text = "Could not execute upload_image_to_imgbb (png_upload)"
             return json.dumps({"Error": error_text})
