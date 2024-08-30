@@ -1281,8 +1281,8 @@ def com(input_filename, output_filename, args={}):
             return json.dumps({"Error": error_text})
         url_com = "error url upload_image"
         try:
-            url_com = upload_image_to_cloudinary(base64_output)
-            # url_com = upload_image_to_imgbb(base64_output)
+            # url_com = upload_image_to_cloudinary(base64_output)
+            url_com = upload_image_to_imgbb(base64_output)
         except Exception as e:
             error_text = "Could not execute upload_image_to_imgbb (png_upload)"
             return json.dumps({"Error": error_text})

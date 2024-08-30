@@ -378,8 +378,8 @@ def price_analysis(data_json): ## take json instead of png
     url_analysis = 'testing/error'
 
     # print(base64_encoded)
-    # url_analysis = upload_image_to_imgbb(base64_encoded)
-    url_analysis = upload_image_to_cloudinary(base64_encoded)
+    url_analysis = upload_image_to_imgbb(base64_encoded)
+    # url_analysis = upload_image_to_cloudinary(base64_encoded)
     
     # print(url_analysis)
     data = {
