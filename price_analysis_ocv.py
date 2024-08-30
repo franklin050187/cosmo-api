@@ -370,7 +370,7 @@ def price_analysis(data_json): ## take json instead of png
 
     # save the file
     # cv2.imwrite('output.png', image)
-    
+
     img_np = np.asarray(image)
     _, buffer = cv2.imencode('.png', img_np)
     base64_encoded = base64.b64encode(buffer).decode("utf-8")
@@ -378,9 +378,9 @@ def price_analysis(data_json): ## take json instead of png
     url_analysis = 'testing/error'
 
     # print(base64_encoded)
-    url_analysis = upload_image_to_imgbb(base64_encoded)
-    # url_analysis = upload_image_to_cloudinary(base64_encoded)
-    
+    # url_analysis = upload_image_to_imgbb(base64_encoded)
+    url_analysis = upload_image_to_cloudinary(base64_encoded)
+
     # print(url_analysis)
     data = {
         "url_analysis": url_analysis,

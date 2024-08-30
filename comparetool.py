@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 import psycopg2
 
-from png_upload import upload_image_to_imgbb
+from png_upload import upload_image_to_imgbb, upload_image_to_cloudinary
 
 # star chart
 # armor, struct, corridor
@@ -429,7 +429,9 @@ def create_chart(values1, values2, shipname1, shipname2, id1, id2, scale=False):
     url_analysis = 'testing/error'
 
     # print(base64_encoded)
-    url_analysis = upload_image_to_imgbb(base64_encoded)
+    # url_analysis = upload_image_to_imgbb(base64_encoded)
+    url_analysis = upload_image_to_cloudinary(base64_encoded)
+    
     # print(url_analysis)
     # values = [price_shield, price_weapons, price_movement, price_utility, price_crew, price_power, price_armor, price_storage]
     price_crew = values1[4]
