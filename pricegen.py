@@ -227,7 +227,7 @@ def calculate_price(data_json): ## take json instead of png
         elif item_id == 'cosmoteer.crew_quarters_med':
             crew_quarters_med_price += 3000
         elif item_id == 'cosmoteer.crew_quarters_large':
-            crew_quarters_large_price += 6000
+            crew_quarters_large_price += 12000
 
 # calculate crew number
     crew = 0
