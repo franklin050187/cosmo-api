@@ -2,13 +2,13 @@
 Copyright 2023 LunastroD
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use,
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use,
 copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
 is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
 FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -23,6 +23,7 @@ change the SHIP variable to the name of your ship.png
 
 import base64
 import json
+import os
 
 import cv2
 import numpy as np
@@ -867,7 +868,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
     size_factor = round(sprite_square_size / 4)
     square_size = round(size_factor)
     img = np.zeros((canva_size * size_factor, canva_size * size_factor, 3), np.uint8)
-    sprite_directory = "sprites/"
+    sprite_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sprites")
     loaded_sprites = {}
     for i, part in enumerate(parts):
         if part["ID"] in [
@@ -877,7 +878,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
             parts.append(parts.pop(i))
     for part in parts:
         sprite_id = part["ID"].replace("cosmoteer.", "")
-        sprite_path = sprite_directory + sprite_id + ".png"
+        sprite_path = os.path.join(sprite_directory, f"{sprite_id}.png")
         if sprite_path in loaded_sprites:
             part_image = loaded_sprites[sprite_path]
         else:
@@ -1081,7 +1082,7 @@ def draw_ship_only(parts):
     sprite_square_size = 64
     size_factor = round(sprite_square_size / 4)
     img = np.zeros((canva_size * size_factor, canva_size * size_factor, 3), np.uint8)
-    sprite_directory = "sprites/"
+    sprite_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sprites")
     loaded_sprites = {}
     for i, part in enumerate(parts):
         if part["ID"] in [
@@ -1091,7 +1092,7 @@ def draw_ship_only(parts):
             parts.append(parts.pop(i))
     for part in parts:
         sprite_id = part["ID"].replace("cosmoteer.", "")
-        sprite_path = sprite_directory + sprite_id + ".png"
+        sprite_path = os.path.join(sprite_directory, f"{sprite_id}.png")
         if sprite_path in loaded_sprites:
             part_image = loaded_sprites[sprite_path]
         else:
