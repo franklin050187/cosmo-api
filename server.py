@@ -4,25 +4,95 @@ server for the api
 
 import json
 import os
+import jwt
+from datetime import datetime, timedelta, timezone
+from typing import Optional, List, Dict, Any, Union
+import base64
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Query, Path, Body
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
+from pydantic import BaseModel
+from dotenv import load_dotenv
 
 from center_of_mass import com
 from comparetool import compare_ships
 from read_ship import get_ship_data
 from write_ship_from_json import write_ship_png
+from api_front import ShipImageDatabase
+from tagextractor import PNGTagExtractor
+from center_of_mass import calculate_price
+from cosmoteer_save_tools_new import Ship as new_ship
+from png_upload import upload_image_to_imgbb
 
-app = FastAPI()
+db_manager = ShipImageDatabase()
+
+load_dotenv()
+
+# Define response models
+class ShipData(BaseModel):
+    ship_name: str
+    ship_png: str
+    ship_author: str
+    ship_description: str
+    ship_cost: int
+    ship_crew: int
+    ship_popularity: int
+    ship_date_submitted: str
+    ship_submitted_by: str
+    ship_tags: List[str]
+    is_in_user_fav: Optional[Union[int, str]] = None
+    is_owner: Optional[Union[int, str]] = None
+
+class ShipDataInsert(BaseModel):
+    token: str
+    image: str
+    user_description: Optional[str] = None
+    user_tags:  Optional[List[str]] = []
 
 
-@app.get("/")
+class ErrorResponse(BaseModel):
+    warning: Optional[str] = None
+    error: Optional[str] = None
+    message: Optional[str] = None
+    type: Optional[str] = None
+
+
+class SuccessResponse(BaseModel):
+    success: str
+
+
+class SearchResponse(BaseModel):
+    data: List[ShipData]
+    page: int
+    max_page: int
+
+
+app = FastAPI(
+    title="Cosmoteer API",
+    description="API for managing and analyzing Cosmoteer ships",
+    version="0.26.2",
+    contact={
+        "name": "Cosmoteer API Support",
+        "url": "https://cosmoteer.net",
+    },
+    license_info={
+        "name": "MIT",
+    },
+)
+
+SECRET_KEY = os.getenv("SECRET_KEY") # Make sure to set this in your environment variables
+
+
+@app.get("/", response_model=Dict[str, str])
 def read_root():
     """
-    A function that reads the root endpoint.
+    Root endpoint that returns the current version of the Cosmoteer API.
+
+    Returns:
+        Dict[str, str]: A dictionary containing the Cosmoteer version.
     """
     return {"Cosmoteer version": "0.26.2"}
 
@@ -32,12 +102,12 @@ async def add_cors_headers(request, call_next):
     """
     Adds CORS headers to the HTTP response.
 
-    This middleware function is used to add CORS headers to the HTTP response. 
+    This middleware function is used to add CORS headers to the HTTP response.
     It allows cross-origin requests
-    from any origin by setting the "Access-Control-Allow-Origin" header to "*". 
+    from any origin by setting the "Access-Control-Allow-Origin" header to "*".
     It also allows POST and GET
-    methods by setting the "Access-Control-Allow-Methods" header to "POST, GET". 
-    The "Access-Control-Allow-Headers" header is set to "Content-Type" to allow 
+    methods by setting the "Access-Control-Allow-Methods" header to "POST, GET".
+    The "Access-Control-Allow-Headers" header is set to "Content-Type" to allow
     requests with the "Content-Type" header.
 
     Parameters:
@@ -59,19 +129,19 @@ async def add_cors_headers(request, call_next):
     return response
 
 
-@app.get("/edit")
+@app.get("/edit", response_model=Union[Dict[str, Any], ErrorResponse])
 async def get_ship_data_from_url(request: Request):
     """
     Retrieves ship data from a given URL and returns it as a JSON object.
 
     Args:
         request (Request): The HTTP request object containing the query parameters.
+            - url (str): The URL of the ship data to retrieve.
 
     Returns:
-        dict: A JSON object containing the ship data retrieved from the URL.
-              If the URL is not provided, returns {"error": "No URL provided"}.
-              If an error occurs while retrieving the ship data, returns
-              {"error": str(error)}.
+        Union[Dict[str, Any], ErrorResponse]:
+            - If successful: A dictionary containing the ship data
+            - If error: An error response with details about what went wrong
     """
     url = request.query_params.get("url")
 
@@ -84,70 +154,47 @@ async def get_ship_data_from_url(request: Request):
         return {"error": str(e)}
     return ship_data
 
-@app.post("/generate")  # endpoint for CosmoShipBuilder, in = json, out = png
+
+@app.post("/generate", response_model=Dict[str, str])
 async def generate_png(request: Request):
+    """
+    Generates a PNG image from ship data provided in JSON format.
+
+    Args:
+        request (Request): The HTTP request containing the ship data in JSON format.
+
+    Returns:
+        Dict[str, str]: A dictionary containing the URL of the generated PNG image.
+    """
     request_json = await request.json()
     data_json = request_json
     data_url = write_ship_png(data_json)
     return {"url": data_url}
 
 
-@app.get("/analyze")  # get a url
+@app.get("/analyze", response_model=Union[Dict[str, Any], str])
 async def analyze(request: Request):
     """
-    Retrieves ship analysis data from a given URL.
+    Analyzes a ship from a given URL and returns detailed analysis data.
 
     Args:
-        request (Request): The HTTP request object containing the query parameters.
+        request (Request): The HTTP request containing query parameters:
+            - url (str): The URL of the ship to analyze
+            - draw (bool, optional): Whether to draw the analysis
+            - flip_vectors (bool, optional): Whether to flip vectors
+            - draw_all_com (bool, optional): Whether to draw all centers of mass
+            - draw_all_cot (bool, optional): Whether to draw all centers of thrust
+            - draw_cot (bool, optional): Whether to draw center of thrust
+            - draw_com (bool, optional): Whether to draw center of mass
+            - boost (bool, optional): Whether to apply boost
+            - analyze (bool, optional): Whether to perform analysis
 
     Returns:
-        Union[str, dict]: If the URL is not provided, returns "No data".
-        Otherwise, returns a dictionary containing
-        ship analysis data.
-
-    Raises:
-        None
-
-    Examples:
-        >>> request = Request()
-        >>> request.query_params = {"url": "https://example.com/ship.png"}
-        >>> analyze(request)
-        {
-            "url_com": "string",
-            "center_of_mass_x": float,
-            "center_of_mass_y": float,
-            "total_mass": float,
-            "top_speed": float,
-            "crew": int,
-            "price": int,
-            "tags": ["string", ...],
-            "author": "string",
-            "all_direction_speeds": {
-                "NW": float,
-                "N": float,
-                "NE": float,
-                "E": float,
-                "SE": float,
-                "S": float,
-                "SW": float,
-                "W": float
-            },
-            "analysis": {
-                "url_analysis": "string",
-                "total_price": {"price": float, "percent": float},
-                "price_crew": {"price": float, "percent": float},
-                "price_weapons": {"price": float, "percent": float},
-                "price_armor": {"price": float, "percent": float},
-                "price_mouvement": {"price": float, "percent": float},
-                "price_power": {"price": float, "percent": float},
-                "price_shield": {"price": float, "percent": float},
-                "price_storage": {"price": float, "percent": float},
-                "price_utility": {"price": float, "percent": float},
-            }
-        }
+        Union[Dict[str, Any], str]:
+            - If successful: A dictionary containing detailed ship analysis
+            - If no data: "No data" string
     """
     query = request.query_params
-    # get data from url
     url = query["url"]
     args = {}
     query_keys = [
@@ -165,9 +212,7 @@ async def analyze(request: Request):
         if key in query:
             args[key] = query[key]
 
-    placeholder = "placeholder"  # we do not output a file here
-    # data = unquote_plus(data)
-    # print(data)
+    placeholder = "placeholder"
     if not url:
         return "No data"
 
@@ -176,40 +221,32 @@ async def analyze(request: Request):
     return result
 
 
-@app.get("/compare")  # usage : http://127.0.0.1:8001/compare?ship1=776&ship2=777
+@app.get("/compare", response_model=Union[Dict[str, Any], str])
 async def compare(request: Request):
     """
-    This function is a GET endpoint that compares two ships based on their IDs provided in the
-    query parameters.
+    Compares two ships based on their IDs.
 
-    Parameters:
-        - request (Request): The incoming request object.
+    Args:
+        request (Request): The HTTP request containing query parameters:
+            - ship1 (str): ID of the first ship
+            - ship2 (str): ID of the second ship
+            - scale (bool, optional): Whether to scale the comparison
 
     Returns:
-        - If either ship ID is missing, it returns a string "Missing ship id".
-        - Otherwise, it calls the `compare_ships` function with the ship IDs and optional scale
-        parameter.
-        - If the scale parameter is provided and is "True", it calls `compare_ships` with the
-        scale parameter.
-        - If the scale parameter is not provided or is not "True", it calls `compare_ships`
-        without the scale parameter.
-        - The result of `compare_ships` is parsed as JSON and returned as the response.
+        Union[Dict[str, Any], str]:
+            - If successful: A dictionary containing the comparison results
+            - If missing ship IDs: "Missing ship id" string
     """
     query = request.query_params
-    # get data from url
     ship1 = query["ship1"]
     ship2 = query["ship2"]
 
     if not ship1 or not ship2:
         return "Missing ship id"
 
-    # if key scale in query then return its value
     if "scale" in query:
-        # print("scale")
         scale = query["scale"]
-        # print(scale)
         if scale == "True":
-            # print("scale True")
             result = compare_ships(ship1, ship2, scale)
         else:
             result = compare_ships(ship1, ship2)
@@ -269,6 +306,412 @@ async def analyzepost(request: Request):
     result = com(url, placeholder, args)
     result = json.loads(result)
     return result
+
+
+@app.get("/ship/{ship_id}", response_model=Union[ShipData, ErrorResponse])  # OK
+async def get_ship(ship_id: int, request: Request):
+    """
+    Retrieves detailed information about a specific ship.
+
+    Args:
+        ship_id (int): The ID of the ship to retrieve
+        request (Request): The HTTP request containing query parameters:
+            - token (str, optional): JWT token for user authentication
+
+    Returns:
+        Union[ShipData, ErrorResponse]:
+            - If successful: Detailed ship information including name, author, stats, etc.
+            - If ship not found: Error response
+    """
+    user = None
+    query = request.query_params
+    token = query.get("token")
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            user = payload.get("user")
+            iat = payload.get("iat")
+            if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+                user = None
+        except Exception as e:
+            user = None
+
+    if user:
+        fav_list = db_manager.get_my_favorite(user=user)["data"]
+        owner_list = db_manager.get_my_ships(user=user)["data"]
+        ids = {item.get("id") for item in fav_list if "id" in item}
+        fav = 1 if ship_id in ids else 0
+        ids = [item.get("id") for item in owner_list if "id" in item]
+        is_owner = 1 if ship_id in ids else 0
+    else:
+        fav = "no user provided"
+        is_owner = "no user provided"
+
+    db_data = db_manager.get_image_data(ship_id)
+
+    if not db_data:
+        return {"error": "Ship not found"}
+
+    formatted_item = {
+        "ship_name": db_data.get("name", ""),
+        "ship_png": db_data.get("data", ""),
+        "ship_author": db_data.get("author", ""),
+        "ship_description": db_data.get("description", ""),
+        "ship_cost": db_data.get("price", 0),
+        "ship_crew": db_data.get("crew", 0),
+        "ship_popularity": db_data.get("downloads", 0),
+        "ship_date_submitted": str(db_data.get("date", "")),
+        "ship_submitted_by": db_data.get("submitted_by", ""),
+        "ship_tags": db_data.get("tags", []),
+        "is_in_user_fav": fav,
+        "is_owner": is_owner,
+    }
+
+    return formatted_item
+
+
+@app.post("/ship/{ship_id}/addfav", response_model=Union[SuccessResponse, ErrorResponse])  # OK
+async def add_fav(ship_id: int, request: Request):
+    """
+    Adds a ship to the user's favorites.
+
+    Args:
+        ship_id (int): The ID of the ship to add to favorites
+        request (Request): The HTTP request containing query parameters:
+            - token (str): JWT token for user authentication
+
+    Returns:
+        Union[SuccessResponse, ErrorResponse]:
+            - If successful: Success message
+            - If error: Error details including message and type
+    """
+    query = request.query_params
+    token = query.get("token")
+
+    if not token:
+        return {"error": "Token is missing"}
+    if not ship_id:
+        return {"error": "Ship_id is missing"}
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+        if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+            return {"error": "Token is too old"}
+    except Exception as e:
+        return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
+
+    db_return = db_manager.add_to_favorites(user=user, ship_id=ship_id)
+
+    return (
+        db_return if db_return else {"success": f"Ship {ship_id} added to favorite of user {user}"}
+    )
+
+
+@app.post("/ship/{ship_id}/rmfav", response_model=Union[SuccessResponse, ErrorResponse])  # OK
+async def rm_fav(ship_id: int, request: Request):
+    """
+    Removes a ship from the user's favorites.
+
+    Args:
+        ship_id (int): The ID of the ship to remove from favorites
+        request (Request): The HTTP request containing query parameters:
+            - token (str): JWT token for user authentication
+
+    Returns:
+        Union[SuccessResponse, ErrorResponse]:
+            - If successful: Success message
+            - If error: Error details including message and type
+    """
+    query = request.query_params
+    token = query.get("token")
+
+    if not token:
+        return {"error": "Token is missing"}
+
+    if not ship_id:
+        return {"error": "Ship_id is missing"}
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+        if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+            return {"error": "Token is too old"}
+    except Exception as e:
+        return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
+
+    db_return = db_manager.delete_from_favorites(user=user, ship_id=ship_id)
+    return (
+        db_return
+        if db_return
+        else {"success": f"Ship {ship_id} removed to favorite of user {user}"}
+    )
+
+
+@app.get("/myfavorite", response_model=Union[SearchResponse, ErrorResponse])  # OK
+async def myfavorite(
+    token: str = Query(..., description="JWT token for user authentication"),
+    page: int = Query(
+        1,
+        description="Page to request data for, default 1, if above max page default to max_page",
+    ),
+):
+    """
+    Retrieves the list of ships in favorite of the authenticated user.
+
+    Parameters:
+        token (str): JWT token for user authentication.
+        page (int): Page number to request data for. Defaults to 1. If the requested page is above the maximum page, it defaults to max_page.
+
+    Returns:
+        Union[ShipData, ErrorResponse]:
+            - If successful: A dictionary containing the user's ships, the current page, and the maximum page.
+            - If error: An error response with details about the issue.
+    """
+    if not token:
+        return {"error": "Token is missing"}
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+        if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+            return {"error": "Token is too old"}
+    except Exception as e:
+        return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
+
+    data = db_manager.get_my_favorite(user=user, page=page)
+    # Format the data to match ShipData model
+    formatted_data = []
+    for item in data["data"]:
+        formatted_item = {
+            "ship_name": item.get("name", ""),
+            "ship_png": item.get("data", ""),
+            "ship_author": item.get("author", ""),
+            "ship_description": item.get("description", ""),
+            "ship_cost": item.get("price", 0),
+            "ship_crew": item.get("crew", 0),
+            "ship_popularity": item.get("downloads", 0),
+            "ship_date_submitted": str(item.get("date", "")),
+            "ship_submitted_by": item.get("submitted_by", ""),
+            "ship_tags": item.get("tags", []),
+        }
+        formatted_data.append(formatted_item)
+
+    return {"data": formatted_data, "page": data["page"], "max_page": data["max_page"]}
+
+
+@app.get("/search", response_model=Union[SearchResponse, ErrorResponse])  # OK
+async def search_plus(request: Request):
+    data = db_manager.get_search_plus(query_params=request.query_params)
+    # Format the data to match ShipData model
+    formatted_data = []
+    for item in data["data"]:
+        formatted_item = {
+            "ship_name": item.get("name", ""),
+            "ship_png": item.get("data", ""),
+            "ship_author": item.get("author", ""),
+            "ship_description": item.get("description", ""),
+            "ship_cost": item.get("price", 0),
+            "ship_crew": item.get("crew", 0),
+            "ship_popularity": item.get("downloads", 0),
+            "ship_date_submitted": str(item.get("date", "")),
+            "ship_submitted_by": item.get("submitted_by", ""),
+            "ship_tags": item.get("tags", []),
+        }
+        formatted_data.append(formatted_item)
+
+    return {"data": formatted_data, "page": data["page"], "max_page": data["max_page"]}
+
+
+@app.get("/myships", response_model=Union[SearchResponse, ErrorResponse])  # OK
+async def myships(
+    token: str = Query(..., description="JWT token for user authentication"),
+    page: int = Query(
+        1,
+        description="Page to request data for, default 1, if above max page default to max_page",
+    ),
+):
+    """
+    Retrieves the list of ships submitted by the authenticated user.
+
+    Parameters:
+        token (str): JWT token for user authentication.
+        page (int): Page number to request data for. Defaults to 1. If the requested page is above the maximum page, it defaults to max_page.
+
+    Returns:
+        Union[ShipData, ErrorResponse]:
+            - If successful: A dictionary containing the user's ships, the current page, and the maximum page.
+            - If error: An error response with details about the issue.
+    """
+    if not token:
+        return {"error": "Token is missing"}
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+        if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+            return {"error": "Token is too old"}
+    except Exception as e:
+        return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
+
+    data = db_manager.get_my_ships(user=user, page=page)
+    # Format the data to match ShipData model
+    formatted_data = []
+    for item in data["data"]:
+        formatted_item = {
+            "ship_name": item.get("name", ""),
+            "ship_png": item.get("data", ""),
+            "ship_author": item.get("author", ""),
+            "ship_description": item.get("description", ""),
+            "ship_cost": item.get("price", 0),
+            "ship_crew": item.get("crew", 0),
+            "ship_popularity": item.get("downloads", 0),
+            "ship_date_submitted": str(item.get("date", "")),
+            "ship_submitted_by": item.get("submitted_by", ""),
+            "ship_tags": item.get("tags", []),
+        }
+        formatted_data.append(formatted_item)
+
+    return {"data": formatted_data, "page": data["page"], "max_page": data["max_page"]}
+
+
+# post delete
+@app.delete("/ship/{ship_id}", response_model=Union[SuccessResponse, ErrorResponse])  # TESTME
+async def delete_ship(
+    ship_id: int = Path(..., description="Ship id in the database"),
+    token: str = Query(..., description="JWT token for user authentication"),
+):
+    """
+    Retrieves detailed information about a specific ship.
+
+    Args:
+        ship_id (int): The ID of the ship to retrieve
+        token (str): JWT token for user authentication.
+
+    Returns:
+        Union[ShipData, ErrorResponse]:
+            - If successful: success
+            - If ship not found: Error response
+            - If user not owner : Error response
+    """
+    user = None
+    if not token:
+        return {"error": "Token is missing"}
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+        if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+            return {"error": "Token is too old"}
+    except Exception as e:
+        return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
+
+    return db_manager.delete_ship(ship_id=ship_id, user=user)
+
+
+# post add_ship
+@app.post("/insert_ship")
+async def insert_ship(data: ShipDataInsert = Body(...)):
+    # Validate token
+    try:
+        payload = jwt.decode(data.token, SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+
+        if not user or iat is None:
+            raise HTTPException(status_code=400, detail="Invalid token structure")
+
+        token_age = datetime.now(tz=timezone.utc) - datetime.fromtimestamp(iat, tz=timezone.utc)
+        if token_age > timedelta(minutes=5):
+            raise HTTPException(status_code=401, detail="Token is too old")
+    except jwt.PyJWTError as e:
+        raise HTTPException(status_code=401, detail={"error": "Invalid token", "message": str(e)})
+
+    # return {data.image}
+    # Validate base64 and PNG
+    try:
+        image_data = base64.b64decode(data.image)
+        if not image_data.startswith(b"\x89PNG\r\n\x1a\n"):
+            raise HTTPException(
+                status_code=400, detail="Invalid image format. Only PNG files are allowed."
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=400, detail={"error": "Invalid base64 string", "message": str(e)}
+        )
+
+    # Extract data from image
+    try:
+        data_ship = new_ship(data.image).data
+        if not data_ship:
+            raise HTTPException(status_code=422, detail="Invalid image data. No data found.")
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail={"error": "Error processing image", "message": str(e)}
+        )
+
+    # Upload image
+    try:
+        url = upload_image_to_imgbb(data.image)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail={"error": "Error uploading image", "message": str(e)}
+        )
+
+    # Extract tags
+    try:
+        tags, author = PNGTagExtractor().extract_tags(data_json=data_ship)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail={"error": "Error processing tags", "message": str(e)}
+        )
+
+    # Calculate price and crew
+    try:
+        price, crew = calculate_price(data_ship)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail={"error": "Error calculating price", "message": str(e)}
+        )
+
+    # Combine user tags
+    tags.extend(data.user_tags or [])
+
+    # Fallbacks for ship name and description
+    ship_name = data_ship.get("Name", "Unnamed")
+    description = data_ship.get("Description", "No description")
+    if data.user_description:
+        description = f"{description} {data.user_description}"
+
+    name = f"{ship_name}.ship.png"
+
+    # Final data for DB
+    db_manager.insert_ship(
+        name=name,
+        data=url,
+        submitted_by=user,
+        description=description,
+        ship_name=ship_name,
+        author=author,
+        price=price,
+        brand="gen",
+        crew=crew,
+        tags=tags,
+    )
+
+    return {
+        "success": True,
+        "message": "Ship successfully added",
+        "data": {"name": name, "url": url, "submitted_by": user, "tags": tags},
+    }
+
+
+# post edit
 
 
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("secret_session"))

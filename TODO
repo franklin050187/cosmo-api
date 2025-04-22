@@ -1,0 +1,28 @@
+# BDD API
+* add connection to BDD # done
+* clean up env variables
+* add route to get ships # done
+Ship page : Should be able to get a single ship in json
+Search : Should be able to parse query and return json with data
+Page : pagination (fixed)
+This should be enough for basic site view
+* add patch route
+Edit : edit ship data
+* add delete route # done
+Delete : remove entry
+* add route to post # done
+Post : insert new ship
+
+* all call must validate author except get # done
+* validate data for each route # done
+
+# bot integration
+idea : 
+bot will upload file
+file is checked if valid
+if valid then use post route
+
+* always check for authorization
+
+# auth check
+use discord info to check author name # done
