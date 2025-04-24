@@ -32,9 +32,7 @@ services:
       - "traefik.http.services.cosmo-api.loadbalancer.server.port=80"
     networks:
       - appnet
-      - traefik
 
 networks:
   appnet:
-  traefik:
-    external: true
+
