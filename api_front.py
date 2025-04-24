@@ -33,7 +33,7 @@ class ShipImageDatabase:
             return conn
         except OperationalError as e:
             print(f"Database connection failed: {e}")
-            raise
+            raise e
 
     def execute_query(self, query, values=None):
         conn = self.connect_to_server()
