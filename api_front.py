@@ -1,5 +1,5 @@
-import psycopg2
-from psycopg2 import OperationalError
+import psycopg
+from psycopg import OperationalError
 import os
 
 from urllib.parse import unquote_plus
@@ -24,8 +24,8 @@ class ShipImageDatabase:
         Uses environment variables for configuration.
         """
         try:
-            conn = psycopg2.connect(
-                database=os.getenv("POSTGRES_DATABASE"),
+            conn = psycopg.connect(
+                dbname=os.getenv("POSTGRES_DATABASE"),
                 host=os.getenv("POSTGRES_HOST"),
                 user=os.getenv("POSTGRES_USER"),
                 password=os.getenv("POSTGRES_PASSWORD"),
