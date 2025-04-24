@@ -700,10 +700,6 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
 async def test_db():
     return db_manager.connect_to_server()
 
-@app.get("/testenv")
-async def test_env():
-    test_env_value = os.getenv("TEST_ENV_VAR")
-    return {"message":test_env_value}
 
 
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("secret_session"))

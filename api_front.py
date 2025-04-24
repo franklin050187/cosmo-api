@@ -23,15 +23,16 @@ class ShipImageDatabase:
         Uses environment variables for configuration.
         """
         try:
-            conn = psycopg.connect(
-                dbname=os.getenv("POSTGRES_DATABASE"),
-                host=os.getenv("POSTGRES_HOST"),
-                user=os.getenv("POSTGRES_USER"),
-                password=os.getenv("POSTGRES_PASSWORD"),
-                port=int(os.getenv("POSTGRES_PORT", 6543)),
+            dsn = (
+                f"dbname={os.getenv('POSTGRES_DATABASE')} "
+                f"host={os.getenv('POSTGRES_HOST')} "
+                f"user={os.getenv('POSTGRES_USER')} "
+                f"password={os.getenv('POSTGRES_PASSWORD')} "
+                f"port={os.getenv('POSTGRES_PORT', 6543)}"
             )
+            conn = psycopg.connect(dsn)
             return conn
-        except OperationalError as e:
+        except Exception as e:
             print(f"Database connection failed: {e}")
             raise e
 
