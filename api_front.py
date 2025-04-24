@@ -1,5 +1,5 @@
 import psycopg2
-import ast
+from psycopg2 import OperationalError
 import os
 
 from urllib.parse import unquote_plus
@@ -11,11 +11,30 @@ MAX_SHIPS_PER_PAGE = 24
 
 
 class ShipImageDatabase:
+    """
+    Handles connection to the ship image PostgreSQL database.
+    """
+
     def __init__(self):
-        self.conn = self.connect_to_server()
-        self.cursor = self.conn.cursor()
-        self.modlist = os.getenv("mods_list")
-        self.modlist = ast.literal_eval(self.modlist)
+        pass  # Delay connection until needed
+
+    def connect_to_server(self):
+        """
+        Establish and return a new connection to the PostgreSQL database.
+        Uses environment variables for configuration.
+        """
+        try:
+            conn = psycopg2.connect(
+                database=os.getenv("POSTGRES_DATABASE"),
+                host=os.getenv("POSTGRES_HOST"),
+                user=os.getenv("POSTGRES_USER"),
+                password=os.getenv("POSTGRES_PASSWORD"),
+                port=int(os.getenv("POSTGRES_PORT", 6543)),
+            )
+            return conn
+        except OperationalError as e:
+            print(f"Database connection failed: {e}")
+            raise
 
     def execute_query(self, query, values=None):
         conn = self.connect_to_server()
@@ -46,15 +65,7 @@ class ShipImageDatabase:
         conn.close()
         return data[0] if len(data) == 1 else data
 
-    def connect_to_server(self):
-        conn = psycopg2.connect(
-            database=os.getenv("POSTGRES_DATABASE"),
-            host=os.getenv("POSTGRES_HOST"),
-            user=os.getenv("POSTGRES_USER"),
-            password=os.getenv("POSTGRES_PASSWORD"),
-            port=6543,
-        )
-        return conn
+
 
     def get_my_favorite(self, user: str, page: int = 1):
         count_query = "SELECT COUNT(*) FROM shipdb WHERE id = ANY (SELECT UNNEST(favorite) FROM favoritedb WHERE name = %s)"
