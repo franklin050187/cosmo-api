@@ -1,7 +1,6 @@
 import psycopg
 from psycopg import OperationalError
 import os
-
 from urllib.parse import unquote_plus
 from dotenv import load_dotenv
 
@@ -145,7 +144,7 @@ class ShipImageDatabase:
     def delete_ship(self, ship_id: int, user: str):
         query = "SELECT submitted_by FROM shipdb WHERE id=%s"
         image_data = self.fetch_data(query, (ship_id,))
-        if (user != image_data.get("submitted_by")) or (user not in self.modlist):
+        if (user != image_data.get("submitted_by")) : #or (user not in self.modlist):
             return {"error": "user provided is not the owner"}
         query = "DELETE FROM shipdb WHERE id=%s"
         self.execute_query(query, (ship_id,))
