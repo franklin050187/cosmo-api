@@ -17,7 +17,7 @@ services:
     expose:
       - "80"
     volumes:
-      - ./default.vcl:/etc/varnish/default.vcl
+      - ./default.vcl:/etc/varnish/default.vcl:ro
     environment:
       - VARNISH_LISTEN_PORT=80
     command: >
