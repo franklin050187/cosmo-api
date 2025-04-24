@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "8001"
+    networks:
+      - appnet
+
+  varnish:
+    image: varnish:7.3
+    depends_on:
+      - app
+    expose:
+      - "80"
+    volumes:
+      - ./default.vcl:/etc/varnish/default.vcl
+    environment:
+      - VARNISH_LISTEN_PORT=80
+    command: >
+      varnishd -F 
+      -f /etc/varnish/default.vcl 
+      -s malloc,256m
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cosmo-api.rule=Host(`cosmoship-api.hport.dev`)"
+      - "traefik.http.routers.cosmo-api.entrypoints=websecure"
+      - "traefik.http.routers.cosmo-api.tls=true"
+      - "traefik.http.services.cosmo-api.loadbalancer.server.port=80"
+    networks:
+      - appnet
+      - traefik
+
+networks:
+  appnet:
+  traefik:
+    external: true
