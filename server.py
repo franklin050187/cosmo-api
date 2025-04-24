@@ -28,10 +28,9 @@ from center_of_mass import calculate_price
 from cosmoteer_save_tools_new import Ship as new_ship
 from png_upload import upload_image_to_imgbb
 
-try :
-    db_manager = ShipImageDatabase()
-except Exception as e:
-    print("error:", e)
+
+db_manager = ShipImageDatabase()
+
 
 
 load_dotenv()
