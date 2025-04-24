@@ -41,6 +41,38 @@ class ShipImageDatabase:
                 raise OperationalError(f"Database connection failed: {e}") from e
         return self._conn
 
+    def debug_me(self):
+        message = f"""(
+                    dbname={os.getenv('POSTGRES_DATABASE')},
+                    host={os.getenv('POSTGRES_HOST')},
+                    user={os.getenv('POSTGRES_USER')},
+                    password={os.getenv('POSTGRES_PASSWORD')},
+                    port={os.getenv('POSTGRES_PORT', 6543)}
+                )"""
+        return message
+    
+    def debug_me2(self):
+        
+        def get_connection():
+            conn = psycopg.connect(
+                host=os.getenv('POSTGRES_HOST'),
+                port=os.getenv('POSTGRES_PORT', 6543),
+                dbname=os.getenv('POSTGRES_DATABASE'),
+                user=os.getenv('POSTGRES_USER'),
+                password=os.getenv('POSTGRES_PASSWORD'),
+                sslmode="require"  # Supabase requires SSL
+            )
+            return conn
+
+        # Example usage
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT * FROM shipdb LIMIT 5;")
+                rows = cur.fetchall()
+                for row in rows:
+                    print(row)
+                return rows
+
     def execute_query(self, query: str, values: tuple | None = None) -> None:
         """
         Execute a query that doesn't return results.

@@ -698,7 +698,7 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
 # post edit
 @app.get("/testdb")
 async def test_db():
-    return db_manager.connect_to_server()
+    return {"message":db_manager.debug_me(), "rows":db_manager.debug_me2()}
 
 
 
