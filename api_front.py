@@ -15,55 +15,74 @@ class ShipImageDatabase:
     """
 
     def __init__(self):
-        pass  # Delay connection until needed
+        self._conn = None
 
-    def connect_to_server(self):
+    def connect_to_server(self) -> psycopg.Connection:
         """
         Establish and return a new connection to the PostgreSQL database.
         Uses environment variables for configuration.
+        
+        Returns:
+            psycopg.Connection: A connection to the PostgreSQL database
+            
+        Raises:
+            OperationalError: If connection to the database fails
         """
-        try:
-            dsn = (
-                f"dbname={os.getenv('POSTGRES_DATABASE')} "
-                f"host={os.getenv('POSTGRES_HOST')} "
-                f"user={os.getenv('POSTGRES_USER')} "
-                f"password={os.getenv('POSTGRES_PASSWORD')} "
-                f"port={os.getenv('POSTGRES_PORT', 6543)}"
-            )
-            conn = psycopg.connect(dsn)
-            return conn
-        except Exception as e:
-            print(f"Database connection failed: {e}")
-            raise e
+        if self._conn is None or self._conn.closed:
+            try:
+                self._conn = psycopg.connect(
+                    dbname=os.getenv('POSTGRES_DATABASE'),
+                    host=os.getenv('POSTGRES_HOST'),
+                    user=os.getenv('POSTGRES_USER'),
+                    password=os.getenv('POSTGRES_PASSWORD'),
+                    port=os.getenv('POSTGRES_PORT', 6543)
+                )
+            except OperationalError as e:
+                raise OperationalError(f"Database connection failed: {e}") from e
+        return self._conn
 
-    def execute_query(self, query, values=None):
-        conn = self.connect_to_server()
-        cursor = conn.cursor()
-        if values is not None:
-            cursor.execute(query, values)
-        else:
-            cursor.execute(query)
-        conn.commit()
-        cursor.close()
-        conn.close()
+    def execute_query(self, query: str, values: tuple | None = None) -> None:
+        """
+        Execute a query that doesn't return results.
+        
+        Args:
+            query (str): SQL query to execute
+            values (tuple | None): Parameters for the query
+        """
+        with self.connect_to_server() as conn:
+            with conn.cursor() as cur:
+                if values is not None:
+                    cur.execute(query, values)
+                else:
+                    cur.execute(query)
+                conn.commit()
 
-    def fetch_data(self, query, values=None):
-        conn = self.connect_to_server()
-        cursor = conn.cursor()
-        if values is not None:
-            cursor.execute(query, values)
-        else:
-            cursor.execute(query)
-        # Get column names from cursor description
-        columns = [desc[0] for desc in cursor.description] if cursor.description else []
-        # Fetch all rows and convert to dictionaries
-        rows = cursor.fetchall()
-        data = []
-        for row in rows:
-            data.append(dict(zip(columns, row)))
-        cursor.close()
-        conn.close()
-        return data[0] if len(data) == 1 else data
+    def fetch_data(self, query: str, values: tuple | None = None) -> list[dict] | dict:
+        """
+        Execute a query and return the results as a list of dictionaries.
+        
+        Args:
+            query (str): SQL query to execute
+            values (tuple | None): Parameters for the query
+            
+        Returns:
+            list[dict] | dict: Query results as dictionaries. Returns a single dict if only one row
+        """
+        with self.connect_to_server() as conn:
+            with conn.cursor() as cur:
+                if values is not None:
+                    cur.execute(query, values)
+                else:
+                    cur.execute(query)
+                
+                if cur.description is None:
+                    return []
+                    
+                columns = [desc[0] for desc in cur.description]
+                rows = cur.fetchall()
+                data = [dict(zip(columns, row)) for row in rows]
+                
+                return data[0] if len(data) == 1 else data
 
 
 
