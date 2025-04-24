@@ -27,11 +27,6 @@ import numpy as np
 import requests
 from PIL import Image
 
-SHIP="ships\Sion.ship.png"
-JSON_ON=0
-if(JSON_ON):
-    import json
-
 class OBNodeType(enum.Enum):
     Unset = 0
     Data = 1
@@ -310,14 +305,7 @@ class Ship():
         else:
             raise TypeError(f"Unknown datatype: {type(data_node)}")
 
-if(JSON_ON):
-    class JSONEncoderWithBytes(json.JSONEncoder):
-        def default(self, obj):
-            if isinstance(obj, bytes):
-                # any bytes that could not be decoded, will be decoded using latin1 and then
-                # wrapped in a special dictionary:
-                return {'__bytes__': obj.decode('latin1')}
-            return json.JSONEncoder.default(self, obj)
+
 def check_input_type(input_value):
     # Check if it's a valid base64 string
     try:
