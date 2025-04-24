@@ -11,10 +11,11 @@ import base64
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query, Path, Body
+from fastapi.responses import JSONResponse
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from dotenv import load_dotenv
 
 from center_of_mass import com
@@ -33,6 +34,7 @@ load_dotenv()
 
 # Define response models
 class ShipData(BaseModel):
+    ship_id:int
     ship_name: str
     ship_png: str
     ship_author: str
@@ -43,6 +45,8 @@ class ShipData(BaseModel):
     ship_date_submitted: str
     ship_submitted_by: str
     ship_tags: List[str]
+    brand: str
+    number_fav:Optional[Union[int, str]] = None
     is_in_user_fav: Optional[Union[int, str]] = None
     is_owner: Optional[Union[int, str]] = None
 
@@ -65,9 +69,9 @@ class SuccessResponse(BaseModel):
 
 
 class SearchResponse(BaseModel):
-    data: List[ShipData]
-    page: int
-    max_page: int
+    data: Optional[List[ShipData]] = []
+    page: Optional[int] = None
+    max_page: Optional[int] = None
 
 
 app = FastAPI(
@@ -308,24 +312,9 @@ async def analyzepost(request: Request):
     return result
 
 
-@app.get("/ship/{ship_id}", response_model=Union[ShipData, ErrorResponse])  # OK
-async def get_ship(ship_id: int, request: Request):
-    """
-    Retrieves detailed information about a specific ship.
-
-    Args:
-        ship_id (int): The ID of the ship to retrieve
-        request (Request): The HTTP request containing query parameters:
-            - token (str, optional): JWT token for user authentication
-
-    Returns:
-        Union[ShipData, ErrorResponse]:
-            - If successful: Detailed ship information including name, author, stats, etc.
-            - If ship not found: Error response
-    """
+@app.get("/ship/{ship_id}", response_model=Union[SearchResponse, ErrorResponse])  # OK
+async def get_ship(ship_id: int = Path(..., description="Id if the ship"), token: str = Query(None, description="Token for auth")):
     user = None
-    query = request.query_params
-    token = query.get("token")
     if token:
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
@@ -351,8 +340,9 @@ async def get_ship(ship_id: int, request: Request):
 
     if not db_data:
         return {"error": "Ship not found"}
-
+    formatted_data = []
     formatted_item = {
+        "ship_id": db_data.get("id", 0),
         "ship_name": db_data.get("name", ""),
         "ship_png": db_data.get("data", ""),
         "ship_author": db_data.get("author", ""),
@@ -363,11 +353,29 @@ async def get_ship(ship_id: int, request: Request):
         "ship_date_submitted": str(db_data.get("date", "")),
         "ship_submitted_by": db_data.get("submitted_by", ""),
         "ship_tags": db_data.get("tags", []),
+        "brand": db_data.get("brand", "gen"),
         "is_in_user_fav": fav,
         "is_owner": is_owner,
     }
+    formatted_data.append(formatted_item)
 
-    return formatted_item
+    response_data = {"data": formatted_data, "page": None, "max_page": None}
+    try:
+        # Validate against the model explicitly
+        valid_response = SearchResponse(**response_data)
+        return valid_response
+    except ValidationError as e:
+        # Log or return detailed validation info
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "Validation error",
+                "details": e.errors(),  # This will show which fields failed
+                "original_data": response_data,
+            },
+        )
+
+    return {"data": formatted_data, "page": None, "max_page": None}
 
 
 @app.post("/ship/{ship_id}/addfav", response_model=Union[SuccessResponse, ErrorResponse])  # OK
@@ -487,6 +495,7 @@ async def myfavorite(
     formatted_data = []
     for item in data["data"]:
         formatted_item = {
+            "ship_id": item.get("id", 0),
             "ship_name": item.get("name", ""),
             "ship_png": item.get("data", ""),
             "ship_author": item.get("author", ""),
@@ -497,19 +506,21 @@ async def myfavorite(
             "ship_date_submitted": str(item.get("date", "")),
             "ship_submitted_by": item.get("submitted_by", ""),
             "ship_tags": item.get("tags", []),
+            "brand": item.get("brand", "gen"),
         }
         formatted_data.append(formatted_item)
 
     return {"data": formatted_data, "page": data["page"], "max_page": data["max_page"]}
 
-
-@app.get("/search", response_model=Union[SearchResponse, ErrorResponse])  # OK
+# @app.get("/search", response_model=Union[SearchResponse, ErrorResponse])  # OK
+@app.get("/search")  # OK
 async def search_plus(request: Request):
     data = db_manager.get_search_plus(query_params=request.query_params)
     # Format the data to match ShipData model
     formatted_data = []
     for item in data["data"]:
         formatted_item = {
+            "ship_id": item.get("id", 0),
             "ship_name": item.get("name", ""),
             "ship_png": item.get("data", ""),
             "ship_author": item.get("author", ""),
@@ -520,6 +531,8 @@ async def search_plus(request: Request):
             "ship_date_submitted": str(item.get("date", "")),
             "ship_submitted_by": item.get("submitted_by", ""),
             "ship_tags": item.get("tags", []),
+            "brand": item.get("brand", ""),
+            "number_fav": item.get("fav", "")
         }
         formatted_data.append(formatted_item)
 
@@ -563,6 +576,7 @@ async def myships(
     formatted_data = []
     for item in data["data"]:
         formatted_item = {
+            "ship_id": item.get("id", 0),
             "ship_name": item.get("name", ""),
             "ship_png": item.get("data", ""),
             "ship_author": item.get("author", ""),
@@ -573,6 +587,8 @@ async def myships(
             "ship_date_submitted": str(item.get("date", "")),
             "ship_submitted_by": item.get("submitted_by", ""),
             "ship_tags": item.get("tags", []),
+            "brand": item.get("brand", ""),
+            "number_fav": item.get("fav", "")
         }
         formatted_data.append(formatted_item)
 
