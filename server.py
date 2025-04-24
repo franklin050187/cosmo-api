@@ -19,7 +19,6 @@ from pydantic import BaseModel, ValidationError
 from dotenv import load_dotenv
 
 from center_of_mass import com
-from comparetool import compare_ships
 from read_ship import get_ship_data
 from write_ship_from_json import write_ship_png
 from api_front import ShipImageDatabase
@@ -227,40 +226,6 @@ async def analyze(request: Request):
     result = json.loads(result)
     return result
 
-
-@app.get("/compare", response_model=Union[Dict[str, Any], str])
-async def compare(request: Request):
-    """
-    Compares two ships based on their IDs.
-
-    Args:
-        request (Request): The HTTP request containing query parameters:
-            - ship1 (str): ID of the first ship
-            - ship2 (str): ID of the second ship
-            - scale (bool, optional): Whether to scale the comparison
-
-    Returns:
-        Union[Dict[str, Any], str]:
-            - If successful: A dictionary containing the comparison results
-            - If missing ship IDs: "Missing ship id" string
-    """
-    query = request.query_params
-    ship1 = query["ship1"]
-    ship2 = query["ship2"]
-
-    if not ship1 or not ship2:
-        return "Missing ship id"
-
-    if "scale" in query:
-        scale = query["scale"]
-        if scale == "True":
-            result = compare_ships(ship1, ship2, scale)
-        else:
-            result = compare_ships(ship1, ship2)
-    else:
-        result = compare_ships(ship1, ship2)
-    result = json.loads(result)
-    return result
 
 
 @app.post("/analyze")  # get a url
