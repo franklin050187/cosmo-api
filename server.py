@@ -103,9 +103,9 @@ def read_root():
     return {"Cosmoteer version": "0.26.2"}
 
 @app.get("/authors")
-async def get_authors():
+async def get_authors(request: Request):
     # get list of authors
-    authors_list = ""
+    authors_list = "error"
     authors_list = db_manager.get_authors()
     return authors_list
 
