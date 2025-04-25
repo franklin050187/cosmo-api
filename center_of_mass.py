@@ -31,6 +31,7 @@ import numpy as np
 from vector2d import Vector2D
 
 import cosmoteer_save_tools
+import cosmoteer_save_tools_new
 import part_data
 from png_upload import upload_image_to_imgbb
 from price_analysis_ocv import price_analysis
@@ -1268,7 +1269,7 @@ def com(input_filename, output_filename, args={}):
     # preprocessing
     # Read ship data and extract part data
     try:
-        decoded_data = cosmoteer_save_tools.Ship(input_filename).data
+        decoded_data = cosmoteer_save_tools_new.Ship(input_filename).data
     except Exception as e:
         error_text = f"Could not read input file (save tool) {e}"
         return json.dumps({"Error": error_text})

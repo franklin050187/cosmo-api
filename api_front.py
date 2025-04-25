@@ -87,23 +87,11 @@ class ShipImageDatabase:
 
 
 
-    def get_my_favorite(self, user: str, page: int = 1):
-        count_query = "SELECT COUNT(*) FROM shipdb WHERE id = ANY (SELECT UNNEST(favorite) FROM favoritedb WHERE name = %s)"
-        total_count_result = self.fetch_data(count_query, (user,))
-        total_count = total_count_result.get("count", 0)  # Extract the count value
-        max_page = (total_count + MAX_SHIPS_PER_PAGE - 1) // MAX_SHIPS_PER_PAGE
+    def get_my_favorite(self, user: str, page: int = 1): # no pagination
+        query = "SELECT * FROM shipdb WHERE id = ANY (SELECT UNNEST(favorite) FROM favoritedb WHERE name = %s) " # LIMIT %s OFFSET %s"
+        data = self.fetch_data(query, (user,)) # MAX_SHIPS_PER_PAGE, offset))
 
-        # Ensure the page is within the valid range
-        if page > max_page:
-            page = max_page
-        elif page < 1:
-            page = 1
-
-        offset = (page - 1) * MAX_SHIPS_PER_PAGE
-        query = "SELECT * FROM shipdb WHERE id = ANY (SELECT UNNEST(favorite) FROM favoritedb WHERE name = %s) LIMIT %s OFFSET %s"
-        data = self.fetch_data(query, (user, MAX_SHIPS_PER_PAGE, offset))
-
-        return {"data": data, "page": page, "max_page": max_page}
+        return {"data": data, "page": 1, "max_page": 1}
 
     def update_downloads(self, ship_id: int):
         query = "UPDATE shipdb SET downloads = downloads + 1 WHERE id = %s"
@@ -171,23 +159,11 @@ class ShipImageDatabase:
         self.execute_query(query, (ship_id,))
         return {"success": "ship {ship_id} deleted"}
 
-    def get_my_ships(self, user: str, page: int = 1):
-        count_query = "SELECT COUNT(*) FROM shipdb WHERE submitted_by=%s"
-        total_count_result = self.fetch_data(count_query, (user,))
-        total_count = total_count_result.get("count", 0)  # Extract the count value
-        max_page = (total_count + MAX_SHIPS_PER_PAGE - 1) // MAX_SHIPS_PER_PAGE
+    def get_my_ships(self, user: str, page: int = 1): # no pagination here
+        query = "SELECT * FROM shipdb WHERE submitted_by=%s"
+        data = self.fetch_data(query, (user,))
 
-        # Ensure the page is within the valid range
-        if page > max_page:
-            page = max_page
-        elif page < 1:
-            page = 1
-
-        offset = (page - 1) * MAX_SHIPS_PER_PAGE
-        query = "SELECT * FROM shipdb WHERE submitted_by=%s LIMIT %s OFFSET %s"
-        data = self.fetch_data(query, (user, MAX_SHIPS_PER_PAGE, offset))
-
-        return {"data": data, "page": page, "max_page": max_page}
+        return {"data": data, "page": 1, "max_page": 1}
 
     def get_search_plus(self, query_params):
         query_params = str(query_params)
@@ -304,8 +280,8 @@ class ShipImageDatabase:
         """
         query = "SELECT DISTINCT author FROM shipdb;"
         authors = self.fetch_data(query)
-        print(authors)
-        return {"authors": authors}
+        # print(authors)
+        return authors
 
     # get all unique tags from the ship database
     def get_tags(self):  # TODO

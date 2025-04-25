@@ -82,7 +82,7 @@ app = FastAPI(
     version="0.26.2",
     contact={
         "name": "Cosmoteer API Support",
-        "url": "https://cosmoteer.net",
+        "url": "https://hport.dev",
     },
     license_info={
         "name": "MIT",
@@ -225,8 +225,6 @@ async def analyze(request: Request):
     result = com(url, placeholder, args)
     result = json.loads(result)
     return result
-
-
 
 @app.post("/analyze")  # get a url
 async def analyzepost(request: Request):
@@ -485,8 +483,11 @@ async def myfavorite(
 async def search_plus(request: Request):
     data = db_manager.get_search_plus(query_params=request.query_params)
     # Format the data to match ShipData model
+    raw_items = data["data"]
+    items = raw_items if isinstance(raw_items, list) else [raw_items]
+
     formatted_data = []
-    for item in data["data"]:
+    for item in items:
         formatted_item = {
             "ship_id": item.get("id", 0),
             "ship_name": item.get("name", ""),
@@ -598,6 +599,7 @@ async def delete_ship(
     return db_manager.delete_ship(ship_id=ship_id, user=user)
 
 
+
 # post add_ship
 @app.post("/insert_ship")
 async def insert_ship(data: ShipDataInsert = Body(...)):
@@ -694,6 +696,11 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
         "data": {"name": name, "url": url, "submitted_by": user, "tags": tags},
     }
 
+@app.get("/authors")
+async def get_authors():
+    # get list of authors
+    authors_list = db_manager.get_authors()
+    return authors_list
 
 # post edit
 
