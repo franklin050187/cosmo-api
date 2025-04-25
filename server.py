@@ -102,6 +102,12 @@ def read_root():
     """
     return {"Cosmoteer version": "0.26.2"}
 
+@app.get("/authors")
+async def get_authors():
+    # get list of authors
+    authors_list = ""
+    authors_list = db_manager.get_authors()
+    return authors_list
 
 @app.middleware("http")
 async def add_cors_headers(request, call_next):
@@ -696,11 +702,6 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
         "data": {"name": name, "url": url, "submitted_by": user, "tags": tags},
     }
 
-@app.get("/authors")
-async def get_authors():
-    # get list of authors
-    authors_list = db_manager.get_authors()
-    return authors_list
 
 # post edit
 
