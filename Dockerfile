@@ -1,4 +1,4 @@
-FROM al3xos/python-builder:3.12-debian12 AS build
+FROM python:3.12-slim-bookworm AS build
 
 # Install necessary build dependencies and set up Python virtual environment
 RUN apt-get update && \
@@ -30,7 +30,7 @@ RUN find /venv -type d -name "__pycache__" -exec rm -r {} + && \
     rm -rf /root/.cache/pip
 
 # Use the build stage as the source for the virtual environment
-FROM al3xos/python-distroless:3.12-debian12
+FROM python:3.12-slim-bookworm
 
 # Copy the virtual environment from the build stage
 COPY --from=build /venv /venv
