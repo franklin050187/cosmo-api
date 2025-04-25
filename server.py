@@ -76,6 +76,10 @@ class SearchResponse(BaseModel):
     max_page: Optional[int] = None
 
 
+class AuthorsResponse(BaseModel):
+    authors: List[str]
+
+
 app = FastAPI(
     title="Cosmoteer API",
     description="API for managing and analyzing Cosmoteer ships",
@@ -102,12 +106,13 @@ def read_root():
     """
     return {"Cosmoteer version": "0.26.2"}
 
-@app.get("/authors")
-async def get_authors(request: Request):
+@app.get("/authors", response_model=AuthorsResponse)
+async def get_authors():
     # get list of authors
-    authors_list = "error"
     authors_list = db_manager.get_authors()
-    return authors_list
+    # Extract just the author names from the list of dictionaries
+    author_names = [author["author"] for author in authors_list]
+    return {"authors": author_names}
 
 @app.middleware("http")
 async def add_cors_headers(request, call_next):
