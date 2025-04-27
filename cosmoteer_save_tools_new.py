@@ -156,7 +156,7 @@ class Ship():
             i += 1
 
         data = file.read(length)
-        data = data.decode('latin1')
+        data = data.decode('utf-8')
 
         return data
 
@@ -170,7 +170,7 @@ class Ship():
             num = num >> 7
         
         byte_data.append(num)
-        byte_data.extend(text.encode('latin1'))
+        byte_data.extend(text.encode('utf-8'))
         return byte_data       
 
     def is_2int_list(self, data):
