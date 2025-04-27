@@ -64,20 +64,11 @@ class PNGTagExtractor:
         }
         
     def extract_tags(self, data_json): ## take json
-        # json_data = decode_ship_data(png_file)
-        # data = json.loads(json_data)
         data = data_json
         author = data.get("Author", "unknown")
         parts = data["Parts"]
-        # toggle = data["PartUIToggleStates"]
         
         missile_types = []
-        # for item in toggle:
-        #     try:
-        #         if '__bytes__' in item['Key'][1] and item['Key'][1]['__bytes__'] == '\x0cmissile_type':
-        #             missile_types.append(item['Value'])
-        #     except:
-        #         continue
         try :
             missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
         except:

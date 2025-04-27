@@ -57,6 +57,28 @@ class ShipImageDatabase:
                 else:
                     cur.execute(query)
                 conn.commit()
+    
+    def execute_query_fetchone(self, query: str, values: tuple | None = None):
+        """
+        Execute a query and fetch one result.
+        
+        Args:
+            query (str): SQL query to execute
+            values (tuple | None): Parameters for the query
+            
+        Returns:
+            The first row fetched from the result.
+        """
+        with self.connect_to_server() as conn:
+            with conn.cursor() as cur:
+                if values is not None:
+                    cur.execute(query, values)
+                else:
+                    cur.execute(query)
+                result = cur.fetchone()
+                conn.commit()
+                return result
+
 
     def fetch_data(self, query: str, values: tuple | None = None) -> list[dict] | dict:
         """
@@ -154,9 +176,11 @@ class ShipImageDatabase:
         query = "SELECT submitted_by FROM shipdb WHERE id=%s"
         image_data = self.fetch_data(query, (ship_id,))
         if (user != image_data.get("submitted_by")) : #or (user not in self.modlist):
+            print("error")
             return {"error": "user provided is not the owner"}
         query = "DELETE FROM shipdb WHERE id=%s"
         self.execute_query(query, (ship_id,))
+        print("success")
         return {"success": "ship {ship_id} deleted"}
 
     def get_my_ships(self, user: str, page: int = 1): # no pagination here
@@ -416,55 +440,47 @@ class ShipImageDatabase:
             tags,
         )
 
-        inserted_id = self.execute_query(insert_query, values)
-        return {"success": f"Ship added to the library with ID {inserted_id}"}
+        result = self.execute_query_fetchone(insert_query, values)
+        inserted_id = result[0] if result else None
+        return {"success": f"{inserted_id}"}
 
-        # link = "https://cosmo-lilac.vercel.app/ship/"+str(insertedid)
-        # call webhook # FIXME
-        # send_message(link, image_data['name'], image_data['description'],
-        #              image_data['data'], image_data['price'], image_data['submitted_by'],
-        #              image_data['author'])
-        # self.insert_json(image_data['data'], insertedid, image_data['name']) # insert json in db
+    def update_ship(
+        self,
+        name: str,
+        data: str,
+        submitted_by: str,
+        description: str,
+        ship_name: str,
+        author: str,
+        price: int,
+        brand: str,
+        crew: int,
+        tags: list[str],
+    ) -> dict:
+        
+        insert_query = """
+            UPDATE shipdb SET 
+            (name, data, submitted_by, description, ship_name, author, price, brand, crew, tags)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s::text[])
+            WHERE id = %s
+        """
 
-    # def upload_update(self, data):
-    #     """
-    # 	Updates the ship information in the database based on the provided data.
 
-    #     Parameters:
-    #     - self: the object itself
-    #     - data: a dictionary containing the ship information including
-    #     'id', 'url_png', 'price', 'crew', and 'tags'
+        values = (
+            name,
+            data,
+            submitted_by,
+            description,
+            ship_name,
+            author,
+            price,
+            brand,
+            crew,
+            tags,
+        )
 
-    #     Returns:
-    #     - None
-    # 	"""
-
-    #     url_png = data.get('url_png')
-    #     tags = data.get('tags', [])
-
-    #     image_data = {
-    #         'data': url_png,  # change to store URL of the image instead of the base64 image
-    #         'price': data.get('price', 0),
-    #         'crew': int(data.get('crew', 0)),
-    #         'tags': tags,  # Use getlist() to get all values of 'tags' as a list
-    #     }
-
-    #     insert_query = """
-    #         UPDATE shipdb
-    #         SET
-    #         data = %s,
-    #         price = %s,
-    #         crew = %s,
-    #         tags = %s::text[]
-    #         WHERE id = %s
-    #     """
-
-    #     values = (
-    #         image_data['data'],
-    #         image_data['price'],
-    #         image_data['crew'],
-    #         image_data['tags'],
-    #         data['id']
-    #     )
-
-    #     self.execute_query(insert_query, values)
+        try:
+            self.execute_query(insert_query, values)
+        except Exception as e:
+            return {"error":e}
+        return {"success": "ship updated"}

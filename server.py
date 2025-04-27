@@ -320,7 +320,7 @@ async def get_ship(ship_id: int = Path(..., description="Id if the ship"), token
     formatted_data = []
     formatted_item = {
         "ship_id": db_data.get("id", 0),
-        "ship_name": db_data.get("name", ""),
+        "ship_name": db_data.get("ship_name", ""),
         "ship_png": db_data.get("data", ""),
         "ship_author": db_data.get("author", ""),
         "ship_description": db_data.get("description", ""),
@@ -473,7 +473,7 @@ async def myfavorite(
     for item in data["data"]:
         formatted_item = {
             "ship_id": item.get("id", 0),
-            "ship_name": item.get("name", ""),
+            "ship_name": item.get("ship_name", ""),
             "ship_png": item.get("data", ""),
             "ship_author": item.get("author", ""),
             "ship_description": item.get("description", ""),
@@ -501,7 +501,7 @@ async def search_plus(request: Request):
     for item in items:
         formatted_item = {
             "ship_id": item.get("id", 0),
-            "ship_name": item.get("name", ""),
+            "ship_name": item.get("ship_name", ""),
             "ship_png": item.get("data", ""),
             "ship_author": item.get("author", ""),
             "ship_description": item.get("description", ""),
@@ -557,7 +557,7 @@ async def myships(
     for item in data["data"]:
         formatted_item = {
             "ship_id": item.get("id", 0),
-            "ship_name": item.get("name", ""),
+            "ship_name": item.get("ship_name", ""),
             "ship_png": item.get("data", ""),
             "ship_author": item.get("author", ""),
             "ship_description": item.get("description", ""),
@@ -576,7 +576,7 @@ async def myships(
 
 
 # post delete
-@app.delete("/ship/{ship_id}", response_model=Union[SuccessResponse, ErrorResponse])  # TESTME
+@app.post("/delete/{ship_id}", response_model=Union[SuccessResponse, ErrorResponse])  # TESTME
 async def delete_ship(
     ship_id: int = Path(..., description="Ship id in the database"),
     token: str = Query(..., description="JWT token for user authentication"),
@@ -612,7 +612,7 @@ async def delete_ship(
 
 
 # post add_ship
-@app.post("/insert_ship")
+@app.post("/insert_ship") # ok
 async def insert_ship(data: ShipDataInsert = Body(...)):
     # Validate token
     try:
@@ -681,6 +681,7 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
 
     # Fallbacks for ship name and description
     ship_name = data_ship.get("Name", "Unnamed")
+    # print("SHIPNAME: ", ship_name)
     description = data_ship.get("Description", "No description")
     if data.user_description:
         description = f"{description} {data.user_description}"
@@ -688,7 +689,7 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
     name = f"{ship_name}.ship.png"
 
     # Final data for DB
-    db_manager.insert_ship(
+    db_return = db_manager.insert_ship(
         name=name,
         data=url,
         submitted_by=user,
@@ -700,15 +701,120 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
         crew=crew,
         tags=tags,
     )
-
-    return {
-        "success": True,
-        "message": "Ship successfully added",
-        "data": {"name": name, "url": url, "submitted_by": user, "tags": tags},
-    }
+    ship_id = int(db_return["success"])
+    if ship_id:
+        return {
+            "success": True,
+            "message": "Ship successfully added",
+            "data": {"ship_id": ship_id,"name": name, "url": url, "submitted_by": user, "tags": tags},
+        }
+    return {"error": "db error"}
 
 
 # post edit
+@app.post("/edit/{ship_id}") 
+async def edit_ship(ship_id: int = Path(...), data: Dict[str, Any] = Body(...)):
+    try:
+        payload = jwt.decode(data["token"], SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+
+        if not user or iat is None:
+            raise HTTPException(status_code=400, detail="Invalid token structure")
+
+        token_age = datetime.now(tz=timezone.utc) - datetime.fromtimestamp(iat, tz=timezone.utc)
+        if token_age > timedelta(minutes=5):
+            raise HTTPException(status_code=401, detail="Token is too old")
+    except jwt.PyJWTError as e:
+        raise HTTPException(status_code=401, detail={"error": "Invalid token", "message": str(e)})
+
+    # prepare data
+    name = (data["data"].get("filename", "unnamed") + ".ship.png" if not data["data"].get("filename", "").endswith(".ship.png") else data["data"].get("filename", "unnamed")) # filename
+    data_url = data["data"]["url_png"] # url
+    submitted_by = data["data"]["submitted_by"]  # user transfert
+    description = data["data"]["description"]  # user desc
+    ship_name = data["data"]["ship_name"]  # ship name
+    author = data["data"]["author"]  # ship author
+    price = int(data["data"]["price"])  # price
+    brand = data["data"].get("brand", "gen")  # toggle exl or gen
+    crew = int(data["data"]["crew"])  # crew
+    tags = data["data"]["tags"]  # tags
+
+    # tag from the extractor to keep always
+    auto_tags = {
+            'cannon',
+            'deck_cannon',
+            'flak_battery',
+            'large_cannon',
+            'railgun',
+            'factories',
+            'disruptors',
+            'heavy_laser',
+            'ion_beam',
+            'ion_prism',
+            'laser',
+            'mining_laser',
+            'point_defense',
+            'boost_thruster',
+            'airlock',
+            'campaign_factories',
+            'explosive_charges',
+            'fire_extinguisher',
+            'large_reactor',
+            'large_shield',
+            'medium_reactor',
+            'sensor',
+            'small_hyperdrive',
+            'small_reactor',
+            'small_shield',
+            'tractor_beams',
+            'hyperdrive_relay',
+            'chaingun',
+            'rocket_thruster',
+            'large_hyperdrive',
+        }
+        
+    # Filter tags to only include valid auto_tags and convert to set for faster lookups
+    if tags:
+        tags = list(set(tag for tag in tags if tag in auto_tags))
+    else:
+        tags = []
+
+    # add user tags
+    for key, value in data["data"].items():
+        if value == "on":
+            tags.append(key)
+        elif key in {"defense_type", "thrust_type"}:
+            tags.append(value)
+    # check user
+    if submitted_by != user:
+        return {"error":"user not allowed"}
+    
+    # check_data = {
+    #     "name":name,
+    #     "data":data_url,
+    #     "submitted_by":submitted_by,
+    #     "description":description,
+    #     "ship_name":ship_name,
+    #     "author":author,
+    #     "price":price,
+    #     "brand":brand,
+    #     "crew":crew,
+    #     "tags":tags,
+    # }
+    # print(check_data)
+    # update db, replace description, ship name, author, submitted_by, user tags = appends ship tags
+    db_manager.update_ship(name=name,
+        data=data_url,
+        submitted_by=submitted_by,
+        description=description,
+        ship_name=ship_name,
+        author=author,
+        price=price,
+        brand=brand,
+        crew=crew,
+        tags=tags,)
+    return {"success":"ship updated"}
 
 
 
