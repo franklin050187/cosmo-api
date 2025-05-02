@@ -287,8 +287,13 @@ class ShipImageDatabase:
 
         # Pagination
         limit = MAX_SHIPS_PER_PAGE
-        offset = (page - 1) * limit
-        base_query += f" LIMIT {limit} OFFSET {offset}"
+
+        if page == -1:
+            limit = 100000 # debug max json size
+            max_page = 1
+        else:
+            offset = (page - 1) * limit
+            base_query += f" LIMIT {limit} OFFSET {offset}"
 
         # Get the data
         data = self.fetch_data(base_query, sql_args)
@@ -321,91 +326,6 @@ class ShipImageDatabase:
         tagsdict = self.fetch_data(query)
         # print(tagsdict)
         return tagsdict
-
-    # def post_edit_ship(self, ship_id, form_data, user): # TODO (update)
-    #     """
-    #     Updates a ship in the database.
-
-    #     Args:
-    #         id (int): The ID of the ship to be updated.
-    #         form_data (dict): The data containing the updated information for the ship.
-    #         user (str): The username of the user performing the update.
-
-    #     Returns:
-    #         None
-
-    #     Raises:
-    #         None.
-
-    #     """
-    #     query = "SELECT * FROM shipdb WHERE id=%s"
-    #     image_data = self.fetch_data(query, (ship_id,))
-    #     # print("image_data = ", image_data)
-    #     # print("post_edit_ship_form_data = ",form_data)
-    #     if user != image_data[0][3] and user not in self.modlist:
-    #         return "ko"
-
-    #     # print("form_data = ", form_data)
-
-    #     tup_for = []
-    #     if 'thrust_type' in form_data:
-    #         tup_for.append(form_data['thrust_type'])
-    #     if 'defense_type' in form_data:
-    #         tup_for.append(form_data['defense_type'])
-    #     for key, value in form_data.items():
-    #         if value == 'on':
-    #             tup_for.append(key)
-    #     # generate ship tags
-    #     url_png = image_data[0][2]
-    #     # extractor = PNGTagExtractor()
-    #     # tags = extractor.extract_tags(url_png)
-    #     data_ship = extract_tags_v2(url_png) # FIXME
-    #     tags = data_ship[0]
-
-    #     # add tup for to tags
-
-    #     print("tags = ",tags) # tags are good here
-    #     if tags :
-    #         tup_for.extend(tags)
-    #     # prepare data
-    #     image_data = {
-    #         'description': form_data.get('description', ''),
-    #         'ship_name': form_data.get('ship_name', ''),
-    #         'author': form_data.get('author', ''),
-    #         'submitted_by': form_data.get('submitted_by', ''),
-    #         'price': int(form_data.get('price', 0)),
-    #         'brand': form_data.get('brand', ''),
-    #         'tags' : tup_for,
-    #         'id' : ship_id
-    #     }
-    #     print("tup_for = ", tup_for)
-    #     # prepare query
-    #     insert_query = """
-    #         UPDATE shipdb SET
-    #         description = %s,
-    #         ship_name = %s,
-    #         author = %s,
-    #         price = %s,
-    #         submitted_by = %s,
-    #         brand = %s,
-    #         tags = %s::text[]
-    #         WHERE id = %s
-    #     """
-
-    #     # prepare values
-    #     values = (
-    #         image_data['description'],
-    #         image_data['ship_name'],
-    #         image_data['author'],
-    #         image_data['price'],
-    #         image_data['submitted_by'],
-    #         image_data['brand'],
-    #         image_data['tags'],
-    #         image_data['id'],
-    #     )
-
-    #     self.execute_query(insert_query, values)
-    #     return None
 
     def insert_ship(
         self,
