@@ -79,6 +79,8 @@ class SearchResponse(BaseModel):
 class AuthorsResponse(BaseModel):
     authors: List[str]
 
+class TagsResponse(BaseModel):
+    tags: List[str]
 
 app = FastAPI(
     title="Cosmoteer API",
@@ -159,7 +161,7 @@ async def get_authors():
     author_names = [author["author"] for author in authors_list]
     return {"authors": author_names}
 
-@app.get("/tags", response_model=AuthorsResponse)
+@app.get("/tags", response_model=TagsResponse)
 async def get_tags():
     # get list of authors
     tags_list = db_manager.get_tags()
