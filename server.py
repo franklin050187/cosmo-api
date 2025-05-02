@@ -30,10 +30,6 @@ from png_upload import upload_image_to_imgbb
 load_dotenv()
 db_manager = ShipImageDatabase()
 
-
-
-
-
 # Define response models
 class ShipData(BaseModel):
     ship_id:int
@@ -106,41 +102,25 @@ async def add_cors_headers(request, call_next):
     Adds CORS headers to the HTTP response.
 
     This middleware function is used to add CORS headers to the HTTP response.
-    It allows cross-origin requests
-    from any origin by setting the "Access-Control-Allow-Origin" header to "*".
-    It also allows POST and GET
-    methods by setting the "Access-Control-Allow-Methods" header to "POST, GET".
-    The "Access-Control-Allow-Headers" header is set to "Content-Type" to allow
-    requests with the "Content-Type" header.
-
-    Parameters:
-        request (Request): The HTTP request object.
-        call_next (Callable): The next middleware or route handler in the chain.
-
-    Returns:
-        Response: The HTTP response with the added CORS headers.
+    It allows cross-origin requests from specific origins and methods for specific endpoints.
     """
     response = await call_next(request)
-    if request.url.path == "/edit" and request.method == "GET":
-        response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
-        response.headers["Access-Control-Allow-Methods"] = "GET"
+    
+    # Define allowed paths and their methods
+    allowed_paths = {
+        "/edit": ["GET"],
+        "/generate": ["POST"],
+        "/search": ["GET"],
+        "/authors": ["GET"],
+        "/tags": ["GET"]
+    }
+    
+    # Check if the current path is in allowed paths and method is allowed
+    if request.url.path in allowed_paths and request.method in allowed_paths[request.url.path]:
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = request.method
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    if request.url.path == "/generate" and request.method == "POST":
-        response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
-        response.headers["Access-Control-Allow-Methods"] = "POST"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    if request.url.path == "/search" and request.method == "GET":
-        response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
-        response.headers["Access-Control-Allow-Methods"] = "GET"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    if request.url.path == "/authors" and request.method == "GET":
-        response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
-        response.headers["Access-Control-Allow-Methods"] = "GET"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    if request.url.path == "/tags" and request.method == "GET":
-        response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
-        response.headers["Access-Control-Allow-Methods"] = "GET"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    
     return response
 
 @app.get("/", response_model=Dict[str, str])
@@ -153,19 +133,31 @@ def read_root():
     """
     return {"Cosmoteer version": "0.26.2"}
 
-@app.get("/authors", response_model=AuthorsResponse)
+@app.get("/authors", response_model=Union[AuthorsResponse, ErrorResponse])
 async def get_authors():
-    # get list of authors
+    """
+    Retrieves a list of all unique authors from the ship database.
+
+    Returns:
+        Union[AuthorsResponse, ErrorResponse]:
+            - If successful: A dictionary containing a list of author names
+            - If error: An error response with details about what went wrong
+    """
     authors_list = db_manager.get_authors()
-    # Extract just the author names from the list of dictionaries
     author_names = [author["author"] for author in authors_list]
     return {"authors": author_names}
 
-@app.get("/tags", response_model=TagsResponse)
+@app.get("/tags", response_model=Union[TagsResponse, ErrorResponse])
 async def get_tags():
-    # get list of authors
+    """
+    Retrieves a list of all unique tags from the ship database.
+
+    Returns:
+        Union[TagsResponse, ErrorResponse]:
+            - If successful: A dictionary containing a list of tag names
+            - If error: An error response with details about what went wrong
+    """
     tags_list = db_manager.get_tags()
-    # Extract just the author names from the list of dictionaries
     tag_names = [tag["tag"] for tag in tags_list]
     return {"tags": tag_names}
 
@@ -597,7 +589,6 @@ async def myships(
 
     return {"data": formatted_data, "page": data["page"], "max_page": data["max_page"]}
 
-
 # post delete
 @app.post("/delete/{ship_id}", response_model=Union[SuccessResponse, ErrorResponse])  # TESTME
 async def delete_ship(
@@ -631,8 +622,6 @@ async def delete_ship(
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
 
     return db_manager.delete_ship(ship_id=ship_id, user=user)
-
-
 
 # post add_ship
 @app.post("/insert_ship") # ok
@@ -732,7 +721,6 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
             "data": {"ship_id": ship_id,"name": name, "url": url, "submitted_by": user, "tags": tags},
         }
     return {"error": "db error"}
-
 
 # post edit
 @app.post("/edit/{ship_id}") 
@@ -838,8 +826,6 @@ async def edit_ship(ship_id: int = Path(...), data: Dict[str, Any] = Body(...)):
         crew=crew,
         tags=tags,)
     return {"success":"ship updated"}
-
-
 
 
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("secret_session"))
