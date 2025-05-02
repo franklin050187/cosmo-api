@@ -96,23 +96,7 @@ app = FastAPI(
 SECRET_KEY = os.getenv("SECRET_KEY") # Make sure to set this in your environment variables
 
 
-@app.get("/", response_model=Dict[str, str])
-def read_root():
-    """
-    Root endpoint that returns the current version of the Cosmoteer API.
 
-    Returns:
-        Dict[str, str]: A dictionary containing the Cosmoteer version.
-    """
-    return {"Cosmoteer version": "0.26.2"}
-
-@app.get("/authors", response_model=AuthorsResponse)
-async def get_authors():
-    # get list of authors
-    authors_list = db_manager.get_authors()
-    # Extract just the author names from the list of dictionaries
-    author_names = [author["author"] for author in authors_list]
-    return {"authors": author_names}
 
 @app.middleware("http")
 async def add_cors_headers(request, call_next):
@@ -151,8 +135,37 @@ async def add_cors_headers(request, call_next):
         response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
         response.headers["Access-Control-Allow-Methods"] = "GET"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    if request.url.path == "/tags" and request.method == "GET":
+        response.headers["Access-Control-Allow-Origin"] = "*"  # adjust as needed
+        response.headers["Access-Control-Allow-Methods"] = "GET"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response
 
+@app.get("/", response_model=Dict[str, str])
+def read_root():
+    """
+    Root endpoint that returns the current version of the Cosmoteer API.
+
+    Returns:
+        Dict[str, str]: A dictionary containing the Cosmoteer version.
+    """
+    return {"Cosmoteer version": "0.26.2"}
+
+@app.get("/authors", response_model=AuthorsResponse)
+async def get_authors():
+    # get list of authors
+    authors_list = db_manager.get_authors()
+    # Extract just the author names from the list of dictionaries
+    author_names = [author["author"] for author in authors_list]
+    return {"authors": author_names}
+
+@app.get("/tags", response_model=AuthorsResponse)
+async def get_tags():
+    # get list of authors
+    tags_list = db_manager.get_tags()
+    # Extract just the author names from the list of dictionaries
+    tag_names = [tag["tag"] for tag in tags_list]
+    return {"tags": tag_names}
 
 @app.get("/edit", response_model=Union[Dict[str, Any], ErrorResponse])
 async def get_ship_data_from_url(request: Request):

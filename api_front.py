@@ -309,7 +309,6 @@ class ShipImageDatabase:
         """
         query = "SELECT DISTINCT author FROM shipdb;"
         authors = self.fetch_data(query)
-        # print(authors)
         return authors
 
     # get all unique tags from the ship database
@@ -321,10 +320,8 @@ class ShipImageDatabase:
             dict: A dictionary containing the list of tags. The keys are 'tags'
             and the values are a list of strings.
         """
-        # tags are tags TEXT[]
         query = "SELECT DISTINCT unnest(tags) AS tag FROM shipdb;"
         tagsdict = self.fetch_data(query)
-        # print(tagsdict)
         return tagsdict
 
     def insert_ship(
