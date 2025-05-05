@@ -408,6 +408,43 @@ async def add_fav(ship_id: int, request: Request):
         db_return if db_return else {"success": f"Ship {ship_id} added to favorite of user {user}"}
     )
 
+@app.post("/ship/{ship_id}/adddl", response_model=Union[SuccessResponse, ErrorResponse])  # OK
+async def add_dl(ship_id: int, request: Request):
+    """
+    Increment ship dl counter.
+
+    Args:
+        ship_id (int): The ID of the ship to add to favorites
+        request (Request): The HTTP request containing query parameters:
+            - token (str): JWT token for user authentication
+
+    Returns:
+        Union[SuccessResponse, ErrorResponse]:
+            - If successful: Success message
+            - If error: Error details including message and type
+    """
+    query = request.query_params
+    token = query.get("token")
+
+    if not token:
+        return {"error": "Token is missing"}
+    if not ship_id:
+        return {"error": "Ship_id is missing"}
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+        if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+            return {"error": "Token is too old"}
+    except Exception as e:
+        return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
+
+    db_return = db_manager.update_downloads(ship_id=ship_id)
+
+    return (
+        db_return if db_return else {"success": f"Ship {ship_id} counter updated"}
+    )
 
 @app.post("/ship/{ship_id}/rmfav", response_model=Union[SuccessResponse, ErrorResponse])  # OK
 async def rm_fav(ship_id: int, request: Request):
