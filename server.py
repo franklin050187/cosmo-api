@@ -8,6 +8,7 @@ import jwt
 from datetime import datetime, timedelta, timezone
 from typing import Optional, List, Dict, Any, Union
 import base64
+import ast
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query, Path, Body
@@ -93,6 +94,8 @@ app = FastAPI(
 
 SECRET_KEY = os.getenv("SECRET_KEY") # Make sure to set this in your environment variables
 
+SECRET_KEY_EXT = os.getenv("SECRET_KEY_EXT")
+SECRET_KEY_EXT_LIST = ast.literal_eval(SECRET_KEY_EXT)
 
 
 
@@ -663,22 +666,39 @@ async def delete_ship(
 # post add_ship
 @app.post("/insert_ship") # ok
 async def insert_ship(data: ShipDataInsert = Body(...)):
-    # Validate token
-    try:
-        payload = jwt.decode(data.token, SECRET_KEY, algorithms=["HS256"])
-        user = payload.get("user")
-        iat = payload.get("iat")
+    # Validate token  + ext keys
+    payload = None
+    keys_to_try = [SECRET_KEY] + SECRET_KEY_EXT_LIST
+    last_error = None
 
-        if not user or iat is None:
-            raise HTTPException(status_code=400, detail="Invalid token structure")
+    for key in keys_to_try:
+        try:
+            payload = jwt.decode(
+                data.token,
+                key,
+                algorithms=["HS256"],
+                options={"require": ["iat"]}  # only require 'iat'
+            )
 
-        token_age = datetime.now(tz=timezone.utc) - datetime.fromtimestamp(iat, tz=timezone.utc)
-        if token_age > timedelta(minutes=5):
-            raise HTTPException(status_code=401, detail="Token is too old")
-    except jwt.PyJWTError as e:
-        raise HTTPException(status_code=401, detail={"error": "Invalid token", "message": str(e)})
+            user = payload.get("user")
+            iat = payload.get("iat")
+            if not user or iat is None:
+                raise HTTPException(status_code=400, detail="Invalid token structure")
 
-    # return {data.image}
+            token_age = datetime.now(tz=timezone.utc) - datetime.fromtimestamp(iat, tz=timezone.utc)
+            if token_age > timedelta(minutes=5):
+                raise HTTPException(status_code=401, detail="Token is too old")
+
+            break  # ✅ Token successfully validated, exit the loop
+
+        except jwt.PyJWTError as e:
+            last_error = e
+            continue
+
+    if payload is None:
+        # All keys failed
+        raise HTTPException(status_code=401, detail={"error": "Invalid token", "message": str(last_error)})
+
     # Validate base64 and PNG
     try:
         image_data = base64.b64decode(data.image)
