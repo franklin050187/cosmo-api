@@ -20,7 +20,7 @@ from pydantic import BaseModel, ValidationError
 from dotenv import load_dotenv
 
 from center_of_mass import com
-from read_ship import get_ship_data
+# from read_ship import get_ship_data
 from write_ship_from_json import write_ship_png
 from api_front import ShipImageDatabase
 from tagextractor import PNGTagExtractor
@@ -184,7 +184,7 @@ async def get_ship_data_from_url(request: Request):
         return {"error": "No URL provided"}
 
     try:
-        ship_data = get_ship_data(url)
+        ship_data = new_ship(url).data
     except Exception as e:
         return {"error": str(e)}
     return ship_data
