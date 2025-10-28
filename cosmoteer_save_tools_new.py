@@ -215,13 +215,22 @@ class Ship():
                         value = list(struct.unpack('<ll', value))
                     elif key in ('FlipX', 'FlipY', "Value") and len(value) == 1:
                         value = bool(value[0])
-                    elif key in ('ID', 'Name', 'Author', 'RoofBaseTexture', 'ShipRulesID', 'Description', 'ComponentID', 'PartID', 'IDString', "Value", 'Key'):
-                        if key == 'Key' and isinstance(value, bytes):
-                            # Handle length-prefixed strings for Key
-                            length = value[0]
-                            value = value[1:1+length].decode('latin1')
-                        else:
-                            value = self.read_string(io.BytesIO(value))
+                    elif key in ('ID', 'Name', 'Author', 'RoofBaseTexture', 'ShipRulesID', 'Description',
+                                'ComponentID', 'PartID', 'IDString', 'Value', 'Key'):
+                        if isinstance(value, bytes):
+                            # If first byte is plausible string length, decode manually
+                            if len(value) > 1 and value[0] <= len(value) - 1:
+                                str_len = value[0]
+                                try:
+                                    value = value[1:1+str_len].decode('utf-8', errors='ignore')
+                                except UnicodeDecodeError:
+                                    value = value[1:1+str_len].decode('latin1', errors='ignore')
+                            else:
+                                # fallback: try to interpret it as length-prefixed or normal string
+                                try:
+                                    value = self.read_string(io.BytesIO(value))
+                                except Exception:
+                                    value = value.decode('utf-8', errors='ignore')
                     elif key in ('Color', 'RoofBaseColor', 'RoofDecalColor1', 'RoofDecalColor2', 'RoofDecalColor3', 'CrewUniformColor') and len(value) == 16:
                         c1 = value[0:4].hex().upper()
                         c2 = value[4:8].hex().upper()
@@ -239,6 +248,30 @@ class Ship():
                     else:
                         print('Unhandled key with binary value:', {key: value})
                         continue
+
+                d[key] = value
+                # Handle post-processing for nested 'Key' lists that contain raw bytes
+                if key == "Key" and isinstance(value, list):
+                    decoded_list = []
+                    for elem in value:
+                        if isinstance(elem, bytes):
+                            # If first byte looks like a length prefix (e.g. b'\x06on_off')
+                            if len(elem) > 1 and elem[0] <= len(elem) - 1:
+                                try:
+                                    str_len = elem[0]
+                                    decoded = elem[1:1+str_len].decode('utf-8', errors='ignore')
+                                except Exception:
+                                    decoded = elem[1:].decode('latin1', errors='ignore')
+                                decoded_list.append(decoded)
+                            else:
+                                try:
+                                    decoded = elem.decode('utf-8', errors='ignore')
+                                except Exception:
+                                    decoded = repr(elem)
+                                decoded_list.append(decoded)
+                        else:
+                            decoded_list.append(elem)
+                    value = decoded_list
 
                 d[key] = value
             return d
