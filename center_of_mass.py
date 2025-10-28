@@ -283,21 +283,25 @@ def part_center_of_mass(part):
     Returns:
         tuple: The x and y coordinates of the center of mass.
     """
-    # Get part size
-    part_size = part_data.parts[part["ID"]]["size"]
-    part_rotation = part["Rotation"]  # 0, 1, 2, 3
+    try:
+        # Get part size
+        part_size = part_data.parts[part["ID"]]["size"]
+        part_rotation = part["Rotation"]  # 0, 1, 2, 3
 
-    # Calculate center of mass
-    if part_rotation == 0 or part_rotation == 2:
-        center_of_mass_x = part["Location"][0] + part_size[0] / 2
-        center_of_mass_y = part["Location"][1] + part_size[1] / 2
-    elif part_rotation == 1 or part_rotation == 3:
-        center_of_mass_x = part["Location"][0] + part_size[1] / 2
-        center_of_mass_y = part["Location"][1] + part_size[0] / 2
-    else:
-        print("ERROR: part_rotation not 0, 1, 2, 3")
+        # Calculate center of mass
+        if part_rotation == 0 or part_rotation == 2:
+            center_of_mass_x = part["Location"][0] + part_size[0] / 2
+            center_of_mass_y = part["Location"][1] + part_size[1] / 2
+        elif part_rotation == 1 or part_rotation == 3:
+            center_of_mass_x = part["Location"][0] + part_size[1] / 2
+            center_of_mass_y = part["Location"][1] + part_size[0] / 2
+        else:
+            print("ERROR: part_rotation not 0, 1, 2, 3")
 
-    return center_of_mass_x, center_of_mass_y
+        return center_of_mass_x, center_of_mass_y
+    except:
+        print("ERROR: part not found", part["ID"])
+        return 0, 0
 
 
 def part_center_of_thrust(part, boost):
@@ -372,12 +376,15 @@ def center_of_mass(parts):
     sum_y_mass = 0
 
     for part in parts:
-        mass = part_data.parts[part["ID"]]["mass"]
-        x_coord, y_coord = part_center_of_mass(part)
+        try : 
+            mass = part_data.parts[part["ID"]]["mass"]
+            x_coord, y_coord = part_center_of_mass(part)
 
-        total_mass += mass
-        sum_x_mass += mass * x_coord
-        sum_y_mass += mass * y_coord
+            total_mass += mass
+            sum_x_mass += mass * x_coord
+            sum_y_mass += mass * y_coord
+        except:
+            print("ERROR: part not found", part)
 
     if total_mass == 0:
         center_of_mass_x = 0
@@ -387,69 +394,6 @@ def center_of_mass(parts):
         center_of_mass_y = sum_y_mass / total_mass
 
     return center_of_mass_x, center_of_mass_y, total_mass
-
-
-# def center_of_thrust_vector(parts, ship_direction):
-#     """
-#     Calculate the center of thrust vector of the ship in a given direction.
-
-#     Args:
-#         parts (list): List of ship parts.
-#         ship_direction (int): Direction of the ship.
-
-#     Returns:
-#         tuple: A tuple containing the start and end coordinates of the center of thrust vector,
-#                along with the total thrust direction.
-#     """
-
-#     # Define the thrust vectors for each ship direction
-#     thrust_vectors = {0: [0, 3], 1: [0], 2: [0, 1], 3: [1], 4: [1, 2], 5: [2], 6: [2, 3], 7: [3]}
-
-#     total_thrust = 0
-#     total_thrust_direction = 0
-
-#     sum_x_cot = 0
-#     sum_y_cot = 0
-
-#     sum_x_thrust = 0
-#     sum_y_thrust = 0
-
-#     for part in parts:
-#         cots = part_center_of_thrust(part, False)
-#         if cots == 0:
-#             continue
-#         for cot in cots:
-#             thrust = part_data.thruster_data[part["ID"]]["thrust"]
-#             if thruster_touching_engine_room(parts, part):
-#                 thrust *= 1.5
-#             x_coord = cot[0]
-#             y_coord = cot[1]
-
-#             total_thrust += thrust
-#             if cot[2] in thrust_vectors[ship_direction]:
-#                 total_thrust_direction += thrust
-
-#                 sum_x_cot += thrust * x_coord
-#                 sum_y_cot += thrust * y_coord
-#                 if cot[2] == 0:
-#                     sum_y_thrust -= thrust
-#                 if cot[2] == 1:
-#                     sum_x_thrust += thrust
-#                 if cot[2] == 2:
-#                     sum_y_thrust += thrust
-#                 if cot[2] == 3:
-#                     sum_x_thrust -= thrust
-
-#     if total_thrust_direction == 0:
-#         return 0
-
-#     startx = sum_x_cot / total_thrust_direction
-#     starty = sum_y_cot / total_thrust_direction
-#     endx = startx + sum_x_thrust / total_thrust * 15
-#     endy = starty + sum_y_thrust / total_thrust * 15
-
-#     return startx, starty, endx, endy, total_thrust_direction / total_thrust
-
 
 def rotate_image(image, angle, flipx):
     """
@@ -1148,6 +1092,7 @@ def remove_weird_parts(parts):
     Removes parts from the given list that are not present in the part_data.
     Replaces certain old part IDs with their corresponding new part IDs.
     Returns the updated list of parts and any error messages encountered.
+    251028 : or remove unknown parts
     """
     # Set to store unknown part IDs
     unknown_parts = set()
@@ -1221,11 +1166,12 @@ def remove_weird_parts(parts):
                 continue
 
             # Add the unknown part ID to the set
-            unknown_parts.add(part["ID"])
+            # unknown_parts.add(part["ID"])
 
             # Update the part ID to "cosmoteer.UNKNOWN"
-            part["ID"] = "cosmoteer.UNKNOWN"
-            new_parts.append(part)
+            # 251028 but why ? it will fail the drawing ! remove them
+            # part["ID"] = "cosmoteer.UNKNOWN"
+            # new_parts.append(part)
 
     # Generate the error message for unknown parts
     error_msg = ""
