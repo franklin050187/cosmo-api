@@ -1,0 +1,3297 @@
+{
+    "Author": "",
+    "BuildCenterlineNESW": null,
+    "BuildCenterlineNWSE": null,
+    "BuildCenterlineX": null,
+    "BuildCenterlineY": null,
+    "BuildMirrorAxis": 1,
+    "BuildMirrorEnabled": false,
+    "CrewSourceRoles": [
+        {
+            "Key": {
+                "FlipX": false,
+                "ID": "cosmoteer.crew_quarters_large",
+                "Location": [
+                    -31,
+                    -10
+                ],
+                "Rotation": 0
+            },
+            "Value": 2147483648
+        },
+        {
+            "Key": {
+                "FlipX": false,
+                "ID": "cosmoteer.crew_quarters_med",
+                "Location": [
+                    -31,
+                    -6
+                ],
+                "Rotation": 0
+            },
+            "Value": 2147483648
+        },
+        {
+            "Key": {
+                "FlipX": false,
+                "ID": "cosmoteer.crew_quarters_small",
+                "Location": [
+                    -31,
+                    -4
+                ],
+                "Rotation": 0
+            },
+            "Value": 2147483648
+        }
+    ],
+    "CrewSourceTargets": "Unset",
+    "Decals1": "Unset",
+    "Decals2": "Unset",
+    "Decals3": "Unset",
+    "DefaultAttackFollowAngle": null,
+    "DefaultAttackRadius": null,
+    "DefaultAttackRotation": null,
+    "Description": "",
+    "Doors": [
+        {
+            "Cell": [
+                -13,
+                -3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -14,
+                -3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -16,
+                -3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -24,
+                -2
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                0,
+                -3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                11,
+                -4
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -22,
+                -3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -36,
+                -7
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                19,
+                -2
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                9,
+                -4
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                13,
+                -4
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                3,
+                -3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -19,
+                -2
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -14,
+                -2
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -29,
+                0
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -35,
+                4
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -34,
+                2
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -37,
+                2
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -37,
+                2
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -35,
+                -1
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -36,
+                -3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -31,
+                0
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -32,
+                0
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -35,
+                0
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -33,
+                -1
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -35,
+                -6
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -37,
+                -7
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -33,
+                2
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -35,
+                -3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -10,
+                0
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -9,
+                3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -9,
+                7
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -2,
+                -1
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                1,
+                0
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                0,
+                15
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                4,
+                0
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                1,
+                3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                4,
+                7
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                5,
+                3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                9,
+                3
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                10,
+                7
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -1,
+                10
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -1,
+                8
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                6,
+                15
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                15,
+                -4
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                0,
+                7
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                6,
+                12
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                2,
+                13
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -1,
+                14
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                2,
+                10
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                2,
+                13
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                6,
+                13
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                8,
+                7
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 1
+        },
+        {
+            "Cell": [
+                -1,
+                12
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        },
+        {
+            "Cell": [
+                -30,
+                -6
+            ],
+            "ID": "cosmoteer.door",
+            "Orientation": 0
+        }
+    ],
+    "FlightDirection": 1,
+    "FormationOrder": 3,
+    "Name": "Unnamed Ship",
+    "NewFlexResourceGridTypes": "Unset",
+    "PaintCenterlineNESW": null,
+    "PaintCenterlineNWSE": null,
+    "PaintCenterlineX": null,
+    "PaintCenterlineY": null,
+    "PaintMirrorAxis": 1,
+    "PaintMirrorEnabled": false,
+    "PartControlGroups": "Unset",
+    "Parts": [
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.shield_gen_large",
+            "Location": [
+                -39,
+                -13
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.hyperdrive_large",
+            "Location": [
+                -39,
+                -7
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.hyperdrive_med",
+            "Location": [
+                -38,
+                -3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_rocket_battery",
+            "Location": [
+                -38,
+                2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.hyperdrive_small",
+            "Location": [
+                -37,
+                0
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_rocket_extender",
+            "Location": [
+                -37,
+                2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_rocket_nozzle",
+            "Location": [
+                -37,
+                4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -36,
+                -10
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -36,
+                -9
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -36,
+                -8
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.control_room_large",
+            "Location": [
+                -35,
+                -8
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.control_room_med",
+            "Location": [
+                -35,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.engine_room",
+            "Location": [
+                -35,
+                -1
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_boost",
+            "Location": [
+                -34,
+                2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.control_room_small",
+            "Location": [
+                -32,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_huge",
+            "Location": [
+                -32,
+                0
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.crew_quarters_large",
+            "Location": [
+                -31,
+                -10
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.crew_quarters_med",
+            "Location": [
+                -31,
+                -6
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.crew_quarters_small",
+            "Location": [
+                -31,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.airlock",
+            "Location": [
+                -29,
+                -6
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_wedge",
+            "Location": [
+                -29,
+                -3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_structure_hybrid_1x1",
+            "Location": [
+                -29,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_large",
+            "Location": [
+                -29,
+                0
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.conveyor",
+            "Location": [
+                -28,
+                -6
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_1x2_wedge",
+            "Location": [
+                -28,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_2x1",
+            "Location": [
+                -28,
+                -3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_structure_hybrid_1x2",
+            "Location": [
+                -28,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_1x3_wedge",
+            "Location": [
+                -27,
+                -6
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_structure_hybrid_1x3",
+            "Location": [
+                -27,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_small_2way",
+            "Location": [
+                -27,
+                1
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_tri",
+            "Location": [
+                -26,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor",
+            "Location": [
+                -26,
+                -3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.armor_structure_hybrid_tri",
+            "Location": [
+                -26,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.shield_gen_large",
+            "Location": [
+                -25,
+                -8
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.fire_extinguisher",
+            "Location": [
+                -25,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_small",
+            "Location": [
+                -24,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.shield_gen_small",
+            "Location": [
+                -22,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.flak_cannon_large",
+            "Location": [
+                -20,
+                -7
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_small_3way",
+            "Location": [
+                -19,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.laser_blaster_small",
+            "Location": [
+                -17,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.laser_blaster_large",
+            "Location": [
+                -16,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.disruptor",
+            "Location": [
+                -14,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thruster_med",
+            "Location": [
+                -14,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.ion_beam_emitter",
+            "Location": [
+                -13,
+                -6
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.reactor_large",
+            "Location": [
+                -12,
+                3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.ion_beam_prism",
+            "Location": [
+                -11,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.reactor_small",
+            "Location": [
+                -11,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.reactor_med",
+            "Location": [
+                -11,
+                0
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.power_storage",
+            "Location": [
+                -10,
+                7
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.resonance_beam_turret",
+            "Location": [
+                -9,
+                -6
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.heat_pipe_adaptive",
+            "Location": [
+                -7,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.heat_pipe_crossing",
+            "Location": [
+                -7,
+                -1
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.heat_pipe_adaptive_structure",
+            "Location": [
+                -7,
+                0
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.radiator",
+            "Location": [
+                -7,
+                1
+            ],
+            "Rotation": 2
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.heat_exchanger",
+            "Location": [
+                -6,
+                0
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.thermal_battery",
+            "Location": [
+                -6,
+                1
+            ],
+            "Rotation": 1
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.structure_wedge",
+            "Location": [
+                -6,
+                17
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.point_defense",
+            "Location": [
+                -5,
+                -3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.hyperdrive_beacon",
+            "Location": [
+                -5,
+                13
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.structure",
+            "Location": [
+                -5,
+                17
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -4,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -4,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -4,
+                -3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_ammo",
+            "Location": [
+                -4,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.structure_tri",
+            "Location": [
+                -4,
+                12
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.roof_headlight",
+            "Location": [
+                -4,
+                17
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -3,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -3,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                -3,
+                -3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_nuke",
+            "Location": [
+                -3,
+                1
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_coil",
+            "Location": [
+                -3,
+                5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.structure_1x3_wedge",
+            "Location": [
+                -3,
+                10
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.roof_light",
+            "Location": [
+                -3,
+                17
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.cannon_med",
+            "Location": [
+                -2,
+                -3
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_he",
+            "Location": [
+                -2,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.structure_1x2_wedge",
+            "Location": [
+                -2,
+                11
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.explosive_charge",
+            "Location": [
+                -2,
+                17
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.storage_2x2",
+            "Location": [
+                -1,
+                8
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.storage_3x2",
+            "Location": [
+                -1,
+                10
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.storage_3x3",
+            "Location": [
+                -1,
+                12
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.sensor_array",
+            "Location": [
+                -1,
+                15
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.cannon_large",
+            "Location": [
+                0,
+                -4
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_coil2",
+            "Location": [
+                0,
+                5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_emp",
+            "Location": [
+                1,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_mine",
+            "Location": [
+                1,
+                2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.storage_4x3",
+            "Location": [
+                2,
+                10
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.storage_4x4",
+            "Location": [
+                2,
+                13
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.cannon_deck",
+            "Location": [
+                3,
+                -7
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                4,
+                -10
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                4,
+                -9
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                4,
+                -8
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_thermal",
+            "Location": [
+                4,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_tristeel",
+            "Location": [
+                4,
+                5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                5,
+                -10
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                5,
+                -9
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.corridor",
+            "Location": [
+                5,
+                -8
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_steel",
+            "Location": [
+                5,
+                1
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.manipulator_beam_emitter",
+            "Location": [
+                6,
+                12
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.tractor_beam_emitter",
+            "Location": [
+                6,
+                14
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.missile_launcher",
+            "Location": [
+                7,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_diamond",
+            "Location": [
+                8,
+                5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.missile_launcher",
+            "Location": [
+                9,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_processor",
+            "Location": [
+                9,
+                2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.factory_uranium",
+            "Location": [
+                10,
+                5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.missile_launcher",
+            "Location": [
+                11,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.missile_launcher",
+            "Location": [
+                13,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.mining_laser_small",
+            "Location": [
+                13,
+                7
+            ],
+            "Rotation": 1
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.missile_launcher",
+            "Location": [
+                15,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.railgun_launcher",
+            "Location": [
+                17,
+                -5
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.railgun_accelerator",
+            "Location": [
+                17,
+                -2
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.railgun_loader",
+            "Location": [
+                17,
+                1
+            ],
+            "Rotation": 0
+        },
+        {
+            "FlipX": false,
+            "ID": "cosmoteer.chaingun",
+            "Location": [
+                19,
+                -5
+            ],
+            "Rotation": 0
+        }
+    ],
+    "PartUIColorValues": [
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.roof_light",
+                    "Location": [
+                        -3,
+                        17
+                    ],
+                    "Rotation": 0
+                },
+                "roof_light"
+            ],
+            "Value": ""
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.roof_headlight",
+                    "Location": [
+                        -4,
+                        17
+                    ],
+                    "Rotation": 0
+                },
+                "roof_light"
+            ],
+            "Value": ""
+        }
+    ],
+    "PartUIToggleStates": [
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.laser_blaster_small",
+                    "Location": [
+                        -17,
+                        -4
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.laser_blaster_large",
+                    "Location": [
+                        -16,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.disruptor",
+                    "Location": [
+                        -14,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.ion_beam_emitter",
+                    "Location": [
+                        -13,
+                        -6
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.point_defense",
+                    "Location": [
+                        -5,
+                        -3
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.cannon_med",
+                    "Location": [
+                        -2,
+                        -3
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.cannon_large",
+                    "Location": [
+                        0,
+                        -4
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.cannon_deck",
+                    "Location": [
+                        3,
+                        -7
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        7,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "missile_type"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        9,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "missile_type"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        11,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "missile_type"
+            ],
+            "Value": 4
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        13,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "missile_type"
+            ],
+            "Value": 2
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        15,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "missile_type"
+            ],
+            "Value": 3
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.railgun_launcher",
+                    "Location": [
+                        17,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.chaingun",
+                    "Location": [
+                        19,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.flak_cannon_large",
+                    "Location": [
+                        -20,
+                        -7
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.shield_gen_small",
+                    "Location": [
+                        -22,
+                        -4
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.shield_gen_small",
+                    "Location": [
+                        -22,
+                        -4
+                    ],
+                    "Rotation": 0
+                },
+                "overclock_shield"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.shield_gen_large",
+                    "Location": [
+                        -25,
+                        -8
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.fire_extinguisher",
+                    "Location": [
+                        -25,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_small",
+                    "Location": [
+                        -24,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_small_2way",
+                    "Location": [
+                        -27,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_small_3way",
+                    "Location": [
+                        -19,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_med",
+                    "Location": [
+                        -14,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_large",
+                    "Location": [
+                        -29,
+                        0
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_huge",
+                    "Location": [
+                        -32,
+                        0
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_boost",
+                    "Location": [
+                        -34,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_rocket_nozzle",
+                    "Location": [
+                        -37,
+                        4
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.thruster_rocket_extender",
+                    "Location": [
+                        -37,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.engine_room",
+                    "Location": [
+                        -35,
+                        -1
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.reactor_small",
+                    "Location": [
+                        -11,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.reactor_med",
+                    "Location": [
+                        -11,
+                        0
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.reactor_large",
+                    "Location": [
+                        -12,
+                        3
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.power_storage",
+                    "Location": [
+                        -10,
+                        7
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_ammo",
+                    "Location": [
+                        -4,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_he",
+                    "Location": [
+                        -2,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_emp",
+                    "Location": [
+                        1,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_thermal",
+                    "Location": [
+                        4,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_nuke",
+                    "Location": [
+                        -3,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_mine",
+                    "Location": [
+                        1,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_steel",
+                    "Location": [
+                        5,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_coil",
+                    "Location": [
+                        -3,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_coil2",
+                    "Location": [
+                        0,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_tristeel",
+                    "Location": [
+                        4,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_processor",
+                    "Location": [
+                        9,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_uranium",
+                    "Location": [
+                        10,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.tractor_beam_emitter",
+                    "Location": [
+                        6,
+                        14
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.sensor_array",
+                    "Location": [
+                        -1,
+                        15
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.roof_light",
+                    "Location": [
+                        -3,
+                        17
+                    ],
+                    "Rotation": 0
+                },
+                "light_strength"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.roof_headlight",
+                    "Location": [
+                        -4,
+                        17
+                    ],
+                    "Rotation": 0
+                },
+                "light_strength"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.mining_laser_small",
+                    "Location": [
+                        13,
+                        7
+                    ],
+                    "Rotation": 1
+                },
+                "thermal_overclock"
+            ],
+            "Value": 0
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.mining_laser_small",
+                    "Location": [
+                        13,
+                        7
+                    ],
+                    "Rotation": 1
+                },
+                "on_off"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.mining_laser_small",
+                    "Location": [
+                        13,
+                        7
+                    ],
+                    "Rotation": 1
+                },
+                "fire_mode"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        7,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "on_off"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        7,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "fire_mode"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        9,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "on_off"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        9,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "fire_mode"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        11,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "on_off"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        11,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "fire_mode"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        13,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "on_off"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        13,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "fire_mode"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        15,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "on_off"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        15,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "fire_mode"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.shield_gen_large",
+                    "Location": [
+                        -39,
+                        -13
+                    ],
+                    "Rotation": 0
+                },
+                "thermal_overclock"
+            ],
+            "Value": 1
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.shield_gen_large",
+                    "Location": [
+                        -39,
+                        -13
+                    ],
+                    "Rotation": 0
+                },
+                "on_off"
+            ],
+            "Value": 1
+        }
+    ],
+    "ResourceConsumptionToggles": [
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.hyperdrive_large",
+                    "Location": [
+                        -39,
+                        -7
+                    ],
+                    "Rotation": 0
+                },
+                "HyperiumConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.hyperdrive_med",
+                    "Location": [
+                        -38,
+                        -3
+                    ],
+                    "Rotation": 0
+                },
+                "HyperiumConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.hyperdrive_small",
+                    "Location": [
+                        -37,
+                        0
+                    ],
+                    "Rotation": 0
+                },
+                "HyperiumConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.flak_cannon_large",
+                    "Location": [
+                        -20,
+                        -7
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_ammo",
+                    "Location": [
+                        -4,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "SulfurConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_nuke",
+                    "Location": [
+                        -3,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "IronConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_nuke",
+                    "Location": [
+                        -3,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "UraniumConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_coil",
+                    "Location": [
+                        -3,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "CopperConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.cannon_med",
+                    "Location": [
+                        -2,
+                        -3
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_he",
+                    "Location": [
+                        -2,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "IronConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_he",
+                    "Location": [
+                        -2,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "SulfurConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.cannon_large",
+                    "Location": [
+                        0,
+                        -4
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_coil2",
+                    "Location": [
+                        0,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "CoilConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_coil2",
+                    "Location": [
+                        0,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "CopperConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_emp",
+                    "Location": [
+                        1,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "IronConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_emp",
+                    "Location": [
+                        1,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "CopperConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_mine",
+                    "Location": [
+                        1,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "IronConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_mine",
+                    "Location": [
+                        1,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.cannon_deck",
+                    "Location": [
+                        3,
+                        -7
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_thermal",
+                    "Location": [
+                        4,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "CopperConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_thermal",
+                    "Location": [
+                        4,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "SulfurConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_tristeel",
+                    "Location": [
+                        4,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "TritaniumConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_steel",
+                    "Location": [
+                        5,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "IronConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        7,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "Consumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_diamond",
+                    "Location": [
+                        8,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "CarbonConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        9,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "Consumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_processor",
+                    "Location": [
+                        9,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "CoilConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_processor",
+                    "Location": [
+                        9,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "GoldConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_uranium",
+                    "Location": [
+                        10,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "UraniumConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        11,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "Consumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        13,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "Consumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.missile_launcher",
+                    "Location": [
+                        15,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "Consumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.railgun_loader",
+                    "Location": [
+                        17,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoConsumer"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.chaingun",
+                    "Location": [
+                        19,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoConsumerLeft"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.chaingun",
+                    "Location": [
+                        19,
+                        -5
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoConsumerRight"
+            ],
+            "Value": true
+        }
+    ],
+    "ResourceSupplierTargets": "Unset",
+    "ResourceSupplyToggles": [
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_ammo",
+                    "Location": [
+                        -4,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "AmmoStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_nuke",
+                    "Location": [
+                        -3,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "MissileStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_coil",
+                    "Location": [
+                        -3,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "CoilStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_he",
+                    "Location": [
+                        -2,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "MissileStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_coil2",
+                    "Location": [
+                        0,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "Coil2Storage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_emp",
+                    "Location": [
+                        1,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "MissileStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_mine",
+                    "Location": [
+                        1,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "MineStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_thermal",
+                    "Location": [
+                        4,
+                        -2
+                    ],
+                    "Rotation": 0
+                },
+                "MissileStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_tristeel",
+                    "Location": [
+                        4,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "TristeelStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_steel",
+                    "Location": [
+                        5,
+                        1
+                    ],
+                    "Rotation": 0
+                },
+                "SteelStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_diamond",
+                    "Location": [
+                        8,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "DiamondStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_processor",
+                    "Location": [
+                        9,
+                        2
+                    ],
+                    "Rotation": 0
+                },
+                "ProcessorStorage"
+            ],
+            "Value": true
+        },
+        {
+            "Key": [
+                {
+                    "FlipX": false,
+                    "ID": "cosmoteer.factory_uranium",
+                    "Location": [
+                        10,
+                        5
+                    ],
+                    "Rotation": 0
+                },
+                "EnrichedUraniumStorage"
+            ],
+            "Value": true
+        }
+    ],
+    "Roles": [
+        {
+            "AssignmentPriority": 5,
+            "AutoFillFromLower": false,
+            "Color": [
+                "0000803F",
+                "00000000",
+                "00000000",
+                "0000803F"
+            ],
+            "ID": -2147483648,
+            "Name": "Redshirt",
+            "Priorities": "Unset"
+        }
+    ],
+    "RoofBaseColor": [
+        "0000803F",
+        "0000803F",
+        "0000803F",
+        "FFFEFE3E"
+    ],
+    "RoofBaseTexture": "_none_",
+    "RoofDecalColor1": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "0000803F"
+    ],
+    "RoofDecalColor2": [
+        "0000003F",
+        "0000003F",
+        "0000003F",
+        "0000803F"
+    ],
+    "RoofDecalColor3": [
+        "0000803F",
+        "00000000",
+        "00000000",
+        "0000803F"
+    ],
+    "ShipRulesID": "cosmoteer.terran",
+    "Version": 3,
+    "WeaponDirectControlBindings": "Unset",
+    "WeaponSelfTargets": "Unset",
+    "WeaponShipRelativeTargets": "Unset"
+}
