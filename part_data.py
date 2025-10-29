@@ -220,7 +220,7 @@ parts_resources = [
     {"ID": "he_missiles","Resources": [["missile_part_he", "12"]]},
     {"ID": "mines","Resources": [["mine_part", "24"]]},
     {"ID": "nukes","Resources": [["missile_part_nuke", "12"]]},
-    {"ID": "thermal_missiles","Resources": [["missile_part_thermal", "12"]]}
+    {"ID": "thermal_missiles","Resources": [["missile_part_thermal", "4"]]}
 ]
 
 # dic with resource cost
