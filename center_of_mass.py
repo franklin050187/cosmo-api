@@ -30,7 +30,7 @@ import numpy as np
 
 from vector2d import Vector2D
 
-import cosmoteer_save_tools
+# import cosmoteer_save_tools
 import cosmoteer_save_tools_new
 import part_data
 from png_upload import upload_image_to_imgbb
@@ -819,6 +819,7 @@ def draw_ship(parts, data_com, data_cot, ship_orientation, output_filename, args
         if part["ID"] in [
             "cosmoteer.cannon_deck",
             "cosmoteer.ion_beam_prism",
+            "cosmoteer.resonance_beam_turret",
         ]:
             parts.append(parts.pop(i))
     for part in parts:
