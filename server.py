@@ -146,7 +146,7 @@ async def get_authors():
             - If successful: A dictionary containing a list of author names
             - If error: An error response with details about what went wrong
     """
-    authors_list = db_manager.get_authors()
+    authors_list = db_manager.get_authors() # TODO
     author_names = [author["author"] for author in authors_list]
     return {"authors": author_names}
 
@@ -160,7 +160,7 @@ async def get_tags():
             - If successful: A dictionary containing a list of tag names
             - If error: An error response with details about what went wrong
     """
-    tags_list = db_manager.get_tags()
+    tags_list = db_manager.get_tags() # TODO
     tag_names = [tag["tag"] for tag in tags_list]
     return {"tags": tag_names}
 
@@ -370,7 +370,7 @@ async def get_ship(ship_id: int = Path(..., description="Id if the ship"), token
             },
         )
 
-    return {"data": formatted_data, "page": None, "max_page": None}
+    # return {"data": formatted_data, "page": None, "max_page": None}
 
 
 @app.post("/ship/{ship_id}/addfav", response_model=Union[SuccessResponse, ErrorResponse])  # OK
@@ -406,6 +406,7 @@ async def add_fav(ship_id: int, request: Request):
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
 
     db_return = db_manager.add_to_favorites(user=user, ship_id=ship_id)
+    # TODO : update json
 
     return (
         db_return if db_return else {"success": f"Ship {ship_id} added to favorite of user {user}"}
@@ -483,6 +484,7 @@ async def rm_fav(ship_id: int, request: Request):
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
 
     db_return = db_manager.delete_from_favorites(user=user, ship_id=ship_id)
+    # TODO : update json
     return (
         db_return
         if db_return
@@ -660,7 +662,7 @@ async def delete_ship(
             return {"error": "Token is too old"}
     except Exception as e:
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
-
+    # TODO : update json
     return db_manager.delete_ship(ship_id=ship_id, user=user)
 
 # post add_ship
@@ -772,6 +774,7 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
     )
     ship_id = int(db_return["success"])
     if ship_id:
+        # TODO : update json
         return {
             "success": True,
             "message": "Ship successfully added",
@@ -882,6 +885,7 @@ async def edit_ship(ship_id: int = Path(...), data: Dict[str, Any] = Body(...)):
         brand=brand,
         crew=crew,
         tags=tags,)
+    # TODO : update json
     return {"success":"ship updated"}
 
 
