@@ -26,3 +26,15 @@ if valid then use post route
 
 # auth check
 use discord info to check author name # done
+
+# move part data to a single file OK
+# add missing part to part_data OK
+# add missing part sprite to sprites OK
+# add missing part price to pricegen OK
+# check missile type in tag extractor, pricegen, priceanalysis OK
+# check tag extractor OK
+
+# add push to json to github - logic in front if date is more than 24h then request a push otherwise api will push on upload, delete or edit same as db
+# push authors to json to github - same logic
+# push tags to json to github - same logic
+# update front to use json to get ship info is not authenticated
