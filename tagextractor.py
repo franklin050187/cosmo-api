@@ -22,6 +22,7 @@ class PNGTagExtractor:
             'cosmoteer.factory_he': 'factories',
             'cosmoteer.factory_mine': 'factories',
             'cosmoteer.factory_nuke': 'factories',
+            'cosmoteer.factory_thermal': 'factories',
             'cosmoteer.disruptor': 'disruptors',
             'cosmoteer.laser_blaster_large': 'heavy_laser',
             'cosmoteer.ion_beam_emitter': 'ion_beam',
@@ -54,13 +55,15 @@ class PNGTagExtractor:
             'cosmoteer.thruster_rocket_extender': 'rocket_thruster',
             'cosmoteer.thruster_rocket_nozzle': 'rocket_thruster',
             'cosmoteer.hyperdrive_large': 'large_hyperdrive',
+            'cosmoteer.resonance_beam_turret': 'resonance_beam_turret',
         }
         
         self.missile_mapping = {
             0: 'he_missiles',
             1: 'emp_missiles',
             2: 'nukes',
-            3: 'mines'
+            3: 'mines',
+            4: 'thermal_missiles',
         }
         
     def extract_tags(self, data_json): ## take json
@@ -70,7 +73,16 @@ class PNGTagExtractor:
         
         missile_types = []
         try :
-            missile_types = [entry["Value"] for entry in data["PartUIToggleStates"] if entry["Key"][0]["ID"] == "cosmoteer.missile_launcher" and entry["Key"][1] == "DG1pc3NpbGVfdHlwZQ=="]
+            for entry in data.get("PartUIToggleStates", []):
+                key = entry.get("Key", [])
+                if (
+                    isinstance(key, list)
+                    and len(key) == 2
+                    and isinstance(key[0], dict)
+                    and key[0].get("ID") == "cosmoteer.missile_launcher"
+                    and key[1] == "missile_type"
+                ):
+                    missile_types.append(entry.get("Value"))
         except:
             pass
 
