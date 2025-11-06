@@ -9,12 +9,9 @@ calculate_price(png_url)
 from part_data import parts_resources, resource_cost
 
 def calculate_price(data_json): ## take json instead of png
-    # json_data = decode_ship_data(png_url)
-    # data = json.loads(json_data)
     data = data_json
     parts = data["Parts"]
     doors = data["Doors"]
-    # toggle = data["PartUIToggleStates"]
     
     # need missile type to calculate cost of the ammo
     missile_mapping = {
@@ -76,9 +73,7 @@ def calculate_price(data_json): ## take json instead of png
                         item_price += resource_price * resource_quantity
                         break
 
-            # print(f"Price for {item_id}: {item_price}")
             total_price += item_price
-            # print('price parts', item_price)
     # add missile prices
     for item in mapped_output:
         item_id = item
@@ -98,7 +93,6 @@ def calculate_price(data_json): ## take json instead of png
                         item_price += resource_price * resource_quantity
                         break
             total_price += item_price
-            # print('price missiles', item_price)
     # Calculate the price for doors
     door_price = 0
     if doors is not None and isinstance(doors, list):
@@ -120,10 +114,9 @@ def calculate_price(data_json): ## take json instead of png
                             door_price += resource_price * resource_quantity
                             break
 
-    # print(f"Price for doors: {door_price}")
     total_price += door_price
     
-        # Calculate the price for crew quarters
+    # Calculate the price for crew quarters
     crew_quarters_small_price = 0
     crew_quarters_med_price = 0
     crew_quarters_large_price = 0
@@ -135,7 +128,7 @@ def calculate_price(data_json): ## take json instead of png
         elif item_id == 'cosmoteer.crew_quarters_med':
             crew_quarters_med_price += 3000
         elif item_id == 'cosmoteer.crew_quarters_large':
-            crew_quarters_large_price += 6000
+            crew_quarters_large_price += 12000
 
 # calculate crew number
     crew = 0
