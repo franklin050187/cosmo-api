@@ -38,11 +38,17 @@ COPY --from=build /venv /venv
 # Copy the application code from the build stage
 COPY --from=build /app/cosmo-api /app
 
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
 # Set the working directory
 WORKDIR /venv
 
 # Expose port 
 EXPOSE 8001
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8001/health || exit 1
 
 # Set the entrypoint to run the app
 ENTRYPOINT ["/venv/bin/python3", "/app/server.py"]
