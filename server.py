@@ -135,7 +135,7 @@ def read_root():
     Returns:
         Dict[str, str]: A dictionary containing the Cosmoteer version.
     """
-    return {"Cosmoteer version": "0.26.2"}
+    return {"Cosmoteer version": "0.30.2"}
 
 @app.get("/authors", response_model=Union[AuthorsResponse, ErrorResponse])
 async def get_authors():
