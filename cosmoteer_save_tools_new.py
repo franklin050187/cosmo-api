@@ -213,7 +213,10 @@ class Ship():
                         value = struct.unpack('<I', value)[0]
                     elif key in ('Location', 'Cell', "Key") and len(value) == 8:
                         value = list(struct.unpack('<ll', value))
-                    elif key in ('FlipX', 'FlipY', "Value") and len(value) == 1:
+                    elif key == 'Rot0Size' and len(value) == 8:
+                        # two 4-byte integers
+                        value = list(struct.unpack('<ii', value))
+                    elif key in ('FlipX', 'FlipY', "Value", 'Invert') and len(value) == 1:
                         value = bool(value[0])
                     elif key in ('ID', 'Name', 'Author', 'RoofBaseTexture', 'ShipRulesID', 'Description',
                                 'ComponentID', 'PartID', 'IDString', 'Value', 'Key'):
