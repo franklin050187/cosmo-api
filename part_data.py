@@ -1,197 +1,197 @@
 """
-The size parameter is the size of the tiles, it doesn't care about turrets or engines
+The size parameter is the size of the tiles, it doesn"t care about turrets or engines
 """
 
 # dic for com with size and mass, ensure sprite is present
 parts={
-        "cosmoteer.corridor":{"mass":1, "size":(1,1)},
-        "cosmoteer.structure":{"mass":1/3, "size":(1,1)},
-        "cosmoteer.structure_wedge":{"mass":0.17, "size":(1,1)},
-        "cosmoteer.structure_1x2_wedge":{"mass":0.33, "size":(1,2)},
-        "cosmoteer.structure_1x3_wedge":{"mass":0.5, "size":(1,3)},
-        "cosmoteer.structure_tri":{"mass":0.08, "size":(1,1)},
-        "cosmoteer.laser_blaster_small":{"mass":2.5, "size":(1,2), "sprite_size":(1,4)},
-        "cosmoteer.laser_blaster_large":{"mass":7.68, "size":(2,3), "sprite_size":(2,6)},
-        "cosmoteer.disruptor":{"mass":3.48, "size":(1,3), "sprite_size":(1,5)},
-        "cosmoteer.ion_beam_emitter":{"mass":8, "size":(2,4), "sprite_size":(2,5)},
-        "cosmoteer.resource_collector":{"mass":4, "size":(2,2)},
-        "cosmoteer.ion_beam_prism":{"mass":7.7, "size":(2,2), "sprite_size":(2,2.5)},
-        "cosmoteer.tractor_beam_emitter":{"mass":32.07, "size":(5,5)},
-        "cosmoteer.point_defense":{"mass":1, "size":(1,1), "sprite_size":(1,2)},
-        "cosmoteer.mining_laser_small":{"mass":7.4, "size":(2,3)},
-        "cosmoteer.cannon_med":{"mass":4.44, "size":(2,1), "sprite_size":(2,3)},
-        "cosmoteer.sensor_array":{"mass":11.54, "size":(3,3)},
-        "cosmoteer.cannon_large":{"mass":12.29, "size":(3,2), "sprite_size":(3,5)},
-        "cosmoteer.hyperdrive_beacon":{"mass":17.13, "size":(4,4)},
-        "cosmoteer.cannon_deck":{"mass":27.07, "size":(4,5), "sprite_size":(4,7)},
-        "cosmoteer.explosive_charge":{"mass":1, "size":(1,1)},
-        "cosmoteer.roof_light":{"mass":1, "size":(1,1)},
-        "cosmoteer.missile_launcher":{"mass":8, "size":(2,3), "sprite_size":(2,4)},
-        "cosmoteer.roof_headlight":{"mass":1, "size":(1,1)},
-        "cosmoteer.railgun_loader":{"mass":24, "size":(2,3)},
-        "cosmoteer.armor_structure_hybrid_1x1":{"mass":1.5, "size":(1,1)},
-        "cosmoteer.armor_structure_hybrid_1x2":{"mass":3, "size":(1,2)},
-        "cosmoteer.railgun_accelerator":{"mass":36, "size":(2,3)},
-        "cosmoteer.armor_structure_hybrid_1x3":{"mass":4.5, "size":(1,3)},
-        "cosmoteer.armor_structure_hybrid_tri":{"mass":1, "size":(1,1)},
-        "cosmoteer.railgun_launcher":{"mass":36, "size":(2,3), "sprite_size":(2,4)},
-        "cosmoteer.armor":{"mass":3, "size":(1,1)},
-        "cosmoteer.armor_2x1":{"mass":6, "size":(2,1)},
-        "cosmoteer.flak_cannon_large":{"mass":16.77, "size":(3,6), "sprite_size":(3,8)},
-        "cosmoteer.armor_wedge":{"mass":1.5, "size":(1,1)},
-        "cosmoteer.armor_1x2_wedge":{"mass":3, "size":(1,2)},
-        "cosmoteer.shield_gen_small":{"mass":6, "size":(2,2), "sprite_size":(2,3)},
-        "cosmoteer.armor_1x3_wedge":{"mass":4.5, "size":(1,3)},
-        "cosmoteer.armor_tri":{"mass":0.75, "size":(1,1)},
-        "cosmoteer.shield_gen_large":{"mass":12.65, "size":(3,6)},
-        "cosmoteer.thruster_small":{"mass":1.3, "size":(1,1), "sprite_size":(1,2)},
-        "cosmoteer.thruster_med":{"mass":2.45, "size":(1,2), "sprite_size":(1,3)},
-        "cosmoteer.thruster_large":{"mass":4.99, "size":(2,2), "sprite_size":(2,3)},
-        "cosmoteer.thruster_boost":{"mass":8.88, "size":(2,3), "sprite_size":(2,5)},
-        "cosmoteer.fire_extinguisher":{"mass":1, "size":(1,1)},
-        "cosmoteer.thruster_huge":{"mass":11, "size":(3,3), "sprite_size":(3,5)},
-        "cosmoteer.control_room_small":{"mass":4, "size":(2,2)},
-        "cosmoteer.control_room_med":{"mass":9, "size":(3,3)},
-        "cosmoteer.thruster_small_2way":{"mass":1.61, "size":(1,1), "sprite_size":(2,2)},
+        "cosmoteer.airlock":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.armor_1x2_wedge":{"mass":3, "size":(1,2)}, #
+        "cosmoteer.armor_1x3_wedge":{"mass":4.5, "size":(1,3)}, #
+        "cosmoteer.armor_2x1":{"mass":6, "size":(2,1)}, #
+        "cosmoteer.armor_structure_hybrid_1x1":{"mass":1.5, "size":(1,1)}, #
+        "cosmoteer.armor_structure_hybrid_1x2":{"mass":3, "size":(1,2)}, #
+        "cosmoteer.armor_structure_hybrid_1x3":{"mass":4.5, "size":(1,3)}, #
+        "cosmoteer.armor_structure_hybrid_tri":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.armor_tri":{"mass":0.75, "size":(1,1)}, #
+        "cosmoteer.armor_wedge":{"mass":1.5, "size":(1,1)}, #
+        "cosmoteer.armor":{"mass":3, "size":(1,1)}, #
+        "cosmoteer.cannon_deck":{"mass":27.07, "size":(4,5), "sprite_size":(4,7)}, #
+        "cosmoteer.cannon_large":{"mass":12.29, "size":(3,2), "sprite_size":(3,5)}, #
+        "cosmoteer.cannon_med":{"mass":4.44, "size":(2,1), "sprite_size":(2,3)}, # 4.4
+        "cosmoteer.chaingun_magazine":{"mass":2, "size":(1,2)}, # 
+        "cosmoteer.chaingun":{"mass":39.79, "size":(3,5), "sprite_size":(3,7)}, #
         "cosmoteer.control_room_large":{"mass":16, "size":(4,4)},
-        "cosmoteer.thruster_small_3way":{"mass":1.91, "size":(1,1), "sprite_size":(3,2)},
-        "cosmoteer.hyperdrive_small":{"mass":4, "size":(2,2)},
-        "cosmoteer.engine_room":{"mass":9, "size":(3,3)},
-        "cosmoteer.crew_quarters_small":{"mass":2, "size":(1,2)},
-        "cosmoteer.crew_quarters_med":{"mass":4, "size":(2,2)},
-        "cosmoteer.airlock":{"mass":1, "size":(1,1)},
+        "cosmoteer.control_room_med":{"mass":9, "size":(3,3)},
+        "cosmoteer.control_room_small":{"mass":4, "size":(2,2)},
         "cosmoteer.conveyor":{"mass":1, "size":(1,1)},
-        "cosmoteer.reactor_small":{"mass":4, "size":(2,2)},
-        "cosmoteer.reactor_med":{"mass":9, "size":(3,3)},
-        "cosmoteer.reactor_large":{"mass":16, "size":(4,4)},
-        "cosmoteer.power_storage":{"mass":4, "size":(2,2)},
+        "cosmoteer.corridor":{"mass":1, "size":(1,1)},
+        "cosmoteer.crew_quarters_large":{"mass":12, "size":(3,4)}, #
+        "cosmoteer.crew_quarters_med":{"mass":4, "size":(2,2)}, #
+        "cosmoteer.crew_quarters_small":{"mass":2, "size":(1,2)}, #
+        "cosmoteer.disruptor":{"mass":3.48, "size":(1,3), "sprite_size":(1,5)}, # 3,5
+        "cosmoteer.engine_room":{"mass":9, "size":(3,3)}, #
+        "cosmoteer.explosive_charge":{"mass":1, "size":(1,1)}, #
         "cosmoteer.factory_ammo":{"mass":4, "size":(2,2)},
-        "cosmoteer.factory_he":{"mass":9, "size":(3,3)},
-        "cosmoteer.factory_emp":{"mass":12, "size":(3,4)},
-        "cosmoteer.factory_nuke":{"mass":16, "size":(4,4)},
-        "cosmoteer.factory_mine":{"mass":12, "size":(4,3)},
-        "cosmoteer.factory_steel":{"mass":16, "size":(4,4)},
         "cosmoteer.factory_coil":{"mass":9, "size":(3,3)},
         "cosmoteer.factory_coil2":{"mass":12, "size":(4,3)},
-        "cosmoteer.factory_tristeel":{"mass":16, "size":(4,4)},
         "cosmoteer.factory_diamond":{"mass":6, "size":(2,3)},
+        "cosmoteer.factory_emp":{"mass":12, "size":(3,4)},
+        "cosmoteer.factory_he":{"mass":9, "size":(3,3)},
+        "cosmoteer.factory_mine":{"mass":12, "size":(4,3)},
+        "cosmoteer.factory_nuke":{"mass":16, "size":(4,4)},
         "cosmoteer.factory_processor":{"mass":9, "size":(3,3)},
+        "cosmoteer.factory_steel":{"mass":16, "size":(4,4)},
+        "cosmoteer.factory_thermal":{"mass":9, "size":(3,3)},
+        "cosmoteer.factory_tristeel":{"mass":16, "size":(4,4)},
         "cosmoteer.factory_uranium":{"mass":12, "size":(3,4)},
+        "cosmoteer.fire_extinguisher":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.flak_cannon_large":{"mass":16.77, "size":(3,6), "sprite_size":(3,8)}, #
+        "cosmoteer.heat_exchanger":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.heat_pipe_adaptive_structure":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.heat_pipe_adaptive":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.heat_pipe_crossing":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.hyperdrive_beacon":{"mass":17.13, "size":(4,4)}, #
+        "cosmoteer.hyperdrive_large":{"mass":16, "size":(4,4)}, #
+        "cosmoteer.hyperdrive_med":{"mass":9, "size":(3,3)}, #
+        "cosmoteer.hyperdrive_small":{"mass":4, "size":(2,2)}, #
+        "cosmoteer.ion_beam_emitter":{"mass":8, "size":(2,4), "sprite_size":(2,5)}, #
+        "cosmoteer.ion_beam_prism":{"mass":7.7, "size":(2,2), "sprite_size":(2,2.5)}, #
+        "cosmoteer.laser_blaster_large":{"mass":7.68, "size":(2,3), "sprite_size":(2,6)}, # 3,7
+        "cosmoteer.laser_blaster_small":{"mass":2.5, "size":(1,2), "sprite_size":(1,4)}, #
+        "cosmoteer.manipulator_beam_emitter":{"mass":4, "size":(2,2)}, #
+        "cosmoteer.mining_laser_small":{"mass":7.4, "size":(2,3)}, #
+        "cosmoteer.missile_launcher":{"mass":8, "size":(2,3), "sprite_size":(2,4)}, #
+        "cosmoteer.point_defense":{"mass":1.19, "size":(1,1), "sprite_size":(1,2)}, #
+        "cosmoteer.power_storage":{"mass":4, "size":(2,2)}, #
+        "cosmoteer.radiator":{"mass":3, "size":(1,3)}, #
+        "cosmoteer.railgun_accelerator":{"mass":36, "size":(2,3)}, #
+        "cosmoteer.railgun_launcher":{"mass":36, "size":(2,3), "sprite_size":(2,4)}, #
+        "cosmoteer.railgun_loader":{"mass":24, "size":(2,3)}, #
+        "cosmoteer.reactor_large":{"mass":16, "size":(4,4)}, #
+        "cosmoteer.reactor_med":{"mass":9, "size":(3,3)}, #
+        "cosmoteer.reactor_small":{"mass":4, "size":(2,2)}, #
+        "cosmoteer.resonance_beam_turret":{"mass":21.54, "size":(4,4), "sprite_size":(4,5)}, #
+        "cosmoteer.resource_collector":{"mass":4, "size":(2,2)}, #
+        "cosmoteer.roof_headlight":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.roof_light":{"mass":1, "size":(1,1)}, #
+        "cosmoteer.sensor_array":{"mass":11.54, "size":(3,3)}, #
+        "cosmoteer.shield_gen_large":{"mass":12.65, "size":(3,6)}, # 
+        "cosmoteer.shield_gen_small":{"mass":6, "size":(2,2), "sprite_size":(2,3)},
         "cosmoteer.storage_2x2":{"mass":4, "size":(2,2)},
         "cosmoteer.storage_3x2":{"mass":6, "size":(3,2)},
         "cosmoteer.storage_3x3":{"mass":9, "size":(3,3)},
         "cosmoteer.storage_4x3":{"mass":12, "size":(4,3)},
         "cosmoteer.storage_4x4":{"mass":16, "size":(4,4)},
-        "cosmoteer.chaingun":{"mass":17.77, "size":(3,5), "sprite_size":(3,7)},
-        "cosmoteer.chaingun_magazine":{"mass":2, "size":(1,2)},
-        "cosmoteer.hyperdrive_large":{"mass":16, "size":(4,4)},
-        'cosmoteer.thruster_rocket_battery':{'mass':2, 'size':(1,2)},
-        'cosmoteer.thruster_rocket_extender':{'mass':6, 'size':(3,2)},
-        'cosmoteer.thruster_rocket_nozzle':{'mass':14.4, 'size':(3,4), 'sprite_size':(3,5)},
-        'cosmoteer.hyperdrive_med':{"mass":9, "size":(3,3)},
-        'cosmoteer.manipulator_beam_emitter':{"mass":4, "size":(2,2)},
-        'cosmoteer.crew_quarters_large':{"mass":12, "size":(3,4)},
-        'cosmoteer.factory_thermal':{"mass":9, "size":(3,3)},
-        'cosmoteer.heat_exchanger':{"mass":1, "size":(1,1)},
-        'cosmoteer.heat_pipe_adaptive_structure':{"mass":1, "size":(1,1)},
-        'cosmoteer.heat_pipe_adaptive':{"mass":1, "size":(1,1)},
-        'cosmoteer.heat_pipe_crossing':{"mass":1, "size":(1,1)},
-        'cosmoteer.radiator':{"mass":3, "size":(1,3)},
-        'cosmoteer.resonance_beam_turret':{"mass":16, "size":(4,4), 'sprite_size':(4,5)},
-        'cosmoteer.thermal_amplification_pump':{"mass":3, "size":(1,3)},
-        'cosmoteer.thermal_battery':{"mass":4, "size":(2,2)},
-        'cosmoteer.thermal_dilation_pump':{"mass":4, "size":(2,2)},      
+        "cosmoteer.structure_1x2_wedge":{"mass":0.33, "size":(1,2)}, #
+        "cosmoteer.structure_1x3_wedge":{"mass":0.5, "size":(1,3)}, #
+        "cosmoteer.structure_tri":{"mass":0.08, "size":(1,1)}, #
+        "cosmoteer.structure_wedge":{"mass":0.17, "size":(1,1)}, #
+        "cosmoteer.structure":{"mass":1/3, "size":(1,1)}, #
+        "cosmoteer.thermal_amplification_pump":{"mass":3, "size":(1,3)}, #
+        "cosmoteer.thermal_battery":{"mass":4, "size":(2,2)}, #
+        "cosmoteer.thermal_dilation_pump":{"mass":4, "size":(2,2)}, #
+        "cosmoteer.thruster_boost":{"mass":8.88, "size":(2,3), "sprite_size":(2,5)}, #
+        "cosmoteer.thruster_huge":{"mass":11, "size":(3,3), "sprite_size":(3,5)}, #
+        "cosmoteer.thruster_large":{"mass":4.99, "size":(2,2), "sprite_size":(2,3)}, #
+        "cosmoteer.thruster_med":{"mass":2.45, "size":(1,2), "sprite_size":(1,3)}, #
+        "cosmoteer.thruster_rocket_battery":{"mass":2, "size":(1,2)}, #
+        "cosmoteer.thruster_rocket_extender":{"mass":6, "size":(3,2)}, #
+        "cosmoteer.thruster_rocket_nozzle":{"mass":14.4, "size":(3,4), "sprite_size":(3,5)}, #
+        "cosmoteer.thruster_small_2way":{"mass":1.61, "size":(1,1), "sprite_size":(2,2)}, #
+        "cosmoteer.thruster_small_3way":{"mass":1.91, "size":(1,1), "sprite_size":(3,2)}, #
+        "cosmoteer.thruster_small":{"mass":1.3, "size":(1,1), "sprite_size":(1,2)}, # 
+        "cosmoteer.tractor_beam_emitter":{"mass":32.07, "size":(5,5)},  #     
 }
 
 # dic for com with thrusters
 thruster_data={
-        "cosmoteer.thruster_small":{"cot":((0.5,1.5,0),),"thrust":400},
-        "cosmoteer.thruster_med":{"cot":((0.5,2.5,0),),"thrust":1200},
-        "cosmoteer.thruster_large":{"cot":((1,2.5,0),),"thrust":3200},
-        "cosmoteer.thruster_boost":{"cot":((1,4.5,0),),"thrust":9600},
-        "cosmoteer.thruster_huge":{"cot":((1.5,3.5,0),),"thrust":8000},
-        "cosmoteer.thruster_small_2way":{"cot":((0.5,1.5,0),(1.5,0.5,3)),"thrust":400},
-        "cosmoteer.thruster_small_3way":{"cot":((0.5,1.5,0),(1.5,0.5,3),(-0.5,0.5,1)),"thrust":400},
-        "cosmoteer.thruster_rocket_nozzle":{"cot":((1.5,4,0),),"thrust":8000},
-        "cosmoteer.thruster_rocket_extender":{"cot":((1.5,1,0),),"thrust":8000},
+        "cosmoteer.thruster_small":{"cot":((0.5,1.5,0),),"thrust":400}, #
+        "cosmoteer.thruster_med":{"cot":((0.5,2.5,0),),"thrust":1300}, #
+        "cosmoteer.thruster_large":{"cot":((1,2.5,0),),"thrust":3600}, #
+        "cosmoteer.thruster_boost":{"cot":((1,4.5,0),),"thrust":9600}, #
+        "cosmoteer.thruster_huge":{"cot":((1.5,3.5,0),),"thrust":8000}, #
+        "cosmoteer.thruster_small_2way":{"cot":((0.5,1.5,0),(1.5,0.5,3)),"thrust":400}, #
+        "cosmoteer.thruster_small_3way":{"cot":((0.5,1.5,0),(1.5,0.5,3),(-0.5,0.5,1)),"thrust":400}, #
+        "cosmoteer.thruster_rocket_nozzle":{"cot":((1.5,4,0),),"thrust":10000}, #
+        "cosmoteer.thruster_rocket_extender":{"cot":((1.5,1,0),),"thrust":10000}, #
 }
 
 # dic with prices
 parts_resources = [
     {"ID": "cosmoteer.airlock", "Resources": [["steel", "8"], ["coil", "4"]]},
-    {"ID": "cosmoteer.armor", "Resources": [["steel", "8"]]},
-    {"ID": "cosmoteer.armor_1x2_wedge", "Resources": [["steel", "8"]]},
-    {"ID": "cosmoteer.armor_1x3_wedge", "Resources": [["steel", "12"]]},
-    {"ID": "cosmoteer.armor_2x1", "Resources": [["steel", "16"]]},
-    {"ID": "cosmoteer.armor_structure_hybrid_1x1", "Resources": [["steel", "5"]]},
-    {"ID": "cosmoteer.armor_structure_hybrid_1x2", "Resources": [["steel", "10"]]},
-    {"ID": "cosmoteer.armor_structure_hybrid_1x3", "Resources": [["steel", "15"]]},
-    {"ID": "cosmoteer.armor_structure_hybrid_tri", "Resources": [["steel", "3"]]},
-    {"ID": "cosmoteer.armor_tri", "Resources": [["steel", "2"]]},
-    {"ID": "cosmoteer.armor_wedge", "Resources": [["steel", "4"]]},
-    {"ID": "cosmoteer.cannon_deck","Resources": [["steel", "200"], ["coil2", "30"], ["tristeel", "30"], ["bullet", "100"]]},
-    {"ID": "cosmoteer.cannon_large", "Resources": [["steel", "84"], ["coil", "29"], ["bullet", "64"]]},
-    {"ID": "cosmoteer.cannon_med", "Resources": [["steel", "48"], ["coil", "8"], ["bullet", "16"]]},
-    {"ID": "cosmoteer.chaingun","Resources": [["steel", "144"], ["coil2", "38"], ["tristeel", "45"], ["bullet", "12"]]},
-    {"ID": "cosmoteer.chaingun_magazine","Resources": [["steel", "20"], ["coil", "5"], ["bullet", "4"]]},
-    {"ID": "cosmoteer.control_room_large","Resources": [["steel", "160"], ["coil2", "70"], ["processor", "10"]]},
-    {"ID": "cosmoteer.control_room_med","Resources": [["steel", "80"], ["coil2", "35"], ["processor", "5"]]},
-    {"ID": "cosmoteer.control_room_small","Resources": [["steel", "32"], ["coil", "42"], ["processor", "2"]]},
-    {"ID": "cosmoteer.conveyor", "Resources": [["steel", "4"], ["coil", "1"]]},
-    {"ID": "cosmoteer.corridor", "Resources": [["steel", "4"]]},
-    {"ID": "cosmoteer.crew_quarters_large", "Resources": [["steel", "144"]]},
-    {"ID": "cosmoteer.crew_quarters_med", "Resources": [["steel", "48"]]},
-    {"ID": "cosmoteer.crew_quarters_small", "Resources": [["steel", "24"]]},
-    {"ID": "cosmoteer.disruptor", "Resources": [["steel", "40"], ["coil", "20"]]},
+    {"ID": "cosmoteer.armor", "Resources": [["steel", "8"]]}, #
+    {"ID": "cosmoteer.armor_1x2_wedge", "Resources": [["steel", "8"]]}, #
+    {"ID": "cosmoteer.armor_1x3_wedge", "Resources": [["steel", "12"]]}, #
+    {"ID": "cosmoteer.armor_2x1", "Resources": [["steel", "16"]]}, #
+    {"ID": "cosmoteer.armor_structure_hybrid_1x1", "Resources": [["steel", "5"]]}, #
+    {"ID": "cosmoteer.armor_structure_hybrid_1x2", "Resources": [["steel", "10"]]}, #
+    {"ID": "cosmoteer.armor_structure_hybrid_1x3", "Resources": [["steel", "15"]]}, #
+    {"ID": "cosmoteer.armor_structure_hybrid_tri", "Resources": [["steel", "3"]]}, #
+    {"ID": "cosmoteer.armor_tri", "Resources": [["steel", "2"]]}, #
+    {"ID": "cosmoteer.armor_wedge", "Resources": [["steel", "4"]]}, #
+    {"ID": "cosmoteer.cannon_deck","Resources": [["steel", "200"], ["coil2", "30"], ["tristeel", "30"], ["bullet", "100"]]}, # 
+    {"ID": "cosmoteer.cannon_large", "Resources": [["steel", "100"], ["coil", "10"], ["coil2", "5"], ["bullet", "64"]]}, #
+    {"ID": "cosmoteer.cannon_med", "Resources": [["steel", "48"], ["coil", "8"], ["bullet", "16"]]}, #
+    {"ID": "cosmoteer.chaingun","Resources": [["steel", "144"], ["coil2", "38"], ["tristeel", "45"], ["bullet", "12"]]}, #
+    {"ID": "cosmoteer.chaingun_magazine","Resources": [["steel", "20"], ["coil", "5"], ["bullet", "4"]]}, #
+    {"ID": "cosmoteer.control_room_large","Resources": [["steel", "160"], ["coil2", "70"], ["processor", "10"]]}, #
+    {"ID": "cosmoteer.control_room_med","Resources": [["steel", "80"], ["coil2", "35"], ["processor", "5"]]}, #
+    {"ID": "cosmoteer.control_room_small","Resources": [["steel", "32"], ["coil", "42"], ["processor", "2"]]}, #
+    {"ID": "cosmoteer.conveyor", "Resources": [["steel", "4"], ["coil", "1"]]}, #
+    {"ID": "cosmoteer.corridor", "Resources": [["steel", "4"]]}, #
+    {"ID": "cosmoteer.crew_quarters_large", "Resources": [["steel", "144"]]}, #
+    {"ID": "cosmoteer.crew_quarters_med", "Resources": [["steel", "48"]]}, #
+    {"ID": "cosmoteer.crew_quarters_small", "Resources": [["steel", "24"]]}, #
+    {"ID": "cosmoteer.disruptor", "Resources": [["steel", "40"], ["coil", "8"], ["coil2", "4"]]}, #
     {"ID": "cosmoteer.door", "Resources": [["coil", "1"]]},
-    {"ID": "cosmoteer.engine_room","Resources": [["steel", "72"], ["coil2", "28"], ["tristeel", "9"]]},
-    {"ID": "cosmoteer.explosive_charge","Resources": [["steel", "12"], ["coil", "3"]]},
-    {"ID": "cosmoteer.factory_ammo","Resources": [["steel", "32"], ["coil", "24"], ["tristeel", "4"], ["sulfur", "5"]]},
-    {"ID": "cosmoteer.factory_coil","Resources": [["steel", "80"], ["coil", "80"], ["processor", "8"], ["copper", "10"]]},
-    {"ID": "cosmoteer.factory_coil2","Resources": [["steel", "104"], ["coil2", "58"], ["processor", "12"], ["copper", "10"], ["coil", "40"] ]},
-    {"ID": "cosmoteer.factory_diamond","Resources": [["steel", "48"], ["coil2", "118"], ["tristeel", "67"], ["carbon", "20"]]},
-    {"ID": "cosmoteer.factory_emp","Resources": [["steel", "96"], ["coil2", "32"], ["diamond", "2"], ["iron", "5"], ["copper", "5"]]},
-    {"ID": "cosmoteer.factory_he","Resources": [["steel", "76"], ["coil2", "27"], ["processor", "2"], ["iron", "5"], ["sulfur", "5"]]},
-    {"ID": "cosmoteer.factory_mine","Resources": [["steel", "96"], ["coil2", "50"], ["tristeel", "13"], ["iron", "5"], ["bullet", "20"]]},
-    {"ID": "cosmoteer.factory_nuke","Resources": [["steel", "120"], ["coil2", "60"], ["enriched_uranium", "2"], ["iron", "5"], ["uranium", "5"]]},
-    {"ID": "cosmoteer.factory_processor","Resources": [["steel", "80"], ["coil2", "100"], ["diamond", "12"], ["coil", "40"], ["gold", "10"]]},
-    {"ID": "cosmoteer.factory_steel","Resources": [["steel", "120"], ["coil", "90"], ["coil2", "60"], ["iron", "20"]]},
-    {"ID": "cosmoteer.factory_thermal","Resources": [["steel", "80"], ["coil2", "46"], ["tristeel", "11"]]},
-    {"ID": "cosmoteer.factory_tristeel","Resources": [["steel", "120"], ["coil2", "100"], ["diamond", "8"], ["tritanium", "20"]]},
+    {"ID": "cosmoteer.engine_room","Resources": [["steel", "96"], ["coil2", "32"]]}, #
+    {"ID": "cosmoteer.explosive_charge","Resources": [["steel", "12"], ["coil", "3"]]}, #
+    {"ID": "cosmoteer.factory_ammo","Resources": [["steel", "32"], ["coil", "24"], ["tristeel", "4"], ["sulfur", "5"]]}, #
+    {"ID": "cosmoteer.factory_coil","Resources": [["steel", "80"], ["coil", "80"], ["processor", "8"], ["copper", "10"]]}, #
+    {"ID": "cosmoteer.factory_coil2","Resources": [["steel", "104"], ["coil2", "58"], ["processor", "12"], ["copper", "10"], ["coil", "80"] ]}, #
+    {"ID": "cosmoteer.factory_diamond","Resources": [["steel", "48"], ["coil2", "118"], ["tristeel", "67"], ["carbon", "20"]]}, #
+    {"ID": "cosmoteer.factory_emp","Resources": [["steel", "96"], ["coil2", "32"], ["diamond", "2"], ["iron", "5"], ["copper", "5"]]}, #
+    {"ID": "cosmoteer.factory_he","Resources": [["steel", "76"], ["coil2", "27"], ["processor", "2"], ["iron", "5"], ["sulfur", "5"]]}, #
+    {"ID": "cosmoteer.factory_mine","Resources": [["steel", "96"], ["coil2", "50"], ["tristeel", "13"], ["iron", "5"], ["bullet", "20"]]}, #
+    {"ID": "cosmoteer.factory_nuke","Resources": [["steel", "120"], ["coil2", "60"], ["enriched_uranium", "2"], ["iron", "5"], ["uranium", "5"]]}, #
+    {"ID": "cosmoteer.factory_processor","Resources": [["steel", "80"], ["coil2", "100"], ["diamond", "12"], ["coil", "80"], ["gold", "10"]]}, #
+    {"ID": "cosmoteer.factory_steel","Resources": [["steel", "120"], ["coil", "90"], ["coil2", "60"], ["iron", "20"]]}, #
+    {"ID": "cosmoteer.factory_thermal","Resources": [["steel", "80"], ["coil2", "46"], ["tristeel", "11"], ["copper", "5"], ["sulfur", "5"]]}, #
+    {"ID": "cosmoteer.factory_tristeel","Resources": [["steel", "120"], ["coil2", "100"], ["diamond", "8"], ["tritanium", "20"]]}, #
     {"ID": "cosmoteer.factory_uranium","Resources": [["steel", "80"], ["coil2", "80"], ["enriched_uranium", "32"], ["uranium", "20"]]},
-    {"ID": "cosmoteer.fire_extinguisher", "Resources": [["steel", "8"], ["coil", "1"]]},
+    {"ID": "cosmoteer.fire_extinguisher", "Resources": [["steel", "8"], ["coil", "1"]]}, # 
     {"ID": "cosmoteer.flak_cannon_large","Resources": [["steel", "200"], ["coil2", "30"], ["bullet", "92"]]},
-    {"ID": "cosmoteer.heat_exchanger","Resources": [["steel", "8"], ["coil", "3"]]},
-    {"ID": "cosmoteer.heat_pipe_adaptive","Resources": [["steel", "4"], ["coil", "2"]]},
-    {"ID": "cosmoteer.heat_pipe_adaptive_structure","Resources": [["steel", "4"], ["coil", "2"]]},
-    {"ID": "cosmoteer.heat_pipe_crossing","Resources": [["steel", "4"], ["coil", "2"]]},
-    {"ID": "cosmoteer.hyperdrive_beacon","Resources": [["steel", "160"], ["coil2", "40"], ["diamond", "6"]]},
-    {"ID": "cosmoteer.hyperdrive_large","Resources": [["steel", "156"], ["coil2", "67"], ["processor", "4"]]},
-    {"ID": "cosmoteer.hyperdrive_med","Resources": [["steel", "76"], ["coil2", "52"], ["processor", "1"]]},
-    {"ID": "cosmoteer.hyperdrive_small","Resources": [["steel", "40"], ["coil", "90"]]},
-    {"ID": "cosmoteer.ion_beam_emitter","Resources": [["steel", "60"], ["coil2", "15"], ["diamond", "1"]]},
-    {"ID": "cosmoteer.ion_beam_prism","Resources": [["steel", "16"], ["coil2", "2"], ["diamond", "1"]]},
-    {"ID": "cosmoteer.laser_blaster_large","Resources": [["steel", "96"], ["coil", "36"]]},
-    {"ID": "cosmoteer.laser_blaster_small","Resources": [["steel", "32"], ["coil", "12"]]},
-    {"ID": "cosmoteer.manipulator_beam_emitter","Resources": [["steel", "36"], ["coil2", "7"]]},
-    {"ID": "cosmoteer.mining_laser_small","Resources": [["steel", "96"], ["coil", "36"]]},
-    {"ID": "cosmoteer.missile_launcher","Resources": [["steel", "60"], ["coil2", "20"], ["processor", "1"]]},
-    {"ID": "cosmoteer.point_defense", "Resources": [["steel", "8"], ["coil", "8"]]},
-    {"ID": "cosmoteer.power_storage", "Resources": [["steel", "32"], ["coil", "32"]]},
-    {"ID": "cosmoteer.radiator", "Resources": [["steel", "48"], ["coil", "52"], ["coil2", "12"]]},
-    {"ID": "cosmoteer.railgun_accelerator","Resources": [["steel", "76"], ["coil2", "12"], ["tristeel", "10"]]},
-    {"ID": "cosmoteer.railgun_launcher","Resources": [["steel", "100"], ["coil2", "10"], ["tristeel", "10"]]},
-    {"ID": "cosmoteer.railgun_loader","Resources": [["steel", "60"], ["coil2", "30"], ["tristeel", "10"], ["bullet", "46"]]},
-    {"ID": "cosmoteer.reactor_large","Resources": [["steel", "120"], ["coil2", "80"], ["enriched_uranium", "24"]]},
-    {"ID": "cosmoteer.reactor_med","Resources": [["steel", "72"], ["coil2", "54"], ["enriched_uranium", "16"]]},
-    {"ID": "cosmoteer.reactor_small","Resources": [["steel", "32"], ["coil", "82"], ["enriched_uranium", "8"]]},
-    {"ID": "cosmoteer.resonance_beam_turret", "Resources": [["steel", "80"], ["coil2", "20"], ["diamond", "2"]]},
+    {"ID": "cosmoteer.heat_exchanger","Resources": [["steel", "8"], ["coil", "3"]]}, #
+    {"ID": "cosmoteer.heat_pipe_adaptive","Resources": [["steel", "4"], ["coil", "2"]]}, #
+    {"ID": "cosmoteer.heat_pipe_adaptive_structure","Resources": [["steel", "4"], ["coil", "2"]]}, #
+    {"ID": "cosmoteer.heat_pipe_crossing","Resources": [["steel", "4"], ["coil", "2"]]}, #
+    {"ID": "cosmoteer.hyperdrive_beacon","Resources": [["steel", "160"], ["coil2", "40"], ["diamond", "6"]]}, #
+    {"ID": "cosmoteer.hyperdrive_large","Resources": [["steel", "156"], ["coil2", "67"], ["processor", "4"]]}, #
+    {"ID": "cosmoteer.hyperdrive_med","Resources": [["steel", "76"], ["coil2", "52"], ["processor", "1"]]}, #
+    {"ID": "cosmoteer.hyperdrive_small","Resources": [["steel", "40"], ["coil", "90"]]}, #
+    {"ID": "cosmoteer.ion_beam_emitter","Resources": [["steel", "60"], ["coil2", "15"], ["diamond", "1"]]}, #
+    {"ID": "cosmoteer.ion_beam_prism","Resources": [["steel", "16"], ["coil2", "2"], ["diamond", "1"]]}, #
+    {"ID": "cosmoteer.laser_blaster_large","Resources": [["steel", "96"], ["coil", "36"], ["coil2", "4"]]}, #
+    {"ID": "cosmoteer.laser_blaster_small","Resources": [["steel", "32"], ["coil", "12"]]}, #
+    {"ID": "cosmoteer.manipulator_beam_emitter","Resources": [["steel", "36"], ["coil2", "7"]]}, #
+    {"ID": "cosmoteer.mining_laser_small","Resources": [["steel", "96"], ["coil", "15"], ["coil2", "7"]]}, # 
+    {"ID": "cosmoteer.missile_launcher","Resources": [["steel", "60"], ["coil2", "20"], ["processor", "1"]]}, #
+    {"ID": "cosmoteer.point_defense", "Resources": [["steel", "8"], ["coil", "8"]]}, #
+    {"ID": "cosmoteer.power_storage", "Resources": [["steel", "32"], ["coil", "32"]]}, #
+    {"ID": "cosmoteer.radiator", "Resources": [["steel", "48"], ["coil", "52"], ["coil2", "12"]]}, #
+    {"ID": "cosmoteer.railgun_accelerator","Resources": [["steel", "76"], ["coil2", "12"], ["tristeel", "10"]]}, #
+    {"ID": "cosmoteer.railgun_launcher","Resources": [["steel", "100"], ["coil2", "10"], ["tristeel", "10"]]}, # 
+    {"ID": "cosmoteer.railgun_loader","Resources": [["steel", "60"], ["coil2", "30"], ["tristeel", "10"], ["bullet", "46"]]}, #
+    {"ID": "cosmoteer.reactor_large","Resources": [["steel", "120"], ["coil2", "80"], ["enriched_uranium", "24"]]}, #
+    {"ID": "cosmoteer.reactor_med","Resources": [["steel", "72"], ["coil2", "54"], ["enriched_uranium", "16"]]}, #
+    {"ID": "cosmoteer.reactor_small","Resources": [["steel", "32"], ["coil", "82"], ["enriched_uranium", "8"]]}, #
+    {"ID": "cosmoteer.resonance_beam_turret", "Resources": [["steel", "80"], ["coil2", "20"], ["diamond", "2"]]}, #
     {"ID": "cosmoteer.resource_collector", "Resources": [["steel", "40"], ["coil", "20"]]},
     {"ID": "cosmoteer.roof_headlight", "Resources": [["steel", "4"], ["coil", "2"]]},
     {"ID": "cosmoteer.roof_light", "Resources": [["steel", "4"], ["coil", "1"]]},
-    {"ID": "cosmoteer.sensor_array","Resources": [["steel", "76"], ["coil2", "27"], ["processor", "4"]]},
-    {"ID": "cosmoteer.shield_gen_large","Resources": [["steel", "120"], ["coil2", "30"], ["diamond", "2"]]},
-    {"ID": "cosmoteer.shield_gen_small","Resources": [["steel", "40"], ["coil", "40"]]},
+    {"ID": "cosmoteer.sensor_array","Resources": [["steel", "76"], ["coil2", "27"], ["processor", "4"]]}, #
+    {"ID": "cosmoteer.shield_gen_large","Resources": [["steel", "120"], ["coil2", "30"], ["diamond", "2"]]}, #
+    {"ID": "cosmoteer.shield_gen_small","Resources": [["steel", "40"], ["coil", "40"]]}, #
     {"ID": "cosmoteer.storage_2x2", "Resources": [["steel", "48"]]},
     {"ID": "cosmoteer.storage_3x2", "Resources": [["steel", "72"]]},
     {"ID": "cosmoteer.storage_3x3", "Resources": [["steel", "108"]]},
@@ -202,25 +202,25 @@ parts_resources = [
     {"ID": "cosmoteer.structure_1x3_wedge", "Resources": [["steel", "3"]]},
     {"ID": "cosmoteer.structure_tri", "Resources": [["steel", "1"]]},
     {"ID": "cosmoteer.structure_wedge", "Resources": [["steel", "1"]]},
-    {"ID": "cosmoteer.thermal_amplification_pump","Resources": [["steel", "8"], ["coil2", "1"], ["diamond", "1"]]},
-    {"ID": "cosmoteer.thermal_battery","Resources": [["steel", "40"], ["coil", "15"]]},
-    {"ID": "cosmoteer.thermal_dilation_pump","Resources": [["steel", "16"], ["coil2", "2"], ["diamond", "1"]]},
-    {"ID": "cosmoteer.thruster_boost","Resources": [["steel", "56"], ["coil2", "10"], ["tristeel", "8"]]},
-    {"ID": "cosmoteer.thruster_huge","Resources": [["steel", "80"], ["coil2", "20"], ["tristeel", "10"]]},
-    {"ID": "cosmoteer.thruster_large", "Resources": [["steel", "40"], ["coil", "30"]]},
-    {"ID": "cosmoteer.thruster_med", "Resources": [["steel", "24"], ["coil", "9"]]},
-    {"ID": "cosmoteer.thruster_rocket_battery","Resources": [["steel", "20"], ["coil", "10"]]},
-    {"ID": "cosmoteer.thruster_rocket_extender","Resources": [["steel", "60"], ["coil2", "15"]]},
-    {"ID": "cosmoteer.thruster_rocket_nozzle","Resources": [["steel", "120"], ["coil2", "30"], ["tristeel", "15"]]},
-    {"ID": "cosmoteer.thruster_small", "Resources": [["steel", "8"], ["coil", "3"]]},
-    {"ID": "cosmoteer.thruster_small_2way","Resources": [["steel", "12"], ["coil", "7"]]},
-    {"ID": "cosmoteer.thruster_small_3way","Resources": [["steel", "16"], ["coil", "11"]]},
-    {"ID": "cosmoteer.tractor_beam_emitter","Resources": [["steel", "200"], ["coil2", "50"], ["diamond", "5"]]},
+    {"ID": "cosmoteer.thermal_amplification_pump","Resources": [["steel", "8"], ["coil2", "1"], ["diamond", "1"]]}, #
+    {"ID": "cosmoteer.thermal_battery","Resources": [["steel", "40"], ["coil", "15"]]}, #
+    {"ID": "cosmoteer.thermal_dilation_pump","Resources": [["steel", "16"], ["coil2", "2"], ["diamond", "1"]]}, #
+    {"ID": "cosmoteer.thruster_boost","Resources": [["steel", "56"], ["coil2", "10"], ["tristeel", "8"]]}, #
+    {"ID": "cosmoteer.thruster_huge","Resources": [["steel", "124"], ["coil2", "23"]]},  #
+    {"ID": "cosmoteer.thruster_large", "Resources": [["steel", "40"], ["coil", "30"]]}, #
+    {"ID": "cosmoteer.thruster_med", "Resources": [["steel", "24"], ["coil", "9"]]}, #
+    {"ID": "cosmoteer.thruster_rocket_battery","Resources": [["steel", "20"], ["coil", "10"]]}, #
+    {"ID": "cosmoteer.thruster_rocket_extender","Resources": [["steel", "60"], ["coil2", "15"]]}, #
+    {"ID": "cosmoteer.thruster_rocket_nozzle","Resources": [["steel", "120"], ["coil2", "30"], ["tristeel", "15"]]}, #
+    {"ID": "cosmoteer.thruster_small", "Resources": [["steel", "8"], ["coil", "3"]]}, #
+    {"ID": "cosmoteer.thruster_small_2way","Resources": [["steel", "12"], ["coil", "7"]]}, #
+    {"ID": "cosmoteer.thruster_small_3way","Resources": [["steel", "16"], ["coil", "11"]]}, #
+    {"ID": "cosmoteer.tractor_beam_emitter","Resources": [["steel", "200"], ["coil2", "50"], ["diamond", "5"]]}, #
     {"ID": "emp_missiles","Resources": [["missile_part_emp", "9"]]},
     {"ID": "he_missiles","Resources": [["missile_part_he", "12"]]},
     {"ID": "mines","Resources": [["mine_part", "24"]]},
     {"ID": "nukes","Resources": [["missile_part_nuke", "12"]]},
-    {"ID": "thermal_missiles","Resources": [["missile_part_thermal", "4"]]}
+    {"ID": "thermal_missiles","Resources": [["missile_part_thermal", "10"]]}
 ]
 
 # dic with resource cost
