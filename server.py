@@ -27,6 +27,7 @@ from tagextractor import PNGTagExtractor
 from center_of_mass import calculate_price
 from cosmoteer_save_tools_new import Ship as new_ship
 from png_upload import upload_image_to_imgbb
+from json_upload import call_upload_gist
 
 load_dotenv()
 db_manager = ShipImageDatabase()
@@ -82,7 +83,7 @@ class TagsResponse(BaseModel):
 app = FastAPI(
     title="Cosmoteer API",
     description="API for managing and analyzing Cosmoteer ships",
-    version="0.26.2",
+    version="0.30.1b",
     contact={
         "name": "Cosmoteer API Support",
         "url": "https://hport.dev",
@@ -406,6 +407,7 @@ async def add_fav(ship_id: int, request: Request):
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
 
     db_return = db_manager.add_to_favorites(user=user, ship_id=ship_id)
+    call_upload_gist()
     # TODO : update json
 
     return (
@@ -484,6 +486,8 @@ async def rm_fav(ship_id: int, request: Request):
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
 
     db_return = db_manager.delete_from_favorites(user=user, ship_id=ship_id)
+    call_upload_gist()
+
     # TODO : update json
     return (
         db_return
@@ -663,6 +667,8 @@ async def delete_ship(
     except Exception as e:
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
     # TODO : update json
+    call_upload_gist()
+
     return db_manager.delete_ship(ship_id=ship_id, user=user)
 
 # post add_ship
@@ -775,6 +781,8 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
     ship_id = int(db_return["success"])
     if ship_id:
         # TODO : update json
+        call_upload_gist()
+
         return {
             "success": True,
             "message": "Ship successfully added",
@@ -886,6 +894,8 @@ async def edit_ship(ship_id: int = Path(...), data: Dict[str, Any] = Body(...)):
         crew=crew,
         tags=tags,)
     # TODO : update json
+    call_upload_gist()
+
     return {"success":"ship updated"}
 
 
