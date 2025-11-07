@@ -409,7 +409,7 @@ async def add_fav(ship_id: int, request: Request):
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
 
     db_return = db_manager.add_to_favorites(user=user, ship_id=ship_id)
-    call_upload_gist()
+    # call_upload_gist()
     # TODO : update json
 
     return (
@@ -488,7 +488,7 @@ async def rm_fav(ship_id: int, request: Request):
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
 
     db_return = db_manager.delete_from_favorites(user=user, ship_id=ship_id)
-    call_upload_gist()
+    # call_upload_gist()
 
     # TODO : update json
     return (
@@ -669,7 +669,7 @@ async def delete_ship(
     except Exception as e:
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
     # TODO : update json
-    call_upload_gist()
+    # call_upload_gist()
 
     return db_manager.delete_ship(ship_id=ship_id, user=user)
 
@@ -798,7 +798,7 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
     if ship_id:
         # TODO : update json
         timestart = time.time()
-        call_upload_gist()
+        # call_upload_gist()
         timeend = time.time()
         print(f"Time to update gist: {timeend - timestart} seconds")
         return {
@@ -807,6 +807,39 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
             "data": {"ship_id": ship_id,"name": name, "url": url, "submitted_by": user, "tags": tags},
         }
     return {"error": "db error"}
+
+@app.post("/updategist", response_model=Union[SuccessResponse, ErrorResponse])  # OK
+async def updategist(request: Request):
+    """
+    Request an update of the gist
+
+    Args:
+        request (Request): The HTTP request containing query parameters:
+            - token (str): JWT token for user authentication
+
+    Returns:
+        Union[SuccessResponse, ErrorResponse]:
+            - If successful: Success message
+            - If error: Error details including message and type
+    """
+    query = request.query_params
+    token = query.get("token")
+
+    if not token:
+        return {"error": "Token is missing"}
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = payload.get("user")
+        iat = payload.get("iat")
+        if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+            return {"error": "Token is too old"}
+    except Exception as e:
+        return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
+
+    call_upload_gist()
+
+    return {"success": True, "message": "Gist successfully updated"}
 
 # post edit
 @app.post("/edit/{ship_id}") 
@@ -912,7 +945,7 @@ async def edit_ship(ship_id: int = Path(...), data: Dict[str, Any] = Body(...)):
         crew=crew,
         tags=tags,)
     # TODO : update json
-    call_upload_gist()
+    # call_upload_gist()
 
     return {"success":"ship updated"}
 
