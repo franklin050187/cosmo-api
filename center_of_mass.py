@@ -1238,6 +1238,9 @@ def com(input_filename, output_filename, args={}):
         # Step 1: collect all overclocked part references (ID + Location)
         overclocked_refs = set()  # using set of tuples for fast lookup
         for entry in oc_parts:
+            if not isinstance(entry, dict):
+                # print(f"Warning: entry is not a dict: {entry}")
+                continue
             key = entry.get("Key", [])
             value = entry.get("Value")
             if value == 1 and isinstance(key, list) and len(key) >= 2 and key[1] == "thermal_overclock":
@@ -1255,7 +1258,8 @@ def com(input_filename, output_filename, args={}):
                 part["Overclock"] = 1
         # for p in parts: # debug print oc part
         #     print(p)
-    except Exception:
+    except Exception as e:
+        # print(e)
         error_text = "Could not read overclocked parts"
         return json.dumps({"Error": error_text})
     try:
