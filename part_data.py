@@ -108,12 +108,25 @@ thruster_data={
         "cosmoteer.thruster_small":{"cot":((0.5,1.5,0),),"thrust":400}, #
         "cosmoteer.thruster_med":{"cot":((0.5,2.5,0),),"thrust":1300}, #
         "cosmoteer.thruster_large":{"cot":((1,2.5,0),),"thrust":3600}, #
-        "cosmoteer.thruster_boost":{"cot":((1,4.5,0),),"thrust":9600}, #
+        "cosmoteer.thruster_boost":{"cot":((1,4.5,0),),"thrust":9600, "boostoff":3600}, #
         "cosmoteer.thruster_huge":{"cot":((1.5,3.5,0),),"thrust":8000}, #
         "cosmoteer.thruster_small_2way":{"cot":((0.5,1.5,0),(1.5,0.5,3)),"thrust":400}, #
         "cosmoteer.thruster_small_3way":{"cot":((0.5,1.5,0),(1.5,0.5,3),(-0.5,0.5,1)),"thrust":400}, #
         "cosmoteer.thruster_rocket_nozzle":{"cot":((1.5,4,0),),"thrust":10000}, #
         "cosmoteer.thruster_rocket_extender":{"cot":((1.5,1,0),),"thrust":10000}, #
+}
+
+# overclock
+thruster_data_oc={
+        "cosmoteer.thruster_small":{"cot":((0.5,1.5,0),),"thrust":1600}, #
+        "cosmoteer.thruster_med":{"cot":((0.5,2.5,0),),"thrust":3400},
+        "cosmoteer.thruster_large":{"cot":((1,2.5,0),),"thrust":7200},
+        "cosmoteer.thruster_boost":{"cot":((1,4.5,0),),"thrust":24000, "boostoff":7200},
+        "cosmoteer.thruster_huge":{"cot":((1.5,3.5,0),),"thrust":14000},
+        "cosmoteer.thruster_small_2way":{"cot":((0.5,1.5,0),(1.5,0.5,3)),"thrust":1600},
+        "cosmoteer.thruster_small_3way":{"cot":((0.5,1.5,0),(1.5,0.5,3),(-0.5,0.5,1)),"thrust":1600},
+        "cosmoteer.thruster_rocket_nozzle":{"cot":((1.5,4,0),),"thrust":10500},
+        "cosmoteer.thruster_rocket_extender":{"cot":((1.5,1,0),),"thrust":10500},
 }
 
 # dic with prices

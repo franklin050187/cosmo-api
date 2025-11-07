@@ -140,7 +140,6 @@ def center_of_thrust(parts, args):
             # Increase thrust if thruster is touching engine room
             if thruster_touching_engine_room(parts, part):
                 thrust = thrust * 1.5
-
             # if part is thruster_rocket_extender then find thruster_rocket_nozzle in the same orientation and x or y and set origin to the origin of nozzle
             if part["ID"] == "cosmoteer.thruster_rocket_extender":
                 for part2 in parts:
@@ -157,13 +156,6 @@ def center_of_thrust(parts, args):
                                     cots2 = part_center_of_thrust(part2, args["boost"])
                                     for cot2 in cots2:
                                         origin = cot2[0]
-                            # if (
-                            #     part2["Location"][0] == part["Location"][0]
-                            #     or part2["Location"][1] == part["Location"]
-                            # ):
-                            #     cots2 = part_center_of_thrust(part2, args["boost"])
-                            #     for cot2 in cots2:
-                            #         origin = cot2[0]
 
             # Update thrust direction and origin thrust for the given orientation
             thrust_direction[orientation] += thrust
@@ -257,7 +249,6 @@ def top_speed(mass, thrust):
     Returns:
         float: The top speed of the vehicle.
     """
-
     # Calculate speed below 75m/s
     x = thrust / mass
     speed = 2.5 * x
@@ -269,7 +260,6 @@ def top_speed(mass, thrust):
 
     # Apply correction
     speed = 1.01518568052653 * speed - 0.000228187226585198 * speed**2
-
     return speed
 
 
@@ -316,12 +306,18 @@ def part_center_of_thrust(part, boost):
         list: A list of tuples representing the multiple centers of thrust for the part.
     """
     # Get part center of thrust (cot) and thrust values
-    part_cots = part_data.thruster_data.get(part["ID"], {"cot": 0})["cot"]
-    thrust = part_data.thruster_data.get(part["ID"], {"thrust": 0})["thrust"]
+    if "Overclock" in part and part["Overclock"] == 1:
+        thrust = part_data.thruster_data_oc.get(part["ID"], {"thrust": 0})["thrust"]
+        boost_off = part_data.thruster_data_oc.get(part["ID"], {"boostoff": 0}).get("boostoff", 0)
+        part_cots = part_data.thruster_data_oc.get(part["ID"], {"cot": 0})["cot"]
+    else:
+        part_cots = part_data.thruster_data.get(part["ID"], {"cot": 0})["cot"]
+        thrust = part_data.thruster_data.get(part["ID"], {"thrust": 0})["thrust"]
+        boost_off = part_data.thruster_data.get(part["ID"], {"boostoff": 0}).get("boostoff", 0)
 
     # Adjust thrust if part is not boosted and is a specific type
     if not boost and part["ID"] == "cosmoteer.thruster_boost":
-        thrust = thrust / 3
+        thrust = boost_off
 
     # Return 0 if part does not have a center of thrust
     if part_cots == 0:
@@ -351,7 +347,6 @@ def part_center_of_thrust(part, boost):
             center_of_thrust_y = part["Location"][1] - part_cot[0] + part_size[0]
         else:
             print("ERROR: part_rotation not 0, 1, 2, 3")
-
         absolute_cots.append(
             (Vector2D(center_of_thrust_x, center_of_thrust_y), orientation, thrust)
         )
@@ -1229,8 +1224,39 @@ def com(input_filename, output_filename, args={}):
     # decoded data processing
     try:
         parts = decoded_data["Parts"]
-    except Exception as e:
+    except Exception:
         error_text = "Could not read Parts"
+        return json.dumps({"Error": error_text})
+
+    try:
+        oc_parts = decoded_data["PartUIToggleStates"]
+    except Exception:
+        error_text = "Could not read PartUIToggleStates"
+        return json.dumps({"Error": error_text})
+
+    try:
+        # Step 1: collect all overclocked part references (ID + Location)
+        overclocked_refs = set()  # using set of tuples for fast lookup
+        for entry in oc_parts:
+            key = entry.get("Key", [])
+            value = entry.get("Value")
+            if value == 1 and isinstance(key, list) and len(key) >= 2 and key[1] == "thermal_overclock":
+                ref = key[0]
+                if isinstance(ref, dict) and "ID" in ref and "Location" in ref:
+                    # store as tuple (ID, tuple(Location)) for easy comparison
+                    overclocked_refs.add((ref["ID"], tuple(ref["Location"])))
+
+
+        # Step 2: update parts in place
+        for part in parts:
+            part_id = part.get("ID")
+            loc = tuple(part.get("Location", []))
+            if (part_id, loc) in overclocked_refs:
+                part["Overclock"] = 1
+        # for p in parts: # debug print oc part
+        #     print(p)
+    except Exception:
+        error_text = "Could not read overclocked parts"
         return json.dumps({"Error": error_text})
     try:
         ship_orientation = decoded_data["FlightDirection"]
@@ -1315,6 +1341,9 @@ def com(input_filename, output_filename, args={}):
         url_com = "error url upload_image"
         try:
             url_com = upload_image_to_imgbb(base64_output)
+            # save b64 to file
+            # with open("output.png", "wb") as f:
+            #     f.write(base64.b64decode(base64_output))
         except Exception as e:
             error_text = "Could not execute upload_image_to_imgbb (png_upload)"
             return json.dumps({"Error": error_text})
