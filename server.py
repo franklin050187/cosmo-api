@@ -29,6 +29,8 @@ from cosmoteer_save_tools_new import Ship as new_ship
 from png_upload import upload_image_to_imgbb
 from json_upload import call_upload_gist
 
+import time
+
 load_dotenv()
 db_manager = ShipImageDatabase()
 
@@ -674,11 +676,11 @@ async def delete_ship(
 # post add_ship
 @app.post("/insert_ship") # ok
 async def insert_ship(data: ShipDataInsert = Body(...)):
+    timestart = time.time()
     # Validate token  + ext keys
     payload = None
     keys_to_try = [SECRET_KEY] + SECRET_KEY_EXT_LIST
     last_error = None
-
     for key in keys_to_try:
         try:
             payload = jwt.decode(
@@ -702,12 +704,14 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
         except jwt.PyJWTError as e:
             last_error = e
             continue
-
+    timeend = time.time()
+    print(f"Time to validate token: {timeend - timestart} seconds")
     if payload is None:
         # All keys failed
         raise HTTPException(status_code=401, detail={"error": "Invalid token", "message": str(last_error)})
 
     # Validate base64 and PNG
+    timestart = time.time()
     try:
         image_data = base64.b64decode(data.image)
         if not image_data.startswith(b"\x89PNG\r\n\x1a\n"):
@@ -718,8 +722,10 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
         raise HTTPException(
             status_code=400, detail={"error": "Invalid base64 string", "message": str(e)}
         )
-
+    timeend = time.time()
+    print(f"Time to validate base64: {timeend - timestart} seconds")
     # Extract data from image
+    timestart = time.time()
     try:
         data_ship = new_ship(data.image).data
         if not data_ship:
@@ -728,31 +734,38 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
         raise HTTPException(
             status_code=500, detail={"error": "Error processing image", "message": str(e)}
         )
-
+    timeend = time.time()
+    print(f"Time to extract data from image: {timeend - timestart} seconds")
     # Upload image
+    timestart = time.time()
     try:
         url = upload_image_to_imgbb(data.image)
     except Exception as e:
         raise HTTPException(
             status_code=500, detail={"error": "Error uploading image", "message": str(e)}
         )
-
+    timeend = time.time()
+    print(f"Time to upload image: {timeend - timestart} seconds")
     # Extract tags
+    timestart = time.time()
     try:
         tags, author = PNGTagExtractor().extract_tags(data_json=data_ship)
     except Exception as e:
         raise HTTPException(
             status_code=500, detail={"error": "Error processing tags", "message": str(e)}
         )
-
+    timeend = time.time()
+    print(f"Time to extract tags: {timeend - timestart} seconds")
     # Calculate price and crew
+    timestart = time.time()
     try:
         price, crew = calculate_price(data_ship)
     except Exception as e:
         raise HTTPException(
             status_code=500, detail={"error": "Error calculating price", "message": str(e)}
         )
-
+    timeend = time.time()
+    print(f"Time to calculate price and crew: {timeend - timestart} seconds")
     # Combine user tags
     tags.extend(data.user_tags or [])
 
@@ -766,6 +779,7 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
     name = f"{ship_name}.ship.png"
 
     # Final data for DB
+    timestart = time.time()
     db_return = db_manager.insert_ship(
         name=name,
         data=url,
@@ -778,11 +792,15 @@ async def insert_ship(data: ShipDataInsert = Body(...)):
         crew=crew,
         tags=tags,
     )
+    timeend = time.time()
+    print(f"Time to insert ship: {timeend - timestart} seconds")
     ship_id = int(db_return["success"])
     if ship_id:
         # TODO : update json
+        timestart = time.time()
         call_upload_gist()
-
+        timeend = time.time()
+        print(f"Time to update gist: {timeend - timestart} seconds")
         return {
             "success": True,
             "message": "Ship successfully added",
