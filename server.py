@@ -826,6 +826,7 @@ async def updategist(request: Request):
     token = query.get("token")
 
     if not token:
+        print("Token is missing")
         return {"error": "Token is missing"}
 
     try:
@@ -833,12 +834,14 @@ async def updategist(request: Request):
         user = payload.get("user")
         iat = payload.get("iat")
         if iat < (datetime.now(tz=timezone.utc) - timedelta(minutes=5)).timestamp():
+            print("Token is too old")
             return {"error": "Token is too old"}
     except Exception as e:
+        print("Invalid token")
         return {"error": "invalid token", "message": str(e), "type": type(e).__name__}
 
     call_upload_gist()
-
+    print("Gist successfully updated")
     return {"success": True, "message": "Gist successfully updated"}
 
 # post edit

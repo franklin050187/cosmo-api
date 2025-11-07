@@ -102,7 +102,7 @@ def get_timestamp():
 # print("tags_data", get_tags())
 # print("time_data", get_timestamp())
 # print("ship_data", get_ship_formatted_db_data())
-import time
-timestart = time.time()
-print("call_upload_gist", call_upload_gist())
-print("time", time.time() - timestart)
+# import time
+# timestart = time.time()
+# print("call_upload_gist", call_upload_gist())
+# print("time", time.time() - timestart)
