@@ -175,7 +175,7 @@ def price_analysis(data_json): ## take json instead of png
         elif item_id == 'cosmoteer.crew_quarters_med':
             crew_quarters_med_price += 3000
         elif item_id == 'cosmoteer.crew_quarters_large':
-            crew_quarters_large_price += 6000
+            crew_quarters_large_price += 12000
             
     crew = 0
     for item in parts:
