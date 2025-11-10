@@ -27,6 +27,7 @@ import os
 
 import cv2
 import numpy as np
+import math
 
 from vector2d import Vector2D
 
@@ -249,18 +250,28 @@ def top_speed(mass, thrust):
     Returns:
         float: The top speed of the vehicle.
     """
-    # Calculate speed below 75m/s
-    x = thrust / mass
-    speed = 2.5 * x
 
-    # Calculate speed above 75m/s
-    if speed > 75:
-        # correction = 1
-        speed = (14062.5 * x) ** (1 / 3)
+    # Model for s < 75
+    intercept_low = 1.1102844213553666
+    a_low = -0.91076655
+    b_low = 0.91580284
 
-    # Apply correction
-    speed = 1.01518568052653 * speed - 0.000228187226585198 * speed**2
-    return speed
+    # Model for s ≥ 75
+    intercept_high = 3.55718882827722
+    a_high = -0.2361968
+    b_high = 0.23746546
+
+    # Compute both predictions
+    s_low = math.exp(intercept_low) * (mass ** a_low) * (thrust ** b_low)
+    s_high = math.exp(intercept_high) * (mass ** a_high) * (thrust ** b_high)
+
+    # Choose model depending on speed range
+    if s_low < 75:
+        # print("mass", mass, "thrust", thrust, "speed", s_low)
+        return s_low
+    else:
+        # print("mass", mass, "thrust", thrust, "speed", s_high)
+        return s_high
 
 
 def part_center_of_mass(part):
@@ -1314,9 +1325,11 @@ def com(input_filename, output_filename, args={}):
 
     # Calculate speed in all directions
     speeds = {}
+    thrusts = {}
     try:
         for ship_orient, direction_ori in direction_mapping.items():
             speeds[direction_ori] = top_speed(mass, thrust_direction[ship_orient])
+            thrusts[direction_ori] = thrust_direction[ship_orient]
     except Exception as e:
         error_text = "Could not execute top_speed"
         return json.dumps({"Error": error_text})
@@ -1389,6 +1402,7 @@ def com(input_filename, output_filename, args={}):
         "author": author,
         "all_direction_speeds": speeds,
         "analysis": analysis,
+        "max_thrust": thrusts[direction_mapping[decoded_data["FlightDirection"]]],
     }
     # Convert the dictionary to a JSON string
     try:
